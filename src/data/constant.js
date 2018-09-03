@@ -6,7 +6,6 @@ let _this = Vue.use(VueResource);
 const TIMEOUT = 15000;
 const ERRORSERVICE = '服务异常，请稍后再试！';
 
-
 _this.http.interceptors.push(function (request, next) {
 //   let token = lsgGetData(LSTUSERKEY) ? lsgGetData(LSTUSERKEY).token : '';
   // 设置超时
@@ -17,18 +16,13 @@ _this.http.interceptors.push(function (request, next) {
   }, TIMEOUT);
 
   // 显示加载动画
-  // _this.$loading({show: true});
-  var __this = Vue.default;
-  console.log('=========1=============');
-  console.log(Vue);
-  console.log(__this);
-  console.log(__this.$loading({show: true}));
-  // window.EVENTBUS.$emit('changeLoading', {'display': true});
+  window.EVENTBUS.$emit('Loading', {'show': true});
   // 设置请求头
   // request.headers.set('Authorization', token);
   // 拦截处理全局ajax回调
   next(function (response) {
-    // window.EVENTBUS.$emit('changeLoading', {'display': false});
+    // 隐藏加载动画
+    window.EVENTBUS.$emit('Loading', {'show': false});
     if ((response.status === 400 && token.length === 0) || response.status === 401) {
       // 未登录或者身份已失效
       // window.EVENTBUS.$emit('alertTokenError', {

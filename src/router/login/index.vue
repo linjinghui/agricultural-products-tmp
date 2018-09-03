@@ -89,6 +89,8 @@
         alert('forgePwd');
       },
       clkLogin: function () {
+        var _this = this;
+
         if (this.rememberMe) {
           // 记住账号密码
           lsgSaveData(this.rememberMeKey, {
@@ -96,17 +98,20 @@
             password: this.password
           });
         }
-        console.log('account:' + this.account + ',password:' + this.password + ',vcode:' + this.vcode);
         // this.$loading({show: true});
-        console.log('=========2============');
-        console.log(this);
+        // console.log('=========2============');
+        // console.log(this);
         // 登录
         ajaxLogin({
           account: this.account,
           password: this.password,
           vcode: this.vcode
         }, function (data) {
-          // 
+          if (data.code === 200) {
+            // 
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
         });
       },
       getRememberData: function () {
@@ -129,20 +134,8 @@
 <style lang="scss">
   .wrap {
 
-    .input {
-
-      input {
-        padding-left: 14px!important;
-        border-radius: 4px;
-      }
-    }
-    .input.pdrt {
-      input {
-        padding-right: 60px!important;
-      }
-      .cicon-cross-crle-chr-cpt {
-        right: 40px!important;
-      }
+    .input input {
+      border-radius: 4px;
     }
 
     // ::-webkit-input-placeholder {
@@ -250,7 +243,7 @@
       }
 
       .icon-eye-close {
-        width: 30px;
+        width: 26px;
         font-size: 22px;
         color: #666;
         background-color: transparent;
@@ -267,4 +260,26 @@
     } 
   }
 
+  // 768
+  @media screen and (max-width: 1366px) {
+    .wrap {
+      
+      >.form {
+        margin-left: 7%;
+        height: 520px; 
+        .subTitle {
+          margin-top: 30px;
+          margin-bottom: 20px;
+        }
+        .wrap-form {
+          .form-layer {
+            margin-top: 0;
+          }
+        }
+        .copyright {
+          margin-top: 40px;
+        }
+      }
+    }
+  }
 </style>
