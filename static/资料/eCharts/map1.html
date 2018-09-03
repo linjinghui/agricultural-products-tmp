@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>ECharts</title>
+		<script src="js/echarts.min.js"></script>
+		<script src="js/jquery-1.12.4.min.js"></script>
+		<style>
+			#container {
+				width: 1100px;
+				height: 550px;
+				display: flex;
+				justify-content: flex-start;
+				border: 2px solid darkgray;
+			}
+			
+			#canvas {
+				position: absolute;
+				z-index: 3;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+		<div id="container">
+			<canvas id="canvas" style="border:1px solid #aaa;display:block;">
+			<script type="text/javascript">
+			window.onload = function() {
+				var canvas = document.getElementById("canvas");
+				var context = canvas.getContext("2d");
+				context.fillStyle = 'rgba(255, 255, 255, 0)';
+				context.lineWidth = 1;
+				context.strokeStyle = "red";
+				canvas.width = 550;
+				canvas.height = 550;
+
+				context.beginPath();
+				context.moveTo(330, 330);
+				context.lineTo(360, 370);
+				context.lineTo(380,370)
+				context.stroke();
+				context.closePath();
+				
+				context.beginPath();
+				context.moveTo(410, 310);
+				context.lineTo(430, 310);
+				context.stroke();
+				context.closePath();
+			}
+		</script>
+		</canvas>
+
+			<div id="main" style="width: 550px;height:550px;background-color:skyblue;position: relative;">
+
+			</div>
+			<script type="text/javascript">
+				$.get('json/fujian.json', function(fJjson) {
+
+					echarts.registerMap('福建', fJjson);
+
+					var chart = echarts.init(document.getElementById('main'));
+
+					var option = {
+
+						title: {
+							text: '生产主体分布图',
+							textAlign: 'left',
+							top: 15,
+							left: 10,
+							textStyle: {
+								color: '#fff',
+								fontFamily: 'Arial,宋体，sans-serif',
+								fontSize: 25,
+								fontWeight: '500'
+							}
+						},
+						tooltip: {
+							show: true,
+							backgroundColor: 'blue',
+						},
+
+						series: [{
+								name: '数据',
+								type: 'map',
+								map: '福建',
+								zoom: 1.2, //缩放比例
+
+								label: {
+									normal: {
+										show: true,
+										backgroundColor: '#fff',
+										borderColor: '#aaa',
+										borderWidth: 2,
+										borderRadius: 6,
+										height: 18,
+										width: 50,
+										padding: 3,
+										fontFamily: 'Microsoft Yahei',
+										fontSize: 14,
+										formatter: ['{c}', '{b}'].join('\n\n'),
+
+										rich: {
+											c: {
+												width: 70,
+												height: 10,
+												backgroundColor: '#000',
+												borderColor: '#aaa',
+												borderWidth: 1,
+												borderRadius: 34,
+												padding: [12, 5]
+											}
+										},
+									},
+									emphasis: {
+										show: true,
+									},
+								},
+								data: [{
+										name: '福州市',
+										value: 66,
+										itemStyle: {
+											normal: {
+												areaColor: '#9CEBCC',
+											},
+										},
+									},
+									{
+										name: '莆田市',
+										value: 33,
+										itemStyle: {
+											normal: {
+												areaColor: '#33AECC',
+											}
+										}
+									},
+									{
+										name: '三明市',
+										value: 25,
+										itemStyle: {
+											normal: {
+												areaColor: '#A0D9E7',
+											}
+										}
+									},
+									{
+										name: '泉州市',
+										value: 54,
+										itemStyle: {
+											normal: {
+												areaColor: '#DE98EF',
+											}
+										}
+									},
+									{
+										name: '龙岩市',
+										value: 76,
+										itemStyle: {
+											normal: {
+												areaColor: '#FDFDBD',
+											}
+										}
+									},
+									{
+										name: '漳州市',
+										value: 64,
+										itemStyle: {
+											normal: {
+												areaColor: '#C6D9F4',
+											}
+										}
+									}, {
+										name: '宁德市',
+										value: 87,
+										itemStyle: {
+											normal: {
+												areaColor: '#C6F4EB',
+											}
+										}
+									}, {
+										name: '南平市',
+										value: 87,
+										itemStyle: {
+											normal: {
+												areaColor: '#E0EDCD',
+											}
+										}
+									}, {
+										name: '平潭试验区',
+										value: 24,
+										itemStyle: {
+											normal: {
+												areaColor: '#E0EDCD',
+												labelLine: {
+													show: true
+												},
+											}
+										}
+									}
+								]
+							},
+
+						]
+
+					};
+
+					chart.setOption(option);
+
+				});
+			</script>
+
+			<div id="main1" style="width:550px;height:550px;background-color:#F7F7F7;">
+				<script type="text/javascript">
+					var myChart = echarts.init(document.getElementById('main1'));
+					var option = {
+						title: {
+							text: '全省已纳入平台监管的生产主体总览图(4642家)',
+							left: 60,
+							top: 15,
+						},
+						tooltip: {},
+						xAxis: {
+							type: 'value',
+							boundaryGap: false,
+							max: 900,
+							interval: 180, //强制设置坐标轴分割间隔。					
+						},
+						yAxis: {
+							type: 'category',
+							axisTick: {
+								show: false //隐藏刻度线
+							},
+
+							boundaryGap: [0, 0.01],
+							data: ["平潭", "莆田", "龙岩", "福州", "漳州", "南平", "泉州", "三明", "宁德"],
+
+
+						},
+
+						series: [{
+							name: '生产主体',
+							type: 'bar',
+							barWidth: 30,
+
+							itemStyle: {
+								normal: {
+									color: '#7098D4'
+								}
+							},
+							label: {
+								normal: {
+									show: true,
+									position: 'inside'
+								}
+							},
+							data: [24, 308, 399, 431, 530, 671, 683, 721, 875]
+						}, ]
+					};
+					myChart.setOption(option);
+				</script>
+			</div>
+		</div>
+
+	</body>
+
+</html>

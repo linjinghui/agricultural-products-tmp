@@ -1,0 +1,159 @@
+<div class="">
+	<div class="">
+		<section class="">
+			<div class="tab-content no-padding">
+				<!-- Morris chart - Sales -->
+				<div class="chart tab-pane active" style="position: relative; height: 100%;">
+					<div class="box box-info">
+						<div class="box-header with-border">
+
+						</div>
+						<!-- /.box-header -->
+						<!-- form start -->
+						<form class="form-horizontal" id="ent_sub_info_form" name="ent_sub_info_form">
+
+							<div class="box-body" id="divname" style="margin-right: 260px;">
+								<input type="hidden" name="entId" id="entId">
+
+								<div class="form-group">
+									<label for="entDescription" class="col-sm-1 control-label">企业概况:</label>
+									<div class="col-sm-9">
+										<!--<textarea class="form-control" rows="3" placeholder="" name="entDescription" id="entDescription"></textarea>-->
+										<textarea name="" id="editor" cols="100" rows="10"></textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="entWebsite" class="col-sm-1 control-label">企业网址:</label>
+
+									<div class="col-sm-3">
+										<input type="text" class="form-control" id="entWebsite" placeholder="" name="entWebsite">
+									</div>
+
+								</div>
+
+								<div class="form-group">
+									<label for="entQrcodeUrl" class="col-sm-1 control-label">企业二维码:</label>
+									<img src="../../dist/img/910G8Y2387T1145C10334SA9-qr.png" alt="" name="entQrcodeUrl" id="entQrcodeUrl">
+								</div>
+
+								<div class="box-footer text-center">
+									<!--以下两种方式提交验证,根据所需选择-->
+									<button type="submit" class="btn btn-primary" data-btn-type="save">保存</button>
+								</div>
+
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+<script type="text/javascript">
+	var form = null;
+	var entId = $("#main_entId").val();
+	$("#entId").val(entId);
+	if(entId == undefined || entId == "")
+		entId = "0";
+
+	id = entId;
+
+	//初始化富文本编辑器
+	CKEDITOR.replace('editor', {});
+
+	$(function() {
+
+		//初始化控件
+		form = $("#ent_sub_info_form").form();
+		//数据校验
+		$("#ent_sub_info_form").bootstrapValidator({
+			message: '请输入有效值',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			submitHandler: function(validator, userform, submitButton) {
+				modals.confirm('确认保存？', function() {
+					var params = form.getFormSimpleData();
+
+					$.ajax({
+						type: "post",
+						url: webapi + "/ent_main_sub_info/saveOrUpdate ",
+						data: params,
+						success: function(data) {
+							if(data.success) {
+								var ret = data.ret
+								if(id != "0") {
+									modals.info("数据更新成功");
+								} else {
+									modals.info("数据保存成功");
+
+									//	$('#boot_product').bootstrapTable('refresh');
+								}
+							} else {
+								modals.error("保存失败,请联系管理员!");
+							}
+						},
+					});
+
+				});
+			},
+			fields: {
+				entDescription: {
+					validators: {
+						notEmpty: {
+							message: '请输入企业概况'
+						}
+					}
+				},
+				entWebsite: {
+					validators: {
+						notEmpty: {
+							message: '请选择企业网址'
+						}
+					}
+				},
+				entQrcodeUrl: {
+					validators: {
+						notEmpty: {
+							message: '请选择企业二维码'
+						}
+					}
+				}
+
+			}
+		});
+
+		form.initComponent();
+
+		//回填id
+		if(id != "0") {
+			var url = webapi + "/ent_main_sub_info/getAllInfo";
+			var para = {
+				entId: id
+			}
+			form.ajaxFormData(url, para, setEditor);
+		}
+	});
+
+	function resetForm() {
+		form.clearForm();
+		$("#ent_sub_info_form").data('bootstrapValidator').resetForm();
+	}
+
+	//设置富文本编辑器函数
+	var setEditor = function(ret) {
+		//富文本编辑器赋值
+		setTimeout(function() {
+			var html = ret.entDescription;
+			//CKEDITOR.instances.editor.setData(html);
+			waitCKEditorReady(html);
+		}, 50);
+
+		//		if(type && type == 'view')
+		//			CKEDITOR.instances.editor.setReadOnly(true); //只读
+
+	}
+</script>

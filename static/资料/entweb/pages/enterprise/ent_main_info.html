@@ -1,0 +1,616 @@
+<div class="">
+	<div class="">
+		<!-- Content Header (Page header) -->
+		<section class="">
+
+			<div class="tab-content no-padding">
+
+				<div class="chart tab-pane active" style="position: relative; height: 100%;">
+					<div class="box box-info" id="pannelDiv">
+
+						<form class="form-horizontal" id="ent_mian_info_form" name="ent_mian_info_form" enctype="multipart/form-data">
+							<div class="box-body" id="divname">
+
+								<div class="box-header text-right">
+									<!--以下两种方式提交验证,根据所需选择-->
+
+									<button style="margin-right: 10px;" type="submit" id="save" class="btn btn-primary" data-toggle="modal" data-btn-type="submit">&#12288;保存&#12288;</button>
+									<button style="margin-right: 10px;" type="button" id="modify" class="btn btn-primary" data-btn-type="modify">主体修改</button>
+									<button type="button" id="logoff" class="btn btn-primary">主体注销</button>
+
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="entType" class="col-sm-2 control-label">主体类型:</label>
+
+								<div class="col-sm-3" style="vertical-align:text-bottom;display: inline-block;line-height: 34px;">
+									<!--<input type="radio" data-flag="urlSelector" data-src="data/common/ENT_TYPE.json" name="entType" data-text="name" data-value="code"
+										    style="width:130px;" data-blank="true">-->
+									<span>企事业单位</span>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label for="entName" class="col-sm-2 control-label">主体名称:</label>
+								<div class="col-sm-3">
+									<input type="text" disabled="disabled" class="form-control" id="entName" name="entName" placeholder="请输入主体名称">
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label for="entUnicode" class="col-sm-2 control-label">主体代码:</label>
+								<div class="col-sm-3">
+									<input type="text" disabled="disabled" class="form-control" id="entUnicode" name="entUnicode" placeholder="请输入主体代码">
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+
+							</div>
+
+							<div class="form-group">
+								<label for="lblstart" class="col-sm-2 control-label">经营起止时间:</label>
+								<div class="col-sm-2">
+									<input type="text" class="form-control" placeholder="请选择" data-flag="datepicker" data-format="yyyy-mm-dd" id="busiStartDate" name="busiStartDate">
+								</div>
+
+								<!--</div>
+								<div class="form-group">
+									<label for="lblend" class="col-sm-2 control-label">经营终止时间:</label>-->
+
+								<div class="col-sm-2">
+									<input type="text" class="form-control" placeholder="请选择" data-flag="datepicker" data-format="yyyy-mm-dd" id="busiEndDate" name="busiEndDate">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="lblplace" class="col-sm-2 control-label">经营场所:</label>
+								<div class="col-xs-1">
+									<select name="busiPlaceCity" id="busiPlaceCity" data-src="" data-flag="urlSelector" data-text="division" data-placeholder="请选择市" data-value="divCode" class="form-control select2" style="width:130px;" data-blank="true">
+									</select>
+								</div>
+
+								<div class="col-xs-1">
+									<select name="busiPlaceCounty" id="busiPlaceCounty" data-src="" data-flag="urlSelector" data-text="division" data-placeholder="请选择县" data-value="divCode" class="form-control select2" style="width:130px;" data-blank="true">
+									</select>
+								</div>
+
+								<div class="col-xs-1">
+									<select name="busiPlaceTown" id="busiPlaceTown" data-src="" data-flag="urlSelector" data-text="townDivision" data-placeholder="请选择区" data-value="idivCode" class="form-control select2" style="width:130px;" data-blank="true">
+									</select>
+								</div>
+
+								<div class="col-sm-2">
+									<input type="text" class="form-control" id="busiPlace" name="busiPlace" placeholder="">
+
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="legal" class="col-sm-2 control-label">法定代表人:</label>
+								<div class="col-sm-3">
+									<input type="text" disabled="disabled" class="form-control" id="legal" placeholder="" name="legal">
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="licType" class="col-sm-2 control-label">法人代表证件类型:</label>
+
+								<div class="col-sm-3">
+									<input type="radio" data-code="idType" data-flag="dictSelector" name="licType" data-text="dictName" data-value="dictCode" style="width:130px;" data-blank="true">
+
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="licNo" class="col-sm-2 control-label">法人代表证件号码:</label>
+								<div class="col-sm-3">
+									<input type="text" disabled="disabled" class="form-control" placeholder="" name="licNo" id="licNo">
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label for="lblscope" class="col-sm-2 control-label">经营范围:</label>
+								<div class="col-sm-9">
+									<textarea class="form-control" rows="3" placeholder="" id="busiScope" name="busiScope"></textarea>
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+
+							</div>
+							<div class="form-group">
+								<label for="entIndustrySub" class="col-sm-2 control-label">产业类型:</label>
+								<div class="col-xs-8">
+									<input type="checkbox" name="entIndustrySub" id="entIndustrySub" data-src="" data-flag="urlSelector" class="form-control select2" data-text="dictName" data-value="dictCode" style="width:130px;" data-blank="true">
+
+									<span class="spanred">*</span>
+									<span>可多选</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalName" class="col-sm-2 control-label">负责人姓名:</label>
+								<div class="col-sm-3">
+									<input type="text" disabled="disabled" class="form-control" placeholder="" name="principalName" id="principalName">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalLicType" class="col-sm-2 control-label">负责人证件类型:</label>
+								<div class="col-sm-3">
+									<input type="radio" data-code="idType" data-flag="dictSelector" name="principalLicType" data-text="dictName" data-value="dictCode" style="width:130px;" data-blank="true">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalLicNo" class="col-sm-2 control-label">证件号码:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" placeholder="" name="principalLicNo">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalEmail" class="col-sm-2 control-label">负责人邮箱:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" placeholder="" name="principalEmail">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalFax" class="col-sm-2 control-label">传真:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" placeholder="" name="principalFax">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalTel" class="col-sm-2 control-label">负责人电话:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" placeholder="" name="principalTel">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="principalMobile" class="col-sm-2 control-label">负责人手机号:</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" placeholder="" name="principalMobile">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="entProperty" class="col-sm-2 control-label">主体性质:</label>
+
+								<div class="col-sm-6">
+									<input type="radio" disabled="disabled" data-flag="dictSelector" data-code="enterpriseType" name="entProperty" data-text="dictName" data-value="dictCode" style="width:130px;" data-blank="true">
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+							</div>
+
+							<!--<div class="form-group">
+								<label for="lblplace" class="col-sm-2 control-label">行政区划:</label>
+								<div class="col-xs-1">
+									<select id="busiPlaceCity2" name="busiPlaceCity2" data-src="data/common/city.json" data-flag="urlSelector" data-placeholder="请选择市" class="form-control select2" data-text="name" data-value="code" style="width:130px;" data-blank="true">
+									</select>
+								</div>
+
+								<div class="col-xs-1">
+									<select id="busiPlaceCounty" name="busiPlaceCounty" data-src="data/common/county.json" data-flag="urlSelector" data-placeholder="请选择区县" class="form-control select2" data-text="name" data-value="code" style="width:130px;" data-blank="true">
+
+									</select>
+								</div>
+
+								<div class="col-xs-1">
+									<select id="busiPlaceTown" name="busiPlaceTown" data-src="data/common/town.json" data-flag="urlSelector" data-placeholder="请选择乡镇街道" class="form-control select2" data-text="name" data-value="code" style="width:130px;" data-blank="true">
+									</select>
+								</div>
+								<div class="col-sm-0">
+									<span class="spanred">*</span>
+								</div>
+							</div>-->
+
+							<input type="hidden" name="fileIds" id="fileIds" value="">
+							<div class="form-group" id="file_container">
+								<label class="col-sm-2 control-label" for="attachment">上传营业执照</label>
+								<div class="col-xs-4">
+									<input type="file" id="file" name="file">
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var form = null;
+	var entId = $("#main_entId").val();
+
+	if(entId == undefined || entId == "")
+		entId = "0";
+
+	id = entId;
+
+	$(function() {
+
+		$("#logoff").click(function() {
+			//var obj = $(this);
+			var entId = $("#entId").val();
+			alert(entId);
+
+			$.ajax({
+				type: "GET",
+				url: webapi + "/ent_main/cancel?entId=" + entId,
+				async: true,
+				data: entId,
+				dataType: 'json',
+				success: function(result) {
+					var ret = result.ret;
+					alert(ret);
+					if(result.success) {
+						alert("成功");
+						window.open("../../login.html");
+					} else {
+						alert(ret);
+						$("#logoff").html('注销失败');
+					}
+				}
+			});
+		});
+
+		//		$("#save").click(function() {
+		//				//var obj = $(this);
+		//				var url = webapi + "/ent_main/getAllInfo";
+		//				var bootstrapValidator = $("#ent_mian_info_form").data('bootstrapValidator');
+		//				bootstrapValidator.validate();
+		//				var params = form.getFormSimpleData();
+		//				alert("提交保存");
+		//
+		//				if(bootstrapValidator.isValid()) {
+		//					$.ajax({
+		//						type: "POST",
+		//						url: webapi + "/register",
+		//						async: true,
+		//						data: params,
+		//						dataType: 'json',
+		//						success: function(result) {
+		//							var ret = result.ret;
+		//							alert(ret);
+		//							if(result.success) {
+		//								alert("保存成功");
+		//
+		//							} else {
+		//								alert("保存失败");
+		//
+		//							}
+		//						}
+		//					});
+		//				});
+		//		}
+
+		$("#modify").click(function() {
+			//var obj = $(this);
+			var params = form.getFormSimpleData();
+			alert("主体修改");
+
+			$.ajax({
+				type: "post",
+				url: webapi + "/ent_main/updateVerify",
+				async: true,
+				data: params,
+				dataType: 'json',
+				success: function(result) {
+					var ret = result.ret;
+					alert(ret);
+					if(result.success) {
+						alert("主体修改保存成功");
+						params.removeAttribute("disabled");
+					} else {
+						alert("主体修改保存失败");
+
+					}
+				}
+			});
+		});
+
+		initFormSrc();
+		//初始化控件
+		form = $("#ent_mian_info_form").form();
+		//数据校验
+		$("#ent_mian_info_form").bootstrapValidator({
+			message: '请输入有效值',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			submitHandler: function(validator, userform, submitButton) {
+				modals.confirm('确认保存？', function() {
+					//var obj = $(this);
+					var params = form.getFormSimpleData();
+					alert("提交保存");
+					//var entId = $("#entId").val();
+					$.ajax({
+						type: "post",
+						url: webapi + "/ent_main/updateUnVerify",
+						async: true,
+						data: params,
+						dataType: 'json',
+						success: function(data) {
+							var ret = data.ret;
+							alert(ret);
+							if(data.success) {
+								modals.info("保存成功");
+							} else {
+								modals.error("保存失败,请联系管理员!");
+							}
+						}
+					});
+				});
+			},
+			fields: {
+				file_container: {
+					validators: {
+						notEmpty: {
+							message: '请选择上传图片'
+						}
+					}
+				},
+				entName: {
+					validators: {
+						notEmpty: {
+							message: '请输入主体名称'
+						}
+					}
+				},
+				entUnicode: {
+					validators: {
+						notEmpty: {
+							message: '请输入主体代码'
+						}
+					}
+				},
+				busiPlace: {
+					validators: {
+						notEmpty: {
+							message: '请输入经营场所'
+						}
+					}
+				},
+
+				principalEmail: {
+					validators: {
+						regexp: {
+							regexp: '^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$',
+							message: '邮箱格式不正确'
+						}
+					}
+				},
+				//				busiStartDate: {
+				//					validators: {
+				//						notEmpty: {
+				//							message: '请输入经营起始时间'
+				//						},
+				//						date: {
+				//							format: $(this).data("format"),
+				//							message: '请输入有效日期'
+				//						}
+				//					}
+				//				},
+				//				busiEndDate: {
+				//					validators: {
+				//						notEmpty: {
+				//							message: '请输入经营终止时间'
+				//						},
+				//						date: {
+				//							format: $(this).data("format"),
+				//							message: '请输入有效日期'
+				//						}
+				//					}
+				//				},
+				legal: {
+					validators: {
+						notEmpty: {
+							message: '请输入法人代表'
+						}
+					}
+				},
+				licType: {
+					validators: {
+						notEmpty: {
+							message: '请选择法人代表证件类型'
+						}
+					}
+				},
+				licNo: {
+					validators: {
+						notEmpty: {
+							message: '请输入法人代表证件号码'
+						},
+						regexp: {
+							regexp: '^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|31)|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$',
+							message: '请输入正确的证件号码'
+						}
+					}
+				},
+				busiScope: {
+					validators: {
+						notEmpty: {
+							message: '请输入经营范围'
+						}
+					}
+				},
+				entIndustrySub: {
+					validators: {
+						notEmpty: {
+							message: '请选择产业类型'
+						}
+					}
+				},
+				//				principalName: {
+				//					validators: {
+				//						notEmpty: {
+				//							message: '请输入负责人姓名'
+				//						}
+				//					}
+				//				},
+				//				principalLicType: {
+				//					validators: {
+				//						notEmpty: {
+				//							message: '请选择负责人证件类型'
+				//						}
+				//					}
+				//				},
+				principalLicNo: {
+					validators: {
+						regexp: {
+							regexp: '^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|31)|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$',
+							message: '请输入正确的证件号码'
+						}
+					}
+				},
+				principalMobile: {
+					validators: {
+						regexp: {
+							regexp: '^[1][3,4,5,7,8][0-9]{9}$',
+							message: '请输入正确的证件号码'
+						}
+					}
+				},
+				entProperty: {
+					validators: {
+						notEmpty: {
+							message: '请输入主体性质'
+						}
+					}
+				}
+
+			}
+		});
+
+		form.initComponent();
+
+		$("#file").file({
+			title: "请上传附件",
+			fileinput: {
+				maxFileSize: 10240,
+				maxFileCount: 1,
+				uploadExtraData: function(previewId, index) {
+					var data = {
+						tableName: "ENT_MAIN_INFO",
+						tableRecordId: ent_id,
+						category: "lic",
+						fileMd5: "123466"
+					};
+					return data;
+				},
+			},
+			fileIds: '23,24',
+			fileIdContainer: "[name='fileIds']",
+			showContainer: '#file',
+			//显示文件类型 edit=可编辑  detail=明细 默认为明细
+			//showType:'edit',
+			window: false
+		});
+
+		//初始化form数据
+		if(id != "0") {
+			//var url = "data/enterprise/main_info.json";
+			var url = webapi + "/ent_main/getInfo";
+			var para = {
+				entId: id
+			};
+			form.ajaxFormData(url, para);
+			/*
+			$.get(url, {
+					entId: id
+				},
+				function (data) {
+					if (data.success) {
+						var json = data.ret
+						form.initFormData(json);
+					}
+					else
+					
+
+					form.initFormData(data);
+		  })
+		  */
+
+		}
+	});
+
+	function resetForm() {
+		form.clearForm();
+		$("#ent_mian_info_form").data('bootstrapValidator').resetForm();
+	}
+
+	$(function() {
+		$("a[data-url]").click(function(evt) {
+			loadPage($(this).data("url"), "#pannelDiv");
+			$("ul li").removeClass("active");
+			$(this).parent().addClass("active");
+		});
+	});
+
+	function initFormSrc() {
+
+		var src = webapi + "/base_dict/industryChilds";
+		$("#entIndustrySub").attr("data-src", src);
+
+		var src = webapi + "/base_dict/findCityList";
+		$("#busiPlaceCity").attr("data-src", src);
+		var src = webapi + "/base_dict/findCountyList?divCode=350800";
+
+		$("#busiPlaceCounty").attr("data-src", src);
+		var src = webapi + "/base_dict/findTownList?idivCode=350206";
+		$("#busiPlaceTown").attr("data-src", src);
+
+		$("#busiPlaceCity").change(function() {
+			var cityCode = $(this).val();
+			var src = webapi + "/base_dict/findCountyList?divCode=" + cityCode;
+			$("#busiPlaceCounty").attr("data-src", src);
+			builtSelDiv(src, $("#busiPlaceCounty"));
+
+			var countyCode = $("#busiPlaceCounty").val();
+			src = webapi + "/base_dict/findTownList?idivCode=" + countyCode;
+			$("#busiPlaceTown").attr("data-src", src);
+			builtSelDiv(src, $("#busiPlaceTown"));
+
+		});
+
+		$("#busiPlaceCounty").change(function() {
+			var countyCode = $(this).val();
+			src = webapi + "/base_dict/findTownList?idivCode=" + countyCode;
+			$("#busiPlaceTown").attr("data-src", src);
+			builtSel(src, $("#busiPlaceTown"));
+
+		});
+
+	}
+
+	//	function cop(){
+	//		var str = document.getElementById("busiPlaceCity").value;
+	//	    document.getElementById("busiPlaceCity2").value = str;
+	//	}
+</script>

@@ -1,0 +1,102 @@
+<style>
+
+	.nav-tabs>.active{
+			border-top:5px solid #3c8dbc;
+	}
+	
+	.chart.tab-pane{
+		border-top:0 solid #ffffff;
+	}
+	
+	.menu-open>.active{
+		border-top:none;
+	}
+	.content-header>.nav.nav-tabs.pull-right>li>a{
+		border-radius:0.1px;
+		width: 100%;
+	}
+	
+	.sidebar-menu >.active{
+		border-top:none;
+	}
+	.breadcrumb>li>a:hover{
+		color: blue;
+	}
+</style>
+<section class="content">
+	<div class="">
+		<div class="">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<!--
+				<ol class="breadcrumb">
+					<li>
+						<a href="#" onclick="loadPage('homePage.html');">
+							<i class="fa fa-dashboard"></i> 首页</a>
+					</li>
+					<li class="" id="ent_title">生产主体基本信息</li>
+				</ol>
+				-->
+				<ul class="nav nav-tabs pull-right" style="width: 100%;background-color: #ffffff;" flag="panel">
+					<li class="active" style="">
+						<a href="#revenue-chart" data-toggle="tab" name="panel" type="main" data-url="pages/enterprise/ent_main_info.html">生产主体基本信息</a>
+					</li>
+					<li>
+						<a href="#sales-chart" data-toggle="tab" name="panel" type="license" data-url="pages/enterprise/ent_license.html">生产经营许可信息</a>
+					</li>
+					<li>
+						<a href="#sales-chart" data-toggle="tab" name="panel" type="sub" data-url="pages/enterprise/ent_sub_info.html">企业其他信息</a>
+					</li>
+					<li>
+						<a href="#sales-chart" data-toggle="tab" name="panel" type="certification" data-url="pages/enterprise/ent_certification.html">生产主体认证信息</a>
+					</li>
+					<li>
+						<a href="#sales-chart" data-toggle="tab" name="panel" type="place" data-url="pages/enterprise/produce_place.html">生产基地信息</a>
+					</li>
+					<li>
+						<a href="#sales-chart" data-toggle="tab" name="panel" type="factory" data-url="pages/enterprise/ent_factory.html">生产工厂信息</a>
+					</li>
+					<li>
+						<a href="#sales-chart" data-toggle="tab" name="panel" type="commend" data-url="pages/enterprise/ent_commend.html">营销推介信息</a>
+					</li>
+				</ul>
+				<div class="tab-content no-padding">
+
+					<div class="chart tab-pane active " style="position: relative; height:100%;">
+						<div class="box box-info" id="panelDiv">
+
+
+						</div>
+
+
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</section>
+
+<script type="text/javascript">
+	var url = $("ul.treeview-menu li[class='active'] a").data("url")
+	var type = getQueryString(url, "type");
+
+	if (type != null && type != undefined && type != "") {
+		var obj = $("a[type='" + type + "']");
+		loadPage($(obj).data("url"), "#panelDiv");
+		$("#ent_title").text($(obj).html())
+		$("ul[flag='panel'] li").removeClass("active");
+		$(obj).parent().addClass("active");
+	} else
+		loadPage($("a[name='panel']:first").data("url"), "#panelDiv");
+
+
+
+	$(function () {
+		$("a[name='panel']").click(function (evt) {
+			loadPage($(this).data("url"), "#panelDiv");
+			$("ul[flag='panel'] li").removeClass("active");
+			$(this).parent().addClass("active");
+			$("#ent_title").text(this.text)
+		});
+	});
+</script>

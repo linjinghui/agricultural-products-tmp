@@ -1,0 +1,246 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		<li class="fa fa-remove"></li>
+	</button>
+	<h5 class="modal-title">新增食品</h5>
+</div>
+
+<div class="modal-body">
+	<form id="product-form" name="product-form" class="form-horizontal">
+		<input type="hidden" name="productId" id="productId">
+		<input type="hidden" name="entId" id="entId">
+
+		<div class="box-body">
+
+			<div class="form-group">
+				<label for="productName" class="col-sm-2 control-label">食品名称:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="productName" name="productName" placeholder="食品名称">
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="productCode" class="col-sm-2 control-label">食品代码:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="productCode" name="productCode" placeholder="食品代码">
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="productType" class="col-sm-2 control-label">食品类型:</label>
+				<div class="col-sm-3">
+					<select class="form-control select3" name="productType" id="productType" data-code="foodType" data-flag="dictSelector" data-placeholder="食品类型"
+					    data-text="dictName" data-value="dictCode" data-blank="true">
+					</select>
+				</div>
+				<div class="form-group" id="divAgr" style="display:none">
+					<label for="agrProductCategory" class="col-sm-2 control-label">食用农产品类别:</label>
+					<div class="col-sm-3">
+						<select class="form-control " name="agrProductCategory" id="agrProductCategory" data-code="agriculturalProductCategory" data-flag="dictSelector"
+						    data-placeholder="食用农产品类别" data-text="dictName" data-value="dictCode" data-blank="false">
+						</select>
+					</div>
+				</div>
+				<div class="form-group" id="divCate" style="display:">
+					<label for="prouctCategory" class="col-sm-2 control-label">预包装食品类别:</label>
+					<div class="col-sm-3">
+						<select class="form-control " name="productCategory" id="productCategory" data-code="prepackagedType" data-flag="dictSelector"
+						    data-placeholder="预包装食品类别" data-text="dictName" data-value="dictCode" data-blank="false">
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="limitDays" class="col-sm-2 control-label">保质期天数:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="limitDays" name="limitDays" placeholder="保质期天数">
+				</div>
+				<label for="specification" class="col-sm-2 control-label">规格:</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="specification" name="specification" placeholder="规格">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="placeOfOrigin" class="col-sm-2 control-label">生产基地:</label>
+				<div class="col-sm-3">
+					<select class="form-control select3" name="placeOfOrigin" id="placeOfOrigin" data-src="" data-flag="urlSelector" data-placeholder="生产基地"
+					    data-text="placeName" data-value="pplaceId" data-blank="true">
+					</select>
+				</div>
+				<label for="measurementUnit" class="col-sm-2 control-label">计量单位:</label>
+				<div class="col-sm-3">
+					<select class="form-control select3" name="measurementUnit" id="measurementUnit" data-code="unitType" data-flag="dictSelector"
+					    data-placeholder="计量单位" data-text="dictName" data-value="dictCode" data-blank="true">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="trademark" class="col-sm-2 control-label">商标:</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" id="trademark" name="trademark" placeholder="商标">
+				</div>
+			</div>
+
+			<input type="hidden" name="fileIds" id="fileIds" value="">
+			<div class="form-group" id="file_container">
+				<label class="col-sm-2 control-label" for="file">食品图片</label>
+				<div class="col-xs-7">
+					<input type="file" id="file" name="file">
+				</div>
+			</div>
+			<div class="box-footer text-right">
+				<button type="button" class="btn btn-default" data-btn-type="cancel" data-dismiss="modal">取消</button>
+				<button type="submit" class="btn btn-primary" data-btn-type="save">保存</button>
+			</div>
+		</div>
+
+	</form>
+
+</div>
+
+<script>
+	var entId = $("#main_entId").val();
+	var form = null;
+	var winUrl = $("#winId").attr("src");
+
+	var id = getQueryString(winUrl, "id");
+	if (id == null) id = "0";
+	$("#productId").val(id);
+
+
+
+
+
+
+
+	$(function () {
+		initFormSrc();
+		form = $("#product-form").form();
+		//赋值entId
+		$("#entId").val(entId);
+
+		//数据校验
+		$("#product-form").bootstrapValidator({
+			message: '请输入有效值',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			submitHandler: function (validator, saveform, submitButton) {
+				modals.confirm('确认保存？', function () {
+					var params = form.getFormSimpleData();
+
+					$.ajax({
+						type: "post",
+						url: webapi + "/ent_product_main_info/saveOrUpdate",
+						data: params,
+						success: function (data) {
+							if (data.success) {
+								var ret = data.ret
+								if (id != "0") {
+									modals.info("数据更新成功");
+								} else {
+									modals.info("数据保存成功");
+								}
+								modals.hideWin("winId");
+								$('#boot_product').bootstrapTable('refresh');
+
+							} else {
+								modals.error("保存失败,请联系管理员!");
+							}
+
+						},
+					});
+				});
+			},
+			fields: {
+				productName: {
+					validators: {
+						notEmpty: {
+							message: '请输入食品名称'
+						}
+					}
+				},
+				productCode: {
+					validators: {
+						notEmpty: {
+							message: '请输入食品代码'
+						}
+					}
+				}
+			}
+		});
+
+		form.initComponent();
+
+		//设置只读状态
+		setFormView()
+
+		//回填id
+		if (id != "0") {
+			var url = webapi + "/ent_product_main_info/getInfo";
+			var para = {
+				productId: id
+			};
+			form.ajaxFormData(url, para);
+		}
+
+		setProductType();
+
+
+		$("#productType").change(function () {
+			setProductType();
+		});
+	});
+
+	$("#file").file({
+		title: "请上传附件",
+		fileinput: {
+			maxFileSize: 10240,
+			//theme: "explorer",
+			maxFileCount: 1
+		},
+		//fileIds:'',
+		fileIdContainer: "[name='fileIds']",
+		showContainer: '#file',
+		window: false
+	});
+	
+	
+	function setFormView() {
+		var type = getQueryString(winUrl, "type");
+		if (type && type == 'view') {
+			$('#product-form').find('input,textarea,select').not('').attr('disabled', true);
+			$('[type="submit"]').css('display', 'none')
+		}
+	}
+
+	function initFormSrc() {
+		var src = webapi + "/ent_main_produce_place/getAllInfo?entId=" + entId;
+		$("#placeOfOrigin").attr("data-src", src);
+	}
+
+
+	function resetForm() {
+		form.clearForm();
+		$("#product-form").data('bootstrapValidator').resetForm();
+	}
+
+	function setProductType() {
+		var value = $("#productType").val();
+		if (value == "1") {
+			$("#divAgr").css("display", "none");
+			$("#divCate").css("display", "");
+		} else {
+			$("#divAgr").css("display", "");
+			$("#divCate").css("display", "none");
+		}
+	}
+</script>

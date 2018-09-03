@@ -1,0 +1,343 @@
+<div class="">
+	<div class="">
+		<section class="">
+			<div class="tab-content no-padding">
+				<!-- Morris chart - Sales -->
+				<div class="chart tab-pane active" style="position: relative; height: 100%;">
+					<div class="box box-info">
+						<div class="box-header with-border">
+						</div>
+
+						<form class="form-horizontal">
+
+							<div class="box-body">
+
+								<div class="panel-body" style="padding-bottom:0px;">
+
+									<div id="toolbar" class="btn-group">
+										<button id="btn_add" type="button" class="btn btn-default">
+											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+										</button>
+										<button id="btn_edit" type="button" class="btn btn-default">
+											<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+										</button>
+										<button id="btn_delete" type="button" class="btn btn-default">
+											<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+										</button>
+
+									</div>
+									<table id="boot_license"></table>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="row">
+
+			<div class="nav-tabs-custom">
+				<div class="tab-content no-padding">
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+<script>
+	var form = null;
+	var entId = $("#main_entId").val();
+
+	$(function() {
+
+		//1.初始化Table
+		var oTable = new TableInit();
+		oTable.Init();
+		//2.初始化Button的点击事件
+		var oButtonInit = new ButtonInit();
+		oButtonInit.Init();
+
+	});
+
+	var boot_url = webapi + "/ent_main_license/getAllInfo";
+
+	//var url='data/enterprise/ENT_FACTORY.json';
+
+	var TableInit = function() {
+		var oTableInit = new Object();
+		//初始化Table
+		oTableInit.Init = function() {
+			$('#boot_license').bootstrapTable({
+				ajax: function(request) {
+					$.ajax({
+						type: "GET",
+						url: boot_url,
+						data: {
+							entId: entId
+
+						},
+						success: function(data) {
+							if(data.success) {
+								var ret = data.ret;
+								request.success({
+									ret: ret
+								});
+								$('#boot_license').bootstrapTable('load', ret);
+							}
+						},
+						error: function() {
+							console.info("获取数据失败");
+
+						}
+					});
+				},
+				toolbar: '#toolbar', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: true, //是否启用排序
+				sortOrder: "asc", //排序方式
+				queryParams: oTableInit.queryParams, //传递参数（*）
+				sidePagination: "client", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+				strictSearch: true,
+				showColumns: true, //是否显示所有的列
+				showRefresh: true, //是否显示刷新按钮
+				minimumCountColumns: 2, //最少允许的列数
+				clickToSelect: true, //是否启用点击选中行
+				height: '', //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "licId", //每一行的唯一标识，一般为主键列
+				showToggle: true, //是否显示详细视图和列表视图的切换按钮
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				singleSelect: false,
+				showExport: true,
+				exportDataType: "basic", //asic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据
+				exportTypes: ['json', 'xml', 'csv', 'txt', 'excel'], //['json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']
+				exportOptions: {
+					ignoreColumn: [0], //忽略某一列的索引
+					fileName: "生产经营许可", //文件名称设置
+					worksheetName: 'sheet1', //表格工作区名称
+					tableName: "生产经营许可"
+					// excelstyles: ['background-color', 'color', 'font-size', 'font-weight'], 设置格式
+				},
+
+				//Icons: 'glyphicon-export icon-share',
+				columns: [{
+						checkbox: true,
+					}, {
+						field: 'licType',
+						title: '许可证类型',
+						sortable: true,
+						formatter: ""
+					}, {
+						field: 'licNo',
+						title: '许可证编号',
+						sortable: true
+					}, {
+						field: 'licIssueDate',
+						title: '发证日期',
+						sortable: true,
+						formatter:fmtDate
+					}, {
+						field: 'licValidEndDate',
+						title: '有效期至',
+						sortable: true,
+						formatter:fmtDate
+					}, {
+						field: 'remark',
+						title: '备注',
+						sortable: true
+					}, {
+						field: 'licPicUrl',
+						title: '许可证图片',
+						sortable: true
+					},
+					{
+						field: '#',
+						title: '操作',
+						align: 'center',
+						formatter: handleFormatter
+					}
+				],
+				rowStyle: function(row, index) { //设置行的特殊样式
+					//这里有5个取值颜色['active', 'success', 'info', 'warning', 'danger'];
+					var strclass = "";
+					if(index == 0) {
+						//rclass = "warning";
+					}
+					return {
+						classes: strclass
+					}
+				},
+				responseHandler: function(data) {
+					return data.ret;
+				},
+
+				onLoadSuccess: function() { //加载成功时执行
+					console.info("加载成功");
+				},
+				onLoadError: function() { //加载失败时执行
+					console.info("加载数据失败");
+				},
+				onDblClickRow: function(row, $element) {
+					var rowId = row.licId;
+					var name = row.licNo;
+					edit(rowId, name);
+				}
+
+			});
+
+		};
+
+		//得到查询的参数
+		oTableInit.queryParams = function(params) {
+			var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+				limit: params.limit, //页面大小
+				offset: params.offset //页码
+			};
+			return temp;
+		};
+		return oTableInit;
+	};
+
+	var ButtonInit = function() {
+		var oInit = new Object();
+		var postdata = {};
+		var winId = "license_win";
+
+		oInit.Init = function() {
+			//初始化页面上面的按钮事件
+			$("#btn_add").click(function() {
+
+				modals.openWin({
+					winId: "winId",
+					title: '新增许可证',
+					width: '1000px',
+					url: "pages/enterprise/license_edit.html",
+					hideFunc: function() {
+						//modals.info("hide me");
+					},
+					showFunc: function() {
+						//modals.info("show me");
+					}
+				});
+
+			});
+
+			$("#btn_edit").click(function() {
+				var rowId = "";
+				var name = "";
+				var rows = $('#boot_license').bootstrapTable('getSelections');
+				if(rows.length > 1) {
+					modals.info('请选择一行');
+					return false;
+				}
+
+				if(rows.length > 0) {
+					rowId = rows[0].licId;
+					name = rows[0].licNo;
+				}
+				edit(rowId, name);
+			});
+
+			$("#btn_delete").click(function() {
+				var rowId = "";
+				var rows = $('#boot_license').bootstrapTable('getSelections');
+				if(rows.length > 1) {
+					modals.info('请选择一行');
+					return false;
+				}
+				if(rows.length > 0) {
+					rowId = rows[0].licId;
+
+				};
+				delele(rowId);
+			});
+
+		};
+
+		return oInit;
+	};
+
+	function handleFormatter(value, row, index) {
+		var id = row.licId;
+		var name = row.licNo;
+		var result = "";
+		result += "<a href='#' class='btn btn-xs green' onclick=\"view('" + id + "','" + name +
+			"')\" title='查看'><span class='glyphicon glyphicon-eye-open'></span></a>";
+		result += "<a href='#' class='btn btn-xs blue' onclick=\"edit('" + id + "','" + name +
+			"')\" title='编辑'><span class='glyphicon glyphicon-edit'></span></a>";
+		result += "<a href='#' class='btn btn-xs red' onclick=\"delele('" + id +
+			"')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
+
+		return result;
+	}
+
+	function view(rowId, name) {
+
+		if(!rowId) {
+			modals.info('请选择要查看的行!');
+			return false;
+		}
+		modals.openWin({
+			winId: "winId",
+			title: '查看【' + name + '】',
+			width: '1000px',
+			url: "pages/enterprise/license_edit.html?id=" + rowId + '&type=view'
+		});
+
+	}
+
+	function edit(rowId, name) {
+		if(!rowId) {
+			modals.info('请选择要编辑的行!');
+			return false;
+		}
+		modals.openWin({
+			winId: "winId",
+			title: '编辑【' + name + '】',
+			width: '1000px',
+			url: "pages/enterprise/license_edit.html?id=" + rowId
+		});
+
+	}
+
+	function delele(rowId) {
+		if(!rowId) {
+			modals.info('请选择要删除的行');
+			return false;
+		}
+		modals.confirm("是否要删除该行数据？", function() {	
+			$.ajax({
+				type: "GET",
+				url: webapi + "/ent_main_license/delete",
+				data: {
+					licId: rowId
+				},
+				success: function (data) {
+					if (data.success) {
+						modals.correct("已删除该数据");
+						$('#boot_license').bootstrapTable('refresh');
+
+					} else {
+						modals.error("删除失败,请联系管理员！");
+					}
+					
+				}
+			});
+
+		
+		
+		})
+
+	}
+</script>

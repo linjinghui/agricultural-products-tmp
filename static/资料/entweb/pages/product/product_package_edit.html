@@ -1,0 +1,188 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		<li class="fa fa-remove"></li>
+	</button>
+	<h5 class="modal-title">新增小包装信息</h5>
+</div>
+
+<div class="modal-body">
+
+	<form id="package-form" name="package-form" class="form-horizontal">
+		<input type="hidden" name="packageId" id="packageId">
+		<input type="hidden" name="entId" id="entId">
+
+
+		<div class="box-body">
+			<div class="form-group">
+				<label for="productCode" class="col-sm-2 control-label">大包装食品名称</label>
+				<div class="col-sm-3">
+					<select class="form-control select3" name="bigProductCode" id="bigProductCode" data-src="" data-flag="urlSelector" data-placeholder="大包装食品名称"
+							data-text="productName" data-value="productCode"  data-blank="true">
+					</select>
+					
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+			
+			<!--
+			<div class="form-group">
+				<label for="limitDays" class="col-sm-2 control-label">小包装食品名称</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="limitDays" name="limitDays" placeholder="小包装食品名称">
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+			-->
+			<div class="form-group">
+				<label for="smallProductCode" class="col-sm-2 control-label">小包装食品代码</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="smallProductCode" name="smallProductCode" placeholder="小包装食品代码">
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="containsNum" class="col-sm-2 control-label">小包装食品数量</label>
+				<div class="col-sm-3">
+					<input type="text" class="form-control" id="containsNum" name="containsNum" placeholder="小包装食品数量">
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="measurementUnit" class="col-sm-2 control-label">小包装计量单位</label>
+				<div class="col-sm-3">
+					<select class="form-control select3" name="measurementUnit" id="measurementUnit" data-code="unitType" data-flag="dictSelector"
+					    data-placeholder="计量单位" data-text="dictName" data-value="dictCode" data-blank="true">
+					</select>
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="remark" class="col-sm-2 control-label">备注:</label>
+				<div class="col-sm-9">
+					<textarea class="form-control" rows="3" placeholder="" id="remark" name="remark"></textarea>
+				</div>
+				<div class="col-sm-0">
+					<span class="spanred">*</span>
+				</div>
+			</div>
+
+			<div class="box-footer text-right">
+				<button type="button" class="btn btn-default" data-btn-type="cancel" data-dismiss="modal">取消</button>
+				<button type="submit" class="btn btn-primary" data-btn-type="save">提交</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<script>
+	var entId = $("#main_entId").val();
+	var form = null;
+	var winUrl = $("#winId").attr("src");
+	var type = getQueryString(winUrl, "type");
+    var id = getQueryString(winUrl, "id");
+	if (id == null) id = "0";
+	$("#packageId").val(id);
+
+	$(function () {
+		initFormSrc();
+		//初始化控件
+		form = $("#package-form").form();
+		
+		$("#entId").val(entId);
+		//数据校验
+		$("#package-form").bootstrapValidator({
+			message: '请输入有效值',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			submitHandler: function (validator, userform, submitButton) {
+				modals.confirm('确认保存？', function () {
+					//Save Data，对应'submit-提交'
+					var params = form.getFormSimpleData();
+					$.ajax({
+						type: "post",
+						url: webapi + "/ent_product_package/saveOrUpdate",
+						data: params,
+						success: function (data) {
+							if (data.success) {
+								var ret = data.ret
+								if (id != "0") {
+									modals.info("数据更新成功");
+								} else { 
+									modals.info("数据保存成功");
+								}
+								modals.hideWin("winId"); 
+
+								$('#boot_package').bootstrapTable('refresh');
+
+							} else {
+								modals.error("保存失败,请联系管理员!");
+							}
+						},
+					});
+					
+					
+				});
+			},
+			fields: {
+				smallProductCode: {
+					validators: {
+						notEmpty: {
+							message: '产品代码'
+						}
+					}
+				},
+				smallProductCode: {
+					validators: {
+						notEmpty: {
+							message: '小包装代码'
+						}
+					}
+				}
+
+
+
+
+			}
+		});
+		
+		form.initComponent();
+		
+		if (id != "0") {
+			var url = webapi + "/ent_product_package/getInfo";
+			var para = {
+				packageId: id
+			};
+			form.ajaxFormData(url, para);
+		}
+
+
+	});
+
+
+	function resetForm() {
+		form.clearForm();
+		$("#package-form").data('bootstrapValidator').resetForm();
+	}
+
+	function initFormSrc() {
+		var src = webapi + "/ent_product_main_info/getAllInfo?entId=" + entId;
+		$("#bigProductCode").attr("data-src", src);
+	}
+
+
+	
+</script>

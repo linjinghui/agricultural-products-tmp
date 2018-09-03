@@ -1,0 +1,16 @@
+[
+{
+    "userId": 1,
+    "username": "admin",
+    "password": "ddb434a34be2d803bcf26d4b468f8da7",
+    "salt": "86eb1da200958900ab06fe56ebef1e3c",
+    "realName": "admin",
+    "identityCard": "324345673345789",
+    "mobile": "1233434545",
+    "email": "123@qq.com",
+    "createTime": null,
+    "userStatus": 0,
+    "adminDivision": null,
+    "townDivision": null
+  }
+  ]

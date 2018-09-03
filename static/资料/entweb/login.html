@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>生产主体平台登录</title>
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<!-- Bootstrap 3.3.7 -->
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+
+		<link rel="stylesheet" href="plugins/iCheck/square/red.css">
+
+		<link rel="stylesheet" href="plugins/bootstrap-validator/dist/css/bootstrap-validator.css" />
+
+		<style>
+			.inputjz {
+				margin-top: 50px;
+				margin-right: 1130px;
+				float: right;
+				color: #666666;
+			}
+			
+			.form-control-feedback {
+			    position: absolute;
+			    right: 714px;
+			    z-index: 2;
+			    display: block;
+			    width: 792px;
+			    height: 48px;
+			    line-height: 97px;
+			    text-align: center;
+			    pointer-events: none;
+			}
+			
+		
+
+		</style>
+	</head>
+
+	<body class="hold-transition skin-blue sidebar-mini">
+		<form action="" method="post" id="login-form">
+			<div style="width: 100%;height:960px;background: #3d484e;float: left">
+				<div style="background-image: url(./dist/img/background.jpg);height: 800px;width: 1500px;margin-left: 210px;margin-top: 80px;border:2px solid;border-radius:25px;">
+					<h2 style="margin-left: 140px;width: 100%;height: 100px;margin-top: 107px;float: left;font-family:'microsoft yahei'"><b>福建省农产品质量安全追溯监管信息平台</b></h2>
+					<div style="margin-left: 140px;width: 100%;height: 100px;margin-top: -23px;float: left">
+						<span style="font-family:'microsoft yahei';font-size: 20px;color: #3b99e9">生产主体登录</span>
+						<div class="form-group">
+							<p style="margin-top: 30px">账号</p>
+							<input type="text" class="fa fa-home" style="padding-left: 16px;width: 368px;height: 50px;font-size:16px; border:0px;" name="userName" id="userName" placeholder=" 请输入手机号/登录邮箱" />
+							<i class="fa fa-user" style="margin-left:-38px;color:#3b99e9;"></i>
+							<br/>
+						</div>
+						<div class="form-group">
+							<p style="margin-top: 30px">密码</p>
+							<input type="password" style="padding-left: 16px;width: 368px;height: 50px;font-size: 16px; border:0px;" name="password" id="password" placeholder=" 请输入密码" />
+							<i class="fa fa-lock " style="margin-left: -38px;color:#3b99e9"></i>
+							<br/>
+							<br/>
+							<span style="float: right;margin-right: 1130px">忘记密码?</span>
+						</div>
+
+						<div class="form-group">
+							<p style="margin-top: 30px"></p>
+							<div class="col-xs-2"  style="padding:0px;">
+								<input type="text" style="padding-left: 16px;width: 263px;height:50px; border:0px;" name="kaptcha" id="kaptcha" placeholder="请输入验证码" data-bv-field="kaptcha">
+							</div>
+							<div class="col-xs-2" style="padding-right: 0px;height: 50px">
+								<img id="codeImg" src="#" onclick="changeKaptcha()" class="img-responsive" style="height: 50px;width: 105px">
+							</div>
+						</div>
+						<div class="form-group">
+							<input type="checkbox" style="font-family:'microsoft yahei'; height: 15px; margin-top: 108px;margin-left: -268px;color:#666666;" onclick="rememberMe(rm_flag)"/> 记住我&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="register.html" target="blank" style="margin-top: 50px;margin-right: 1130px;height: 38px;">立即注册</a>
+
+							<div style="width: 10%;float: right;margin-right: 20%;color: #3b99e9;border:0px;">
+								<a href="#" class="btn btn-primary btn-block" style=" width: 130px;float: left;margin-left: -1050px;margin-top: -30px" id="login">
+									<b>登录</b>
+								</a>
+							</div>
+
+						</div>
+						<div style="margin-top: 80px;">
+							<p style="font-size: 12px;color: #999999;">©2018福建省农业厅版权所有 </p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<!-- jQuery 3 -->
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<!-- jQuery UI 1.11.4 -->
+		<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+
+		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!-- bootstrap-validator-->
+		<script src="plugins/bootstrap-validator/dist/js/bootstrap-validator.js"></script>
+		
+		<script src="dist/common/js/base.js"></script>
+
+	
+
+	
+
+		<script>
+			$(function() {
+
+				var src = webapi + "/kaptcha?random=" + (Math.floor(Math.random() * 100));
+
+				$("#codeImg").attr("src", src);
+
+				fillbackLoginForm();
+
+				$("#login-form").bootstrapValidator({
+					message: '请输入账号/密码',
+
+					feedbackIcons: {
+						valid: 'glyphicon glyphicon-ok',
+						invalid: 'glyphicon glyphicon-remove',
+						validating: 'glyphicon glyphicon-refresh'
+					},
+					fields: {
+						userName: {
+							validators: {
+								notEmpty: {
+									message: '登录账号不能为空'
+								}
+							}
+						},
+						password: {
+							validators: {
+								notEmpty: {
+									message: '密码不能为空'
+								}
+							}
+						},
+						kaptcha: {
+							validators: {
+								notEmpty: {
+									message: '验证码不能为空'
+								}
+							}
+						}
+					}
+				});
+			});
+
+			$(window).keydown(function() {
+				if(event.keyCode == "13") {
+					$("#login").trigger('click');
+				}
+			});
+
+			$("#login").click(function() {
+				var url = webapi + "/login";
+				var username = $("#userName").val();
+				var bootstrapValidator = $("#login-form").data('bootstrapValidator');
+				bootstrapValidator.validate();
+				if(bootstrapValidator.isValid()) {
+					$.ajax({
+						type: "post",
+						cache: false,
+						timeout: 10000,
+						dataType: "json",
+						url: url,
+						data: {
+							username: $("#userName").val(),
+							password: $("#password").val(),
+							kaptcha: $("#kaptcha").val()
+						},
+						xhrFields: {
+							withCredentials: true
+						},
+						crossDomain: true,
+						beforeSend: function() {
+
+						},
+						success: function(data) {
+							if(data.success) {
+								if(username == "super")
+									location.href = "main_supervise.html";
+								else
+									location.href = "main.html";
+							} else {
+								switch(data.code) {
+									case(1):
+										console.info("服务器系统内部错误");
+										break;
+									case(2):
+										console.info("请求参数有误");
+										break;
+									case(3):
+										console.info("未登录");
+										break;
+									case(4):
+										console.info("请求资源不允许访问");
+										break;
+									case(5):
+										console.info("请求资源不存在");
+										break;
+									case(6):
+										console.info("用户名或密码错误");
+										break;
+									case(7):
+										console.info("验证码错误");
+										break;
+									default:
+										console.info("未知错误");
+										break;
+								}
+								
+								alert(JSON.stringify(data.msg));
+								
+							}
+						},
+						error: function(e, jqxhr, settings, exception) {
+
+						},
+					})
+				} 
+			});
+
+			function changeKaptcha() {
+				$("#codeImg").attr("src", webapi + "/kaptcha?random=" + Math.floor(Math.random() * 100));
+			}
+
+			//使用本地缓存记住用户名密码
+			function rememberMe(rm_flag) {
+				//remember me
+				if(rm_flag) {
+					localStorage.userName = $("input[name='userName']").val();
+					localStorage.password = $("input[name='password']").val();
+					localStorage.rememberMe = 1;
+				}
+				//delete remember msg
+				else {
+					localStorage.userName = null;
+					localStorage.password = null;
+					localStorage.rememberMe = 0;
+				}
+			}
+			//记住回填
+			function fillbackLoginForm() {
+				if(localStorage.rememberMe && localStorage.rememberMe == "1") {
+					$("input[name='userName']").val(localStorage.userName);
+					$("input[name='password']").val(localStorage.password);
+					$("input[name='rememberMe']").iCheck('check');
+					$("input[name='rememberMe']").iCheck('update');
+				}
+			}
+		</script>
+	</body>
+</html>
