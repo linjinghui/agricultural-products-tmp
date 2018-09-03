@@ -1,2 +1,3 @@
 @import '../../node_modules/web-base-ui/libs/style/main.css';
-/* @import '../fonts/iconfont.css'; */
+@import '../../static/font-awesome/css/font-awesome.min.css';
+@import '../../static/fonts/iconfont.css';

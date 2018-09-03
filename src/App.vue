@@ -2,36 +2,52 @@
   <div id="app">
     <router-view></router-view>
     <loading v-model="optionLoading.show" v-bind="optionLoading"></loading>
-    <!-- <Dialog v-model="optionDialog.show" v-bind="optionDialog"></Dialog> -->
-    <!-- <dialog v-model="optionDialog.show" v-bind="optionDialog"></dialog> -->
+    <confirm v-bind="optionConfirm" v-model="optionConfirm.show">
+      <span slot="title" v-html="optionConfirm.title"></span>
+      <span slot="content" v-html="optionConfirm.content"></span>
+    </confirm>
     <prompt v-bind="optionPrompt" v-model="optionPrompt.show">
-      <span slot="title">投票成功</span>
+      <span slot="title" v-html="optionPrompt.title"></span>
     </prompt>
   </div>
 </template>
 
 <script>
   import Vue from 'vue';
-  // import {Loading, Tip, Alert} from 'web-base-ui';
-  // import {lsgGetData, lsgDeleteData, lsgSaveData} from '../node_modules/web-js-tool/libs/js/util';
 
   export default {
     name: 'app',
-    components: {
-      // cmpLoading: Loading,
-      // cmpTip: Tip,
-      // cmpAlert: Alert
-    },
     data: function () {
       return {
         optionLoading: {
           show: false,
-          text: ' 正在加载中...',
+          text: '请您稍后！',
           modal: false
         },
-        optionDialog: {
+        optionPrompt: {
+          show: false,
+          modal: true,
+          title: '标题',
+          stl: {
+            footer: {
+              // left|center|right
+              'text-align': 'right'
+            }
+          },
+          buttons: [{
+            text: '取消',
+            // primary|success|info|warning|danger|#f56c6c
+            theme: 'line'
+          }, {
+            text: '确认',
+            theme: 'success'
+          }]
+        },
+        optionConfirm: {
           show: false,
           modal: false,
+          title: '标题',
+          content: '文本内容',
           // error|success|warning
           type: 'success',
           stl: {
@@ -56,25 +72,6 @@
           }, {
             text: '修改',
             theme: 'warning'
-          }]    
-        },
-        optionPrompt: {
-          show: false,
-          modal: true,
-          stl: {
-            footer: {
-              // left|center|right
-              'text-align': 'right'
-            }
-          },
-          buttons2: [],
-          buttons: [{
-            text: '放弃修改',
-            // primary|success|info|warning|danger|#f56c6c
-            theme: 'line'
-          }, {
-            text: '修改',
-            theme: 'warning'
           }]
         }
       };
@@ -85,8 +82,8 @@
       Vue.prototype.$loading = function (option) {
         _this.optionLoading = Object.assign(_this.optionLoading, option);
       };
-      Vue.prototype.$dialog = function (option) {
-        _this.optionDialog = Object.assign(_this.optionDialog, option);
+      Vue.prototype.$confirm = function (option) {
+        _this.optionConfirm = Object.assign(_this.optionConfirm, option);
       };
       Vue.prototype.$prompt = function (option) {
         _this.optionPrompt = Object.assign(_this.optionPrompt, option);
@@ -136,3 +133,95 @@
     background-color: #3d484e;
   }
 </style>
+
+<style lang="scss" id="cssForm">
+  // 默认垂直布局
+  .wrap-form {
+
+    // 单层
+    >.form-layer {
+
+      >label {
+        line-height: 30px;
+      }
+
+      >.f-dom {
+        display: inline-block;
+        width: 100%;
+      }
+
+      >.tip {
+        color: red;
+        line-height: 20px;
+      }
+    }
+    
+    // 单层水平
+    >.form-layer.horiz {
+      position: relative;
+      
+      >label {
+        display: inline-block;
+        margin-right: 10px;
+        width: 100px;
+        text-align: right;
+      }
+
+      >.f-dom {
+        width: calc(100% - 100px - 5px - 10px);
+      }
+    }
+  }
+
+  // 水平布局
+  .wrap-form.horiz {
+
+    // 单层
+    >.form-layer {
+      position: relative;
+      margin-bottom: 14px;
+      
+      >label {
+        display: inline-block;
+        margin-right: 10px;
+        width: 100px;
+        text-align: right;
+      }
+
+      >.f-dom {
+        width: calc(100% - 100px - 5px - 10px);
+      }
+
+      >.tip {
+        position: absolute;
+        top: 0;
+        left: calc(100% + 10px);
+        line-height: 30px;
+        white-space: nowrap;
+        word-wrap: break-word;
+        word-break: normal;
+        z-index: 1;
+      }
+    }
+
+    // 单层垂直
+    >.form-layer.vert {
+
+      >label {
+        display: unset;
+        margin-right: unset;
+        width: unset;
+        text-align: unset;
+      }
+
+      >.f-dom {
+        width: 100%;
+      }
+
+      >.tip {
+        top: 30px;
+      }
+    }
+  }
+</style>
+

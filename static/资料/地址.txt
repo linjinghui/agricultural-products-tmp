@@ -1,0 +1,7 @@
+接口地址：
+http://wifino1.yourslink.com:10211/swagger-ui.html
+
+nginx代理地址:
+location /api/ {
+	    proxy_pass http://wifino1.yourslink.com:10211/;
+	}
