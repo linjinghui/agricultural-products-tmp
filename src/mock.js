@@ -73,7 +73,62 @@ Mock.mock(/(\/portal\/enterpriseByArea)/, {
     'list|20-100': [
       { 'enterName': '@name', 'xzqh': '@natural(0, 100)', 'xxwzd': '@natural(0, 100)' + '%', 'xsl': '@natural(0, 10000)', 'fmsl': '@natural(0, 100)' }
     ],
-    'totalSize': '@natural(0, 400)'
+    'totalSize': '221'
   },
+  'success': true
+});
+
+// 获取生产主体数量统计
+Mock.mock(/(\/portal\/scztSltj)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': [
+    { 'name': '福州', 'value': '@natural(10, 1000)' },
+    { 'name': '厦门', 'value': '@natural(10, 1000)' },
+    { 'name': '漳州', 'value': '@natural(10, 1000)' },
+    { 'name': '泉州', 'value': '@natural(10, 1000)' },
+    { 'name': '莆田', 'value': '@natural(10, 1000)' },
+    { 'name': '宁德', 'value': '@natural(10, 1000)' },
+    { 'name': '南平', 'value': '@natural(10, 1000)' },
+    { 'name': '三明', 'value': '@natural(10, 1000)' },
+    { 'name': '龙岩', 'value': '@natural(10, 1000)' }
+  ],
+  'success': true
+});
+
+// 获取区域产量数据
+Mock.mock(/(\/portal\/qycl)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': [
+    { 'name': '福州市', 'value': '@natural(10, 1000)' },
+    { 'name': '厦门市', 'value': '@natural(10, 1000)' },
+    { 'name': '漳州市', 'value': '@natural(10, 1000)' },
+    { 'name': '泉州市', 'value': '@natural(10, 1000)' },
+    { 'name': '莆田市', 'value': '@natural(10, 1000)' },
+    { 'name': '宁德市', 'value': '@natural(10, 1000)' },
+    { 'name': '南平市', 'value': '@natural(10, 1000)' },
+    { 'name': '三明市', 'value': '@natural(10, 1000)' },
+    { 'name': '龙岩市', 'value': '@natural(10, 1000)' },
+    { 'name': '平潭', 'value': '@natural(10, 1000)' }
+  ],
+  'success': true
+});
+
+// 获取区域看板数据
+Mock.mock(/(\/portal\/areaKbData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': [
+    { 'name': '福州市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '厦门市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '漳州市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '泉州市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '莆田市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '宁德市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '南平市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '三明市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' },
+    { 'name': '龙岩市', 'qysl': '@natural(10, 1000)', 'qyxzsl': '@natural(10, 1000)', 'zzcyl': '@natural(10, 1000)', 'xmycl': '@natural(10, 1000)' }
+  ],
   'success': true
 });

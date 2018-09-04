@@ -1,13 +1,13 @@
 <template>
   <div class="wrap">
     <div class="part pie">
-      <cmp-echarts ref="pie" :option="optionPie"></cmp-echarts>
+      <cmp-echarts :option="optionPie"></cmp-echarts>
     </div>
     <div class="part bar">
-      <cmp-echarts ref="bar" :option="optionBar"></cmp-echarts>
+      <cmp-echarts :option="optionBar"></cmp-echarts>
     </div>
     <div class="part map">
-      <cmp-echarts ref="map" :option="optionMap" :map="map"></cmp-echarts>
+      <cmp-echarts :option="optionMap" :map="map"></cmp-echarts>
     </div>
     <div class="part time">
       <p class="title">时间</p>
@@ -52,6 +52,7 @@
         optionBar: {},
         optionPie: {},
         optionMap: {},
+        map: {},
         timeArr: {
           val: '',
           arr: [
@@ -123,9 +124,9 @@
           // 当期页
           index: 1,
           // 总页数
-          totalPage: 10,
+          totalPage: 1,
           pagesizes: [
-            100, 200, 300
+            10, 20, 30, 40, 50
           ],
           pagesize: 300
         }
@@ -369,46 +370,40 @@
         
       },
       clkArea: function () {
-        var _this = this;
-
         // if (this.areaArr.val.length === 0) {
         //   // alert('取全省数据');
         // } else {
         //   // alert('按区域取数据:' + this.areaArr.val);
         // }
+        if (this.optionPagebarPagesize.index === 1) {
+          this.callbackPagebar({
+            currentPage: 1,
+            pagesize: this.optionPagebarPagesize.pagesize
+          });
+        } else {
+          this.optionPagebarPagesize.index = 1;
+        }
+        
+      },
+      callbackPagebar: function (data) {
+        var _this = this;
+        
+        console.log('===callbackPagebar===');
+        console.log(data);
+        this.optionPagebarPagesize.index = data.currentPage;
+        this.optionPagebarPagesize.pagesize = data.pagesize;
         ajaxGetEnterpriseByArea({
-          area: this.this.areaArr.val,
+          area: this.areaArr.val,
           current: this.optionPagebarPagesize.index,
           pageSize: this.optionPagebarPagesize.pagesize
         }, function (data) {
           if (data.code === 0) {
-            console.log(data);
             _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = (data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize + 1;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
         });
-      },
-      getCylxzbData: function () {
-        // 
-      },
-      getFmsltjData: function () {
-        // 
-      },
-      getQyxsData: function () {
-        // 
-      },
-      getAreaEnterprisesData: function () {
-        // 
-      },
-      callbackPagebar: function (data) {
-        console.log('======');
-        console.log();
-        console.log(data.pagesize);
-        this.optionPagebarPagesize.index = data.currentPage;
-        this.optionPagebarPagesize.pagesize = data.pagesize;
-        this.clkArea();
       }
     }
   };
