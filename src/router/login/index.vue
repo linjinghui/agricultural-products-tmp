@@ -6,15 +6,15 @@
       <div class="wrap-form">
         <div class="form-layer">
           <label class="star">账号: </label>
-          <cmp-input class="f-dom" maxlength="50" :autofocus="true" placeholder="请输入登录账号" v-model="account">
+          <cmp-input class="f-dom" maxlength="50" :autofocus="true" placeholder="请输入登录账号" v-model="account" @focus="focusAccount" @blur="blurAccount">
             <i class="cicon-tick center-v" slot="right" v-if="accountCheck===true"></i>
           </cmp-input>
           <i class="icon iconfont icon-jinzhi" v-show="accountCheck===false"></i><br>
-          <small class="tip">{{accountCheck===false?'请填写账号':''}}&nbsp;</small>
+          <small class="tip">{{accountCheck===false?'请正确填写账号':''}}&nbsp;</small>
         </div>
         <div class="form-layer">
           <label class="star">密码: </label>
-          <cmp-input class="f-dom" :type="pwdType" maxlength="100" placeholder="请输入登录密码" v-model="password">
+          <cmp-input class="f-dom" :type="pwdType" maxlength="100" placeholder="请输入登录密码" v-model="password" @focus="focusPassword">
             <i class="cicon-xxx center-v icon iconfont icon-eye-close" slot="right" @click="changePwdType"></i>
           </cmp-input>
           <i class="icon iconfont icon-jinzhi" v-show="passwordCheck===false"></i><br>
@@ -23,7 +23,7 @@
         </div>
         <div class="form-layer">
           <label class="star">验证码: </label><br>
-          <cmp-input class="f-dom ipt-vcode" maxlength="10" placeholder="请输入验证码" v-model="vcode"></cmp-input>
+          <cmp-input class="f-dom ipt-vcode" maxlength="10" placeholder="请输入验证码" v-model="vcode" @enter="clkLogin"></cmp-input>
           <img class="vcode" :src="vcodeUrl" width="100" height="32" @click="getVcode">
         </div>
         <div class="form-layer" style="margin-top: 40px;">
@@ -68,18 +68,6 @@
       this.getRememberData();
       // 获取验证码
       this.getVcode();
-      // this.$loading({
-      //   // 显示、隐藏
-      //   show: true,
-      //   // 遮罩层
-      //   modal: false
-      // });
-      // this.$prompt({
-      //   // 显示、隐藏
-      //   show: true,
-      //   // 遮罩层
-      //   modal: false
-      // });
     },
     methods: {
       changePwdType: function () {
@@ -90,29 +78,39 @@
       },
       clkLogin: function () {
         var _this = this;
-
-        if (this.rememberMe) {
-          // 记住账号密码
-          lsgSaveData(this.rememberMeKey, {
-            account: this.account,
-            password: this.password
-          });
-        }
-        // this.$loading({show: true});
-        // console.log('=========2============');
-        // console.log(this);
-        // 登录
-        ajaxLogin({
+        var obj = {
           account: this.account,
           password: this.password,
-          vcode: this.vcode
-        }, function (data) {
-          if (data.code === 200) {
-            // 
-          } else {
-            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
-          }
-        });
+          vcode: this.vcode,
+          rememberMe: this.rememberMe
+        };
+
+        if (!this.account) {
+          this.accountCheck = false;
+        }
+        if (!this.password) {
+          this.passwordCheck = false;
+        }
+
+        // 登录
+        if (this.account && this.password) {
+          ajaxLogin(obj, function (data) {
+            if (data.code === 0) {
+              // 记住账号密码
+              if (_this.rememberMe) {
+                lsgSaveData(_this.rememberMeKey, obj);
+              }
+              _this.$root.toPage('', 1);
+            } else if (data.code === 6) {
+              // 用户名或密码错误
+              _this.accountCheck = false;
+              _this.passwordCheck = false;
+            } else {
+              _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+            }
+          });
+        }
+        
       },
       getRememberData: function () {
         var rememberMeData = lsgGetData(this.rememberMeKey);
@@ -123,9 +121,29 @@
         if (rememberMeData && rememberMeData.password) {
           this.password = rememberMeData.password;
         }
+        if (rememberMeData && rememberMeData.rememberMe) {
+          this.rememberMe = rememberMeData.rememberMe;
+        }
       },
       getVcode: function () {
         this.vcodeUrl = ajaxGetVcode();
+      },
+      focusAccount: function () {
+        this.accountCheck = '';        
+      },
+      blurAccount: function () {
+        // var _this = this;
+
+        // setTimeout(function () {
+        //   if (_this.account) {
+        //     _this.accountCheck = true;
+        //   } else {
+        //     _this.accountCheck = false;
+        //   }
+        // }, 100);
+      },
+      focusPassword: function () {
+        this.passwordCheck = '';
       }
     }
   };
@@ -231,7 +249,6 @@
       }
 
       .cicon-tick {
-        width: 30px;
         font-size: 20px;
         color: #4fa5ef;
         background-color: transparent;

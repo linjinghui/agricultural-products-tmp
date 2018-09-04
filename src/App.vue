@@ -108,13 +108,31 @@
         if (!path) {
           switch (type) {
             case 0:
+              // 登录页
               path = '/#/login';
               break;
             case 1:
-              path = '/#/home';
+              path = '/#/index';
               break;
             case 2:
-              path = '/#/addressBookAdmin';
+              // 首页
+              path = '/#/home';
+              break;
+            case 3:
+              // 溯源监管平台
+              path = '/#/syjgpt';
+              break;
+            case 4:
+              // 分析预警平台
+              path = '/#/fxyjpt';
+              break;
+            case 5:
+              // 基础平台
+              path = '/#/jcpt';
+              break;
+            case 6:
+              // 修改密码
+              path = '/#/mmxg';
               break;
             default:
               path = '/#/home';

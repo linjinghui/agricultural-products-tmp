@@ -1,4 +1,4 @@
-import {_this} from './constant.js';
+import {$http} from './constant.js';
 
 const URL = '/api';
 
@@ -12,7 +12,7 @@ export function ajaxGet (pms, callback) {
     name: pms.name
   };
   
-  _this.http({
+  $http({
     method: 'GET',
     url: URL + '/portal/widget',
     params: params
@@ -31,7 +31,7 @@ export function ajaxPost (pms, callback) {
     name: pms.name
   };
   
-  _this.http({
+  $http({
     method: 'POST',
     url: URL + '/portal/widget',
     body: params,
@@ -63,7 +63,7 @@ export function ajaxLogin (pms, callback) {
     kaptcha: pms.vcode
   };
   
-  _this.http({
+  $http({
     method: 'POST',
     url: URL + '/login',
     body: params,

@@ -1,0 +1,130 @@
+<template>
+  <div class="wrap">
+    <header>
+      <nav>
+        <a class="logo">AdminLTE</a>
+        <a v-for="(item,index) in navData" :key="'nav_'+index" v-text="item.name" @click="clkNav(item)"></a>
+      </nav>
+      <nav class="l-r">
+        <a><i class="fa fa-bell-o"></i></a>
+        <!-- <a @mouseleave="optionMenu.show=false"> -->
+        <a @click="optionMenu.show=!optionMenu.show">
+          <i class="fa fa-user"></i>
+          <cmp-menu v-bind="optionMenu" @cbkClkItem="callbackMenu"></cmp-menu>
+        </a>
+        <a><i class="fa fa-cogs"></i></a>
+      </nav>
+    </header>
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+  import {Menu} from 'web-base-ui';
+
+  export default {
+    name: 'Index',
+    components: {
+      'cmpMenu': Menu
+    },
+    data () {
+      return {
+        navData: [
+          {
+            name: '首页',
+            pathIndex: 2
+          },
+          {
+            name: '溯源监管平台',
+            pathIndex: 3
+          },
+          {
+            name: '分析预警平台',
+            pathIndex: 4
+          },
+          {
+            name: '基础平台',
+            pathIndex: 5
+          }
+        ],
+        optionMenu: {
+          show: false,
+          data: ['密码修改', '退出登录'],
+          result: []
+        }
+      };
+    },
+    mounted: function () {
+      // 
+    },
+    methods: {
+      clkNav: function (info) {
+        this.$root.toPage('', info.pathIndex);
+      },
+      callbackMenu: function (data) {
+        console.log('===callbackMenu====');
+        console.log(data);
+        if (data[0] === '密码修改') {
+          this.$root.toPage('', 6);
+        } else if (data[0] === '退出登录') {
+          this.$root.toPage('', 0);
+        }
+      }
+    }
+  };
+</script>
+
+<style lang="scss">
+  .wrap {}
+</style>
+<style scoped lang="scss">
+  .wrap {
+
+    >header {
+      height: 50px;
+      line-height: 50px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #3c8dbc;
+      user-select: none;
+
+      nav {
+        a {
+          position: relative;
+          float: left;
+          padding-left: 20px;
+          padding-right: 20px;
+          cursor: pointer;
+        }
+        .logo {
+          width: 200px;
+          font-size: 20px;
+          font-weight: 700;
+          text-align: center;
+          background-color: #367fa9;
+        }
+        a:not(.logo):hover {
+          background-color: #306f94;
+        }
+      }
+
+      nav.l-r {
+        float: right;
+        font-size: 20px;
+      }
+
+      .wrap-menu {
+        position: absolute;
+        top: calc(100% + 1px);
+        right: 0;
+        width: 120px;
+        color: #666;
+        font-size: 16px;
+        text-align: center;
+      }
+    }
+  }
+
+  // 笔记本尺寸 1366 * 768
+  @media screen and (max-width: 1366px) {}
+</style>
