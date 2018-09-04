@@ -7,25 +7,73 @@ Mock.setup({
 
 let demo = {
   'msg': 'im msg',
-  'msgCode': 200,
-  'msgDesc': 'im msgDesc',
-  'result': '',
-  'subMsg': 'im subMsg',
-  'subMsgCode': 'im subMsgCode'
+  'code': 200,
+  'ret': '',
+  'success': true
 }
 
-// 帐号密码登陆
-Mock.mock(/(\/login\/account)/, {
+// 获取产业类型占比数据
+Mock.mock(/(\/portal\/cylxzb)/, {
   'msg': 'im msg',
-  'msgCode': 200,
-  'msgDesc': 'im msgDesc',
-  'result': {
-    'avatar': '@img',
-    'enterpriseId': 0,
-    'realName': '@name',
-    'token': 'string',
-    'userNumber|1': [66208688, 66071007, 66145044, 66889932]
+  'code': 0,
+  'ret': [
+    { 'id': '1', 'value': '@natural(10, 1000)', 'name': '水果' },
+    { 'id': '2', 'value': '@natural(10, 1000)', 'name': '蔬菜' },
+    { 'id': '3', 'value': '@natural(10, 1000)', 'name': '茶叶' },
+    { 'id': '4', 'value': '@natural(10, 1000)', 'name': '食用菌' },
+    { 'id': '5', 'value': '@natural(10, 1000)', 'name': '中草药' },
+    { 'id': '6', 'value': '@natural(10, 1000)', 'name': '牲畜' },
+    { 'id': '7', 'value': '@natural(10, 1000)', 'name': '家禽' },
+    { 'id': '8', 'value': '@natural(10, 1000)', 'name': '屠宰及肉类加工' }
+  ],
+  'success': true
+});
+
+// 获取赋码数量统计数据
+Mock.mock(/(\/portal\/fmsltj)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': [
+    { 'id': '1', 'value': '@natural(10, 1000)', 'name': '水果' },
+    { 'id': '2', 'value': '@natural(10, 1000)', 'name': '蔬菜' },
+    { 'id': '3', 'value': '@natural(10, 1000)', 'name': '茶叶' },
+    { 'id': '4', 'value': '@natural(10, 1000)', 'name': '食用菌' },
+    { 'id': '5', 'value': '@natural(10, 1000)', 'name': '中草药' },
+    { 'id': '6', 'value': '@natural(10, 1000)', 'name': '牲畜' },
+    { 'id': '7', 'value': '@natural(10, 1000)', 'name': '家禽' },
+    { 'id': '8', 'value': '@natural(10, 1000)', 'name': '屠宰及肉类加工' }
+  ],
+  'success': true
+});
+
+// 获取区域销售数据
+Mock.mock(/(\/portal\/qyxs)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': [
+    { 'name': '福州市', 'value': '@natural(10, 1000)' },
+    { 'name': '厦门市', 'value': '@natural(10, 1000)' },
+    { 'name': '漳州市', 'value': '@natural(10, 1000)' },
+    { 'name': '泉州市', 'value': '@natural(10, 1000)' },
+    { 'name': '莆田市', 'value': '@natural(10, 1000)' },
+    { 'name': '宁德市', 'value': '@natural(10, 1000)' },
+    { 'name': '南平市', 'value': '@natural(10, 1000)' },
+    { 'name': '三明市', 'value': '@natural(10, 1000)' },
+    { 'name': '龙岩市', 'value': '@natural(10, 1000)' },
+    { 'name': '平潭', 'value': '@natural(10, 1000)' }
+  ],
+  'success': true
+});
+
+// 获取区域企业数据
+Mock.mock(/(\/portal\/enterpriseByArea)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20-100': [
+      { 'enterName': '@name', 'xzqh': '@natural(0, 100)', 'xxwzd': '@natural(0, 100)' + '%', 'xsl': '@natural(0, 10000)', 'fmsl': '@natural(0, 100)' }
+    ],
+    'totalSize': '@natural(0, 400)'
   },
-  'subMsg': 'im subMsg',
-  'subMsgCode': 'im subMsgCode'
+  'success': true
 });

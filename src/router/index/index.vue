@@ -3,12 +3,11 @@
     <header>
       <nav>
         <a class="logo">AdminLTE</a>
-        <a v-for="(item,index) in navData" :key="'nav_'+index" v-text="item.name" @click="clkNav(item)"></a>
+        <a v-for="(item,index) in navData" :key="'nav_'+index" :class="{'active': active===index}" v-text="item.name" @click="clkNav(index)"></a>
       </nav>
       <nav class="l-r">
         <a><i class="fa fa-bell-o"></i></a>
-        <!-- <a @mouseleave="optionMenu.show=false"> -->
-        <a @click="optionMenu.show=!optionMenu.show">
+        <a @click="optionMenu.show=!optionMenu.show" @mouseleave="optionMenu.show=false">
           <i class="fa fa-user"></i>
           <cmp-menu v-bind="optionMenu" @cbkClkItem="callbackMenu"></cmp-menu>
         </a>
@@ -29,6 +28,7 @@
     },
     data () {
       return {
+        active: '',
         navData: [
           {
             name: '首页',
@@ -55,11 +55,13 @@
       };
     },
     mounted: function () {
-      // 
+      // 默认进入首页
+      this.clkNav(0);
     },
     methods: {
-      clkNav: function (info) {
-        this.$root.toPage('', info.pathIndex);
+      clkNav: function (index) {
+        this.active = index;
+        this.$root.toPage('', this.navData[index].pathIndex);
       },
       callbackMenu: function (data) {
         console.log('===callbackMenu====');
@@ -103,6 +105,7 @@
           text-align: center;
           background-color: #367fa9;
         }
+        a.active,
         a:not(.logo):hover {
           background-color: #306f94;
         }

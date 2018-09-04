@@ -5,3 +5,6 @@ nginx代理地址:
 location /api/ {
 	    proxy_pass http://wifino1.yourslink.com:10211/;
 	}
+
+阿里云网页发布地址：
+http://120.55.46.245/#/login	
