@@ -1,8 +1,8 @@
 <template>
   <div class="wrap">
     <header>
+      <a class="logo">AdminLTE</a>
       <nav>
-        <a class="logo">AdminLTE</a>
         <a v-for="(item,index) in navData" :key="'nav_'+index" :class="{'active': active===index}" v-text="item.name" @click="clkNav(index)"></a>
       </nav>
       <nav class="l-r">
@@ -90,20 +90,25 @@
       background-color: #3c8dbc;
       user-select: none;
 
+      .logo {
+        float: left;
+        width: 230px;
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        background-color: #367fa9;
+      }
+
       nav {
+        float: left;
+        // margin-left: calc(50% - 230px);
+        // transform: translateX(-50%);
         a {
           position: relative;
           float: left;
           padding-left: 20px;
           padding-right: 20px;
           cursor: pointer;
-        }
-        .logo {
-          width: 200px;
-          font-size: 20px;
-          font-weight: 700;
-          text-align: center;
-          background-color: #367fa9;
         }
         a.active,
         a:not(.logo):hover {
