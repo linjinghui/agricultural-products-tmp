@@ -4,8 +4,44 @@ import Router from 'vue-router';
 const Login = () => import('./login/index.vue');
 const Index = () => import('./index/index.vue');
 const Home = () => import('./home/index.vue');
+
 const Syjgpt = () => import('./syjgpt/index.vue');
+const Dbsx = () => import('./syjgpt/dbsx.vue');
+const Dsh = () => import('./syjgpt/ztsh/dsh.vue');
+const Lssh = () => import('./syjgpt/ztsh/lssh.vue');
+const Shcx = () => import('./syjgpt/ztsh/shcx.vue');
+const Ztxc = () => import('./syjgpt/ztdaxc/ztxc.vue');
+const Yjcx = () => import('./syjgpt/ztdaxc/yjcx.vue');
+const Giszs = () => import('./syjgpt/ztdaxc/giszs.vue');
+const Cpjbxxxc = () => import('./syjgpt/scgcxc/cpjbxxxc.vue');
+const Scxkjg = () => import('./syjgpt/scgcxc/scxkjg.vue');
+const Scjhxc = () => import('./syjgpt/scgcxc/scjhxc.vue');
+const Nzjtrpxc = () => import('./syjgpt/scgcxc/nzjtrpxc.vue');
+const Scghjxc = () => import('./syjgpt/scgcxc/scghjxc.vue');
+const Ccpxxxc = () => import('./syjgpt/scgcxc/ccpxxxc.vue');
+const Jcxxxc = () => import('./syjgpt/scgcxc/jcxxxc.vue');
+const Fmxxxc = () => import('./syjgpt/fmxxxc/fmxxxc.vue');
+const Xslxxc = () => import('./syjgpt/fmxxxc/xslxxc.vue');
+const Xcwt = () => import('./syjgpt/jggl/xcwt.vue');
+const Ajgl = () => import('./syjgpt/jggl/ajgl.vue');
+const Jypgl = () => import('./syjgpt/jggl/jypgl.vue');
+const Hmdgl = () => import('./syjgpt/jggl/hmdgl.vue');
+const Xzcfgl = () => import('./syjgpt/jggl/xzcfgl.vue');
+const Jdjcgl = () => import('./syjgpt/jggl/jdjcgl.vue');
+const Fwxxtsgl = () => import('./syjgpt/fwxxts/fwxxtsgl.vue');
+const Jgdlrzcx = () => import('./syjgpt/gzjd/jgdlrzcx.vue');
+const Jgczrzcx = () => import('./syjgpt/gzjd/jgczrzcx.vue');
+const Scztdlrzcx = () => import('./syjgpt/gzjd/scztdlrzcx.vue');
+const Scztczrzcx = () => import('./syjgpt/gzjd/scztczrzcx.vue');
+const Zzjggl = () => import('./syjgpt/xtgl/zzjggl.vue');
+const Jsgl = () => import('./syjgpt/xtgl/jsgl.vue');
+const Jsjqxgl = () => import('./syjgpt/xtgl/jsjqxgl.vue');
+
 const Fxyjpt = () => import('./fxyjpt/index.vue');
+const Fxpz = () => import('./fxyjpt/jcyjpz/fxpz.vue');
+const Fxzbfzpz = () => import('./fxyjpt/jcyjpz/fxzbfzpz.vue');
+const Fxgxrpz = () => import('./fxyjpt/jcyjpz/fxgxrpz.vue');
+
 const Jcpt = () => import('./jcpt/index.vue');
 const Mmxg = () => import('./mmxg/index.vue');
 
@@ -37,12 +73,186 @@ export default new Router({
         {
           path: '/syjgpt',
           name: 'syjgpt',
-          component: Syjgpt
+          component: Syjgpt,
+          children: [
+            {
+              path: '/',
+              name: 'dbsx',
+              component: Dbsx
+            },
+            {
+              path: '/dsh',
+              name: 'dsh',
+              component: Dsh
+            },
+            {
+              path: '/lssh',
+              name: 'lssh',
+              component: Lssh
+            },
+            {
+              path: '/shcx',
+              name: 'shcx',
+              component: Shcx
+            },
+            {
+              path: '/ztxc',
+              name: 'ztxc',
+              component: Ztxc
+            },
+            {
+              path: '/yjcx',
+              name: 'yjcx',
+              component: Yjcx
+            },
+            {
+              path: '/giszs',
+              name: 'giszs',
+              component: Giszs
+            },
+            {
+              path: '/cpjbxxxc',
+              name: 'cpjbxxxc',
+              component: Cpjbxxxc
+            },
+            {
+              path: '/scxkjg',
+              name: 'scxkjg',
+              component: Scxkjg
+            },
+            {
+              path: '/scjhxc',
+              name: 'scjhxc',
+              component: Scjhxc
+            },
+            {
+              path: '/nzjtrpxc',
+              name: 'nzjtrpxc',
+              component: Nzjtrpxc
+            },
+            {
+              path: '/scghjxc',
+              name: 'scghjxc',
+              component: Scghjxc
+            },
+            {
+              path: '/ccpxxxc',
+              name: 'ccpxxxc',
+              component: Ccpxxxc
+            },
+            {
+              path: '/jcxxxc',
+              name: 'jcxxxc',
+              component: Jcxxxc
+            },
+            {
+              path: '/fmxxxc',
+              name: 'fmxxxc',
+              component: Fmxxxc
+            },
+            {
+              path: '/xslxxc',
+              name: 'xslxxc',
+              component: Xslxxc
+            },
+            {
+              path: '/xcwt',
+              name: 'xcwt',
+              component: Xcwt
+            },
+            {
+              path: '/ajgl',
+              name: 'ajgl',
+              component: Ajgl
+            },
+            {
+              path: '/jypgl',
+              name: 'jypgl',
+              component: Jypgl
+            },
+            {
+              path: '/hmdgl',
+              name: 'hmdgl',
+              component: Hmdgl
+            },
+            {
+              path: '/xzcfgl',
+              name: 'xzcfgl',
+              component: Xzcfgl
+            },
+            {
+              path: '/jdjcgl',
+              name: 'jdjcgl',
+              component: Jdjcgl
+            },
+            {
+              path: '/fwxxtsgl',
+              name: 'fwxxtsgl',
+              component: Fwxxtsgl
+            },
+            {
+              path: '/jgdlrzcx',
+              name: 'jgdlrzcx',
+              component: Jgdlrzcx
+            },
+            {
+              path: '/jgczrzcx',
+              name: 'jgczrzcx',
+              component: Jgczrzcx
+            },
+            {
+              path: '/scztdlrzcx',
+              name: 'scztdlrzcx',
+              component: Scztdlrzcx
+            },
+            {
+              path: '/scztczrzcx',
+              name: 'scztczrzcx',
+              component: Scztczrzcx
+            },
+            {
+              path: '/zzjggl',
+              name: 'zzjggl',
+              component: Zzjggl
+            },
+            {
+              path: '/jsgl',
+              name: 'jsgl',
+              component: Jsgl
+            },
+            {
+              path: '/jsjqxgl',
+              name: 'jsjqxgl',
+              component: Jsjqxgl
+            }
+          ]
         },
         {
           path: '/fxyjpt',
           name: 'fxyjpt',
-          component: Fxyjpt
+          component: Fxyjpt,
+          children: [
+            {
+              path: '/',
+              name: 'fxpz',
+              component: Fxpz
+            },
+            {
+              path: '/fxpz',
+              name: 'fxpz',
+              component: Fxpz
+            },
+            {
+              path: '/fxzbfzpz',
+              name: 'fxzbfzpz',
+              component: Fxzbfzpz
+            },
+            {
+              path: '/fxgxrpz',
+              name: 'fxgxrpz',
+              component: Fxgxrpz
+            }
+          ]
         },
         {
           path: '/jcpt',

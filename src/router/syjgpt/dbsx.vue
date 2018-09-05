@@ -1,15 +1,17 @@
 <template>
   <div class="wrap">
     <cmp-tab v-bind="optionTab"></cmp-tab>
-    生产主体操作日志查询</div>
+    待办事项
+  </div>
 </template>
 
 <script>
   import {Tab} from 'web-base-ui';
+
   export default {
     name: 'Login',
     components: {
-      'cmpTab': Tab 
+      'cmpTab': Tab
     },
     data () {
       return {
@@ -17,10 +19,10 @@
           acitve: 0,
           list: [
             {
-              name: '生产主体操作日志查询'
+              name: '待办事项'
             }
           ]
-        } 
+        }
       };
     },
     mounted: function () {
@@ -33,7 +35,9 @@
 </script>
 
 <style lang="scss">
-  .wrap {}
+  .wrap {
+    // 
+  }
 </style>
 <style scoped lang="scss">
   .wrap {

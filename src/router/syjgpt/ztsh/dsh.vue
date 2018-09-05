@@ -1,17 +1,26 @@
 <template>
-  <div class="wrap">主体审核-待审核</div>
+  <div class="wrap">
+    <cmp-tab v-bind="optionTab"></cmp-tab>
+    主体审核-待审核</div>
 </template>
 
 <script>
-  
+  import {Tab} from 'web-base-ui';
   export default {
     name: 'Login',
     components: {
-      // 
+      'cmpTab': Tab 
     },
     data () {
       return {
-        // 
+        optionTab: {
+          acitve: 0,
+          list: [
+            {
+              name: '待审核'
+            }
+          ]
+        } 
       };
     },
     mounted: function () {

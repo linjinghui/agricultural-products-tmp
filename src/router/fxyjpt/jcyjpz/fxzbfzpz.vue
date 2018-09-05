@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <cmp-tab v-bind="optionTab"></cmp-tab>
-    生产主体操作日志查询</div>
+    风险指标阈值配置</div>
 </template>
 
 <script>
@@ -17,7 +17,7 @@
           acitve: 0,
           list: [
             {
-              name: '生产主体操作日志查询'
+              name: '风险指标阈值配置'
             }
           ]
         } 

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap" :class="{'max': maxContent}">
+  <div class="wrap syjgpt" :class="{'max': maxContent}">
     <div class="p-left">
       <i class="fa fa-reorder" @click="maxContent=!maxContent"></i>
       <ul class="aside-nav">
@@ -22,14 +22,12 @@
       </ul>
     </div>
     <div class="p-content">
-      <component :is="currentTabComponent"></component>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-  // const Dsh = () => import('./ztsh/dsh.vue');
-  const Dsh = require('./ztsh/dsh.vue');
 
   export default {
     name: 'Syjgpt',
@@ -54,14 +52,21 @@
                   id: '1-1',
                   name: '待审核',
                   icon: '',
-                  url: 'https://www.baidu.com?t=1',
+                  url: 'dsh',
                   children: []
                 },
                 {
                   id: '1-2',
                   name: '历史审核',
                   icon: '',
-                  url: 'https://www.baidu.com?t=2',
+                  url: 'lssh',
+                  children: []
+                },
+                {
+                  id: '1-3',
+                  name: '审核查询',
+                  icon: '',
+                  url: 'shcx',
                   children: []
                 }
               ]
@@ -70,26 +75,27 @@
               id: '2',
               name: '主体档案巡查',
               icon: 'fa fa-archive',
+              url: '',
               children: [
                 {
                   id: '2-1',
                   name: '主体巡查',
                   icon: '',
-                  url: '',
+                  url: 'ztxc',
                   children: []
                 },
                 {
                   id: '2-2',
                   name: '预警查询',
                   icon: '',
-                  url: '',
+                  url: 'yjcx',
                   children: []
                 },
                 {
                   id: '2-3',
                   name: 'GIS展示',
                   icon: '',
-                  url: '',
+                  url: 'giszs',
                   children: []
                 }
               ]
@@ -98,47 +104,55 @@
               id: '4',
               name: '生产过程巡查',
               icon: 'fa fa-archive',
+              url: '',
               children: [
                 {
                   id: '4-1',
                   name: '产品基本信息巡查',
                   icon: '',
+                  url: 'cpjbxxxc',
                   children: []
                 },
                 {
                   id: '4-2',
                   name: '生产许可监管',
                   icon: '',
+                  url: 'scxkjg',
                   children: []
                 },
                 {
                   id: '4-3',
                   name: '生产计划巡查',
                   icon: '',
+                  url: 'scjhxc',
                   children: []
                 },
                 {
                   id: '4-4',
                   name: '农资及投入品巡查',
                   icon: '',
+                  url: 'nzjtrpxc',
                   children: []
                 },
                 {
                   id: '4-5',
                   name: '生产各环节巡查',
                   icon: '',
+                  url: 'scghjxc',
                   children: []
                 },
                 {
                   id: '4-6',
                   name: '产成品信息巡查',
                   icon: '',
+                  url: 'ccpxxxc',
                   children: []
                 },
                 {
                   id: '4-7',
                   name: '检测信息巡查',
                   icon: '',
+                  url: 'jcxxxc',
                   children: []
                 }
               ]
@@ -147,17 +161,20 @@
               id: '5',
               name: '赋码信息巡查',
               icon: 'fa fa-archive',
+              url: '',
               children: [
                 {
                   id: '5-1',
                   name: '赋码信息巡查',
                   icon: '',
+                  url: 'fmxxxc',
                   children: []
                 },
                 {
                   id: '5-2',
                   name: '销售流向巡查',
                   icon: '',
+                  url: 'xslxxc',
                   children: []
                 }
               ]
@@ -166,41 +183,48 @@
               id: '6',
               name: '监管管理',
               icon: 'fa fa-archive',
+              url: '',
               children: [
                 {
                   id: '6-1',
                   name: '巡查问题',
                   icon: '',
+                  url: 'xcwt',
                   children: []
                 },
                 {
                   id: '6-2',
-                  name: '按键管理',
+                  name: '案件管理',
                   icon: '',
+                  url: 'ajgl',
                   children: []
                 },
                 {
                   id: '6-3',
                   name: '禁用品管理',
                   icon: '',
+                  url: 'jypgl',
                   children: []
                 },
                 {
                   id: '6-4',
                   name: '黑名单管理',
                   icon: '',
+                  url: 'hmdgl',
                   children: []
                 },
                 {
                   id: '6-5',
                   name: '行政处罚管理',
                   icon: '',
+                  url: 'xzcfgl',
                   children: []
                 },
                 {
                   id: '6-6',
                   name: '监督检查管理',
                   icon: '',
+                  url: 'jdjcgl',
                   children: []
                 }
               ]
@@ -209,11 +233,13 @@
               id: '7',
               name: '服务信息推送',
               icon: 'fa fa-archive',
+              url: '',
               children: [
                 {
                   id: '7-1',
                   name: '服务信息推送管理',
                   icon: '',
+                  url: 'fwxxtsgl',
                   children: []
                 }
               ]
@@ -222,29 +248,34 @@
               id: '8',
               name: '工作监督',
               icon: 'fa fa-archive',
+              url: '',
               children: [
                 {
                   id: '8-1',
                   name: '监管登录日志查询',
                   icon: '',
+                  url: 'jgdlrzcx',
                   children: []
                 },
                 {
                   id: '8-2',
                   name: '监管操作日志查询',
                   icon: '',
+                  url: 'jgczrzcx',
                   children: []
                 },
                 {
                   id: '8-3',
                   name: '生产主体登录日志查询',
                   icon: '',
+                  url: 'scztdlrzcx',
                   children: []
                 },
                 {
                   id: '8-4',
                   name: '生产主体操作日志查询',
                   icon: '',
+                  url: 'scztczrzcx',
                   children: []
                 }
               ]
@@ -253,41 +284,37 @@
               id: '9',
               name: '系统管理',
               icon: 'fa fa-cog',
+              url: '',
               children: [
                 {
                   id: '3-1',
                   name: '组织机构管理',
                   icon: '',
-                  url: 'https://www.baidu.com?t=3',
+                  url: 'zzjggl',
                   children: []
                 },
                 {
                   id: '3-2',
                   name: '角色管理',
                   icon: '',
-                  url: 'https://www.baidu.com?t=4',
+                  url: 'jsgl',
                   children: []
                 },
                 {
                   id: '3-3',
                   name: '角色及权限管理',
                   icon: '',
-                  url: 'https://www.baidu.com?t=5',
+                  url: 'jsjqxgl',
                   children: []
                 }
               ]
             }
           ]
-        },
-        currentTabComponent: ''
+        }
       };
     },
     mounted: function () {
-      // const dsh = () => import('./ztsh/dsh.vue');
-
-      console.log('============');
-      console.log(Dsh);
-      this.currentTabComponent = Dsh;
+      // 
     },
     methods: {
       clkNavItem: function (arr) {
@@ -297,7 +324,7 @@
         // 激活节点
         if (current.url) {
           // step1 - 跳转
-          console.log('跳转：' + current.url);
+          this.$root.toPage('/#/' + current.url);
           // step2 - 激活当前
           this.navOption.activeIndex_2 = current.id;
           // step3 - 激活最上层
@@ -313,7 +340,18 @@
 </script>
 
 <style lang="scss">
-  .wrap {}
+  .syjgpt {
+    .wrap-tab {
+      font-size: 14px;
+      padding-left: 35px!important;
+      background-color: #ccc!important;
+
+      .active {
+        border: 0!important;
+        border-radius: 0!important;
+      }
+    }
+  }
 </style>
 <style scoped lang="scss">
   .wrap {
@@ -324,6 +362,7 @@
       position: relative;
       float: left;
       padding-top: 20px;
+      padding-bottom: 20px;
       width: 230px;
       height: 100%;
       color: #fff;
@@ -336,10 +375,10 @@
       .fa-reorder {
         position: absolute;
         top: 0;
-        right: -30px;
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
+        right: -35px;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
         text-align: center;
         font-size: 14px;
         color: #fff;
