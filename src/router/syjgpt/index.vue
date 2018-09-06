@@ -21,7 +21,7 @@
         </li>
       </ul>
     </div>
-    <div class="p-content">
+    <div class="p-content" :style="{'min-height': 'calc('+$root.sheight+'px - 50px)'}">
       <router-view></router-view>
     </div>
   </div>
@@ -393,6 +393,7 @@
     >.p-content {
       float: left;
       width: calc(100% - 230px);
+      // min-height: calc(662px - 50px);
       background-color: #fff;
       transition: width .3s ease;
     }

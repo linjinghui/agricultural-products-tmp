@@ -76,9 +76,14 @@ export default new Router({
           component: Syjgpt,
           children: [
             {
-              path: '/',
+              path: '/dbsx',
               name: 'dbsx',
               component: Dbsx
+            },
+            {
+              path: '/',
+              name: 'dsh',
+              component: Dsh
             },
             {
               path: '/dsh',
@@ -266,22 +271,5 @@ export default new Router({
         }
       ]
     }
-    //, {
-    //   path: '/index',
-    //   name: 'index',
-    //   component: Index,
-    //   children: [
-    //     {
-    //       path: '/',
-    //       name: 'section',
-    //       component: Section
-    //     },
-    //     {
-    //       path: '/home',
-    //       name: 'home',
-    //       component: Home
-    //     }
-    //   ]
-    // }
   ]
 });

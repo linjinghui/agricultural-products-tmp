@@ -20,6 +20,8 @@
     name: 'app',
     data: function () {
       return {
+        swidth: document.documentElement.clientWidth || document.body.clientWidth,
+        sheight: document.documentElement.clientHeight || document.body.clientHeight,
         optionLoading: {
           show: false,
           text: '请您稍后！',

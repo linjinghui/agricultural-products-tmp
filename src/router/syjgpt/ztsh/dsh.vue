@@ -1,15 +1,15 @@
 <template>
   <div class="wrap">
-    <cmp-tab v-bind="optionTab"></cmp-tab>
-    <div style="padding: 0 20px;">
+    <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
+    <div style="padding: 0 20px;" v-if="optionTab.acitve===0">
       <div class="wrap-form horiz" :class="{'show': formShow}">
         <div class="form-layer">
           <label class="star">主体名称:</label>
-          <cmp-input class="f-dom" v-model="name" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query._ztmc_" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
-          <label class="star">主体名称:</label>
-          <cmp-input class="f-dom" v-model="name" maxlength="50"></cmp-input>
+          <label class="star">主体代码:</label>
+          <cmp-input class="f-dom" v-model="query._ztdm" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">行政区划:</label>
@@ -29,37 +29,41 @@
         </div>
         <div class="form-layer">
           <label class="star">法定代表人:</label>
-          <cmp-input class="f-dom" v-model="name" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query._fddbr_" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">产业类型:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity"></cmp-drop-menu>
+          <cmp-drop-menu class="f-dom" v-bind="optionCylx" v-model="optionCylx.result" @cbkClkItem="cbkClkCylx">
+            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+          </cmp-drop-menu>
         </div>      
         <div class="form-layer">
           <label class="star">主体性质:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity"></cmp-drop-menu>
+          <cmp-drop-menu class="f-dom" v-bind="optionZtxz" v-model="optionZtxz.result" @cbkClkItem="cbkClkZtxz">
+            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+          </cmp-drop-menu>
         </div>
         <div class="form-layer">
           <label class="star">负责人姓名:</label>
-          <cmp-input class="f-dom" v-model="name" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query._fzrxm_" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">主体提交时间:</label>
-          <cmp-date-picker class="f-dom" v-model="name"></cmp-date-picker>
+          <cmp-date-picker class="f-dom" v-model="query._tjsjstart_"></cmp-date-picker>
         </div>
         <div class="form-layer" style="width: 185px;">
-          <cmp-date-picker style="width: 100%;" class="f-dom" v-model="name"></cmp-date-picker>
+          <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query._tjsjend_"></cmp-date-picker>
         </div>
         <div class="form-layer">
           <label class="star">身份验证时间:</label>
-          <cmp-date-picker class="f-dom" v-model="name"></cmp-date-picker>
+          <cmp-date-picker class="f-dom" v-model="query._sfyzsjstart_"></cmp-date-picker>
         </div>
         <div class="form-layer" style="width: 185px;">
-          <cmp-date-picker style="width: 100%;" class="f-dom" v-model="name"></cmp-date-picker>
+          <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query._sfyzsjend_"></cmp-date-picker>
         </div>      
         <div class="form-layer" style="width: 100%;text-align:center;">
-          <cmp-button theme="line">重置</cmp-button>
-          <cmp-button>搜索</cmp-button>
+          <cmp-button theme="line" @click="clkRest">重置</cmp-button>
+          <cmp-button @click="clkSearch">搜索</cmp-button>
         </div>
       </div>
       <div class="fgx">
@@ -69,11 +73,14 @@
         <tr slot="head">
           <td>主体名称</td><td>主体代码</td><td>经营场所</td><td>法定代表人</td><td>产业类型</td><td>主体性质</td><td>负责人姓名</td><td>登录账号</td><td>生产主体提交时间</td><td>身份验证时间</td>
         </tr>
-        <tr slot="body" slot-scope="props">
-          <td>{{props.item.name}}</td><td>{{props.item.qysl}}</td><td>{{props.item.qyxzsl}}</td><td>{{props.item.zzcyl}}</td><td>{{props.item.xmycl}}</td>
+        <tr slot="body" slot-scope="props" @click="clkTabelItem(props.item)">
+          <td>{{props.item._ztmc_}}</td><td>{{props.item._ztdm_}}</td><td>{{props.item._jycs_}}</td><td>{{props.item._fddbr_}}</td><td>{{props.item._cylx_}}</td><td>{{props.item._ztxz_}}</td><td>{{props.item._fzrxm_}}</td><td>{{props.item._dlzh_}}</td><td>{{props.item._sczttjsj_}}</td><td>{{props.item._sfyzsj_}}</td>
         </tr>
       </cmp-table>
       <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
+    </div>
+    <div style="padding: 0 20px;" v-else>
+      审核页面
     </div>
   </div>
 </template>
@@ -96,8 +103,16 @@
     },
     data () {
       return {
+        optionTab: {
+          acitve: 0,
+          list: [
+            {
+              name: '待审核'
+            }
+          ]
+        },
         formShow: true,
-        name: '',
+        query: {},
         optionCity: {
           placeholder: '选择城市',
           show: true,
@@ -117,19 +132,22 @@
           data: [],
           result: []
         },
-        optionTab: {
-          acitve: 0,
-          list: [
-            {
-              name: '待审核'
-            }
-          ]
+        optionCylx: {
+          placeholder: '请选择',
+          show: true,
+          data: [ {text: '蔬菜种植', value: 1}, {text: '食用菌种植', value: 2}, {text: '水果种植', value: 3}, {text: '茶叶种植', value: 4}, {text: '中药材种植', value: 5}, {text: '牲畜饲养', value: 6}, {text: '家禽饲养', value: 7}, {text: '屠宰及肉类加工', value: 8} ],
+          result: []
+        },
+        optionZtxz: {
+          placeholder: '请选择',
+          show: true,
+          data: [ {text: '省级以上龙头企业', value: 1}, {text: '设区市级龙头企业', value: 2}, {text: '其他生产企业', value: 3}, {text: '示范社', value: 4}, {text: '规范社', value: 5}, {text: '合作社', value: 6}, {text: '家庭农场', value: 7} ],
+          result: []
         },
         optionTabel: {
           data: []
         },
         optionPagebarPagesize: {
-          // theme: 'simple',
           // 当期页
           index: 1,
           // 总页数
@@ -142,41 +160,95 @@
       };
     },
     mounted: function () {
-      ajaxGetDshData({}, function (data) {
-        // 
-      });
+      // 
     },
     methods: {
+      cbkTab: function (data) {
+        data.name === '待审核' && (this.optionTab.acitve = 0);
+        data.name === '审核' && (this.optionTab.acitve = 1);
+        alert(this.optionTab.acitve);
+      },
       cbkClkCity: function (data) {
-        console.log('====cbkClkCity====');
-        console.log(data);
+        this.$set(this.query, '_city_', data);
         this.optionXian.data = [];
         this.$nextTick(function () {
           this.optionXian.data = data[0].child;
         });
       },
       cbkClkXian: function (data) {
-        console.log('====cbkClkXian====');
-        console.log(data);
+        this.$set(this.query, '_xian_', data);
         this.optionXiang.data = [];
         this.$nextTick(function () {
           this.optionXiang.data = data[0].child;
         });
       },
       cbkClkXiang: function (data) {
-        console.log('====cbkClkXiang====');
-        console.log(data);
+        this.$set(this.query, '_xiang_', data);
+      },
+      cbkClkCylx: function (data) {
+        this.$set(this.query, '_cylx_', data);
+      },
+      cbkClkZtxz: function (data) {
+        this.$set(this.query, '_ztxz_', data);
+      },
+      clkRest: function () {
+        this.query = {};
+        this.clkSearch();
+      },
+      clkSearch: function () {
+        console.log('===search===');
+        console.log(this.query);
+        this.optionPagebarPagesize.index = 1;
+        if (this.optionPagebarPagesize.index === 1) {
+          this.callbackPagebar({
+            currentPage: 1,
+            pagesize: this.optionPagebarPagesize.pagesize
+          });
+        } else {
+          this.optionPagebarPagesize.index = 1;
+        }
       },
       callbackPagebar: function (data) {
+        var _this = this;
+
         console.log('====callbackPagebar====');
         console.log(data);
+        this.optionPagebarPagesize.index = data.currentPage;
+        this.optionPagebarPagesize.pagesize = data.pagesize;
+        ajaxGetDshData(Object.assign({
+          current: this.optionPagebarPagesize.index,
+          pageSize: this.optionPagebarPagesize.pagesize
+        }, this.query), function (data) {
+          if (data.code === 0) {
+            _this.optionTabel.data = data.ret.list;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+      },
+      clkTabelItem: function (data) {
+        console.log('====clkTabelItem======');
+        console.log(data);
+        if (this.optionTab.list.length === 1) {
+          this.optionTab.list.push({
+            name: '审核'
+          });
+          this.optionTab.acitve = 1;
+          this.optionTab.close = true;
+        }
       }
     }
   };
 </script>
 
 <style lang="scss">
-  .wrap {}
+  .wrap {
+    .wrapper-pagebar-pagesize .wrap-menu {
+      top: unset!important;
+      bottom: calc(100% + 4px)!important;
+    }
+  }
 </style>
 <style scoped lang="scss">
   .wrap {
@@ -219,6 +291,10 @@
         bottom: -6px;
         transform: rotate(0deg);
       }
+    }
+
+    .wrapper-pagebar-pagesize {
+      margin: 10px 0;
     }
   }
 
