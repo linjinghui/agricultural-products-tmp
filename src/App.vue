@@ -163,7 +163,7 @@
   }
 </style>
 
-<style lang="scss" id="cssForm">
+<style lang="scss" class="cssForm">
   // 默认垂直布局
   .wrap-form {
 

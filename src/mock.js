@@ -132,3 +132,17 @@ Mock.mock(/(\/portal\/areaKbData)/, {
   ],
   'success': true
 });
+
+// 获取待审核数据
+Mock.mock(/(\/portal\/getDshData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20-100': [
+      { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_fzrxm_': '@name', '_dlzh_': '@name', '_sczttjsj_': '2018-11-11', '_sfyzsj_': '2018-05-11' }
+    ],
+    'totalSize': '221'
+  },
+  'success': true
+});
+

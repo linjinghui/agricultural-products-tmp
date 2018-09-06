@@ -209,3 +209,22 @@ export function ajaxGetAreaKbData (pms, callback) {
     callback(successData.body);
   });
 }
+
+/**
+ * 获取待审核数据
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetDshData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getDshData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
