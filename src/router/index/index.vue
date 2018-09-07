@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" @click="optionMenu.show=false">
     <header>
       <a class="logo">AdminLTE</a>
       <nav>
@@ -7,7 +7,7 @@
       </nav>
       <nav class="l-r">
         <a><i class="fa fa-bell-o"></i></a>
-        <a @click="optionMenu.show=!optionMenu.show" @mouseleave="optionMenu.show=false">
+        <a @click.stop="optionMenu.show=!optionMenu.show">
           <i class="fa fa-user"></i>
           <cmp-menu v-bind="optionMenu" @cbkClkItem="callbackMenu"></cmp-menu>
         </a>
@@ -123,7 +123,7 @@
 
       .wrap-menu {
         position: absolute;
-        top: calc(100% + 1px);
+        top: calc(100% + 0px);
         right: 0;
         width: 120px;
         color: #666;

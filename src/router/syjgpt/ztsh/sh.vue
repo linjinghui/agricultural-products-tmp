@@ -192,7 +192,7 @@
 
         this.$confirm({
           show: true,
-          modal: false,
+          modal: true,
           heading: '提交至市级审核？',
           content: '提交之后，该主体信息将转入到历史审核界面中',
           type: '',

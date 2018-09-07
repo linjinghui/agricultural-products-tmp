@@ -13,17 +13,18 @@
           <td>所属行政区划</td><td>机构名称</td><td>机构编码</td><td>操作</td>
         </tr>
         <tr slot="body" slot-scope="props">
-          <td>{{currentTreeItem.text}}</td><td>{{props.item._jgmc_}}</td><td>{{props.item._jgbm_}}</td><td><cmp-button theme="line">查看</cmp-button><cmp-button>编辑</cmp-button><cmp-button theme="danger" @click="clkDel(props.item)">删除</cmp-button></td>
+          <td>{{currentTreeItem.text}}</td><td>{{props.item._jgmc_}}</td><td>{{props.item._jgbm_}}</td>
+          <td><cmp-button theme="line" @click="clkView(props.item)">查看</cmp-button><cmp-button @click="clkEdit(props.item)">编辑</cmp-button><cmp-button theme="danger" @click="clkDel(props.item)">删除</cmp-button></td>
         </tr>
       </cmp-table>
       <cmp-dialog class="class-1" v-model="optionDialog.show" v-bind="optionDialog" @callback="callbackDialog">
-        <span slot="title">添加机构</span>
+        <span slot="title">{{optionDialog.heading}}</span>
         <div slot="content">
           <div class="wrap-form">
             <div class="form-layer">
               <label class="star">所属行政区划：</label>
               <span class="f-dom">
-                <cmp-input class="f-dom" v-model="currentJgInfo._ssxzqh_" :disabled="JSON.stringify(currentJgInfo)==='{}'" maxlength="50"></cmp-input>
+                <cmp-input class="f-dom" v-model="currentJgInfo._ssxzqh_" disabled="true" maxlength="50"></cmp-input>
               </span>
             </div>
             <div class="form-layer">
@@ -81,16 +82,11 @@
         },
         currentJgInfo: {},
         optionDialog: {
+          heading: '',
           show: false,
           modal: true,
-          stl: '',
-          buttons: [{
-            text: '添加',
-            theme: 'primary'
-          }, {
-            text: '取消',
-            theme: 'line'
-          }]
+          stl: {},
+          buttons: []
         }
       };
     },
@@ -166,15 +162,62 @@
         });
       },
       clkAdd: function () {
-        this.currentJgInfo = {};
+        this.currentJgInfo = {
+          '_ssxzqh_': this.currentTreeItem.text
+        };
+        this.optionDialog.heading = '添加机构';
+        this.optionDialog.buttons = [{
+          text: '取消',
+          theme: 'line'
+        }, {
+          text: '添加',
+          theme: 'primary'
+        }];
         this.optionDialog.show = true;
+      },
+      clkView: function (info) {
+        this.currentJgInfo = info;
+        this.currentJgInfo._ssxzqh_ = this.currentTreeItem.text;
+        this.optionDialog.heading = '查看机构';
+        this.optionDialog.buttons = [];
+        this.optionDialog.show = true;
+      },
+      clkEdit: function (info) {
+        this.currentJgInfo = info;
+        this.currentJgInfo._ssxzqh_ = this.currentTreeItem.text;
+        this.optionDialog.heading = '编辑机构';
+        this.optionDialog.buttons = [{
+          text: '取消',
+          theme: 'line'
+        }, {
+          text: '编辑',
+          theme: 'primary'
+        }];
+        this.optionDialog.show = true;
+      },
+      callbackDialog: function (data) {
+        this.optionDialog.show = false;
+        if (data.text === '添加') {
+          this.$tip({ show: true, text: '添加机构成功！', theme: 'success' });
+          this.callbackTree([this.currentTreeItem]);
+        } else if (data.text === '编辑') {
+          this.$tip({ show: true, text: '编辑机构成功！', theme: 'success' });
+          this.callbackTree([this.currentTreeItem]);
+        }
       }
     }
   };
 </script>
 
 <style lang="scss">
-  .wrap {}
+  .wrap {
+
+    >.p-r {
+      .wrap-dialog >section {
+        padding: 0 100px;
+      }
+    }
+  }
 </style>
 <style scoped lang="scss">
   .wrap {
@@ -211,10 +254,6 @@
       .wrap-dialog {
         width: 550px;
         height: 360px;
-
-        >section {
-          padding: 0 50px;
-        }
       }
     }
   }
