@@ -159,7 +159,7 @@
           pagesizes: [
             10, 20, 30, 40, 50
           ],
-          pagesize: 300
+          pagesize: 20
         }
       };
     },

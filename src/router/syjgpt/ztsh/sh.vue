@@ -51,9 +51,39 @@
           <img height="200" style="cursor:zoom-in" title="放大查看" :src="info._yyzz_" alt="照片载入中..." @click="clkViewImg">
         </span>
       </div>
-      <div class="form-layer">
+      <div class="form-layer wrap-button" v-show="type==='sh'">
         <cmp-button theme="line" @click="clkNo">不通过</cmp-button>
         <cmp-button @click="clkTgbsh">通过并审核</cmp-button>
+      </div>
+    </div>
+    <div style="padding-top:20px;border-top: solid 1px #ccc;" class="wrap-form horiz" v-show="type==='ck'">
+      <div class="form-layer">
+        <label class="star">生产主体提交时间:</label>
+        <span class="f-dom">2018-05-01</span>
+      </div>
+      <div class="form-layer">
+        <label class="star">身份验证时间:</label>
+        <span class="f-dom">2018-05-02</span>
+      </div>
+      <div class="form-layer">
+        <label class="star">验证失败原因:</label>
+        <span class="f-dom">法人身份证号填写错误</span>
+      </div>
+      <div class="form-layer">
+        <label class="star">县级审核时间:</label>
+        <span class="f-dom">2018-05-03</span>
+      </div>
+      <div class="form-layer">
+        <label class="star">审核失败原因:</label>
+        <span class="f-dom">主体信息与所上传的营业执照图片不符</span>
+      </div>
+      <div class="form-layer">
+        <label class="star">市级审核时间:</label>
+        <span class="f-dom">2018-05-13</span>
+      </div>
+      <div class="form-layer">
+        <label class="star">审核失败原因:</label>
+        <span class="f-dom">主体信息与所上传的营业执照图片不符</span>
       </div>
     </div>
     <cmp-dialog class="class-1" v-model="optionDialog.show" v-bind="optionDialog" @callback="callbackDialog">
@@ -108,6 +138,12 @@
       'cmpDialog': Dialog,
       'cmpCheckbox': Checkbox,
       'cmpTextarea': Textarea
+    },
+    props: {
+      type: {
+        // sh | ck
+        default: 'sh'
+      }
     },
     data () {
       return {
@@ -223,20 +259,26 @@
 <style scoped lang="scss">
   .wrap {
     padding-top: 20px;
+
     >.wrap-form.horiz {
       width: 680px;
+
       >.form-layer {
+
         >label {
           margin-right: 30px;
           width: 200px;
         }
+
         >.f-dom {
           width: calc(100% - 200px - 30px - 10px);
         }
       }
-      >.form-layer:last-of-type {
+
+      >.form-layer.wrap-button {
         width: 100%;
         text-align:center;
+
         >.button {
           margin-left: 20px;
           width: 180px;
@@ -251,8 +293,10 @@
 
       .wrap-form {
         margin-top: 20px;
+
         >.form-layer {
           padding-left: 20px;
+
           >label {
             // display: none;
           }

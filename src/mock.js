@@ -138,7 +138,7 @@ Mock.mock(/(\/portal\/getDshData)/, {
   'msg': 'im msg',
   'code': 0,
   'ret': {
-    'list|10': [
+    'list|20': [
       { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_fzrxm_': '@name', '_dlzh_': '@name', '_sczttjsj_': '2018-11-11', '_sfyzsj_': '2018-05-11' }
     ],
     'totalSize': '221'
@@ -157,5 +157,31 @@ Mock.mock(/(\/portal\/getDshInfo)/, {
     'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536301538656&di=4c5c41d7a0dc024e6fd032068351ffc9&imgtype=0&src=http%3A%2F%2Fdocs.ebdoor.com%2FImage%2FCompanyCertificate%2F20%2F203414.jpg',
     'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536301571537&di=0b6badcc18a466bb6a345b01d52c21bf&imgtype=0&src=http%3A%2F%2Fwww.fzjlbj.com%2Fupload%2F201406%2F05%2F201406051528269687.jpg'
   ], '_jjqzsj_|1': ['2016-05-11 至 2035-05-11', '2006-11-11 至 2039-01-01', '2008-05-11 至 2055-05-11'], '_fddbrzjhm_': '@id' },
+  'success': true
+});
+
+// 获取历史审核数据列表
+Mock.mock(/(\/portal\/getLsshData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20': [
+      { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_shzt_|1': ['通过', '不通过'], '_sczttjsj_': '2018-11-11', '_shjssj_': '2018-05-11' }
+    ],
+    'totalSize': '221'
+  },
+  'success': true
+});
+
+// 获取待审核和历史审核数据列表
+Mock.mock(/(\/portal\/getDshShcxData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20': [
+      { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_shzt_|1': ['待审核', '通过', '未通过', '县级审核', '市级审核'], '_sczttjsj_': '2018-11-11', '_shjssj_': '2018-05-11' }
+    ],
+    'totalSize': '221'
+  },
   'success': true
 });

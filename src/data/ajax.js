@@ -247,3 +247,60 @@ export function ajaxGetDshInfo (pms, callback) {
     callback(successData.body);
   });
 }
+
+/**
+ * 获取历史审核数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetLsshData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getLsshData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 获取历史审核数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetShcxData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getShcxData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 获取待审核和历史审核数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetDshShcxData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getDshShcxData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
