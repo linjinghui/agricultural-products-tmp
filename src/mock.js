@@ -185,3 +185,13 @@ Mock.mock(/(\/portal\/getDshShcxData)/, {
   },
   'success': true
 });
+
+// 获取地区机构数据列表
+Mock.mock(/(\/portal\/getJgData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret|5-30': [
+    { '_ssxzqh_': '@name', '_jgmc_': '@name', '_jgbm_': '@code' }
+  ],
+  'success': true
+});

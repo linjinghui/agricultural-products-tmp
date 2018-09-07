@@ -304,3 +304,22 @@ export function ajaxGetDshShcxData (pms, callback) {
     callback(successData.body);
   });
 }
+
+/**
+ * 获取地区机构数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getJgData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
