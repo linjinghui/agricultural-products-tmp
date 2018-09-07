@@ -211,7 +211,7 @@ export function ajaxGetAreaKbData (pms, callback) {
 }
 
 /**
- * 获取待审核数据
+ * 获取待审核数据列表
  * @param {string} pms
  * @param {function} callback - 回调函数 
  */
@@ -223,6 +223,25 @@ export function ajaxGetDshData (pms, callback) {
   $http({
     method: 'GET',
     url: URL + '/portal/getDshData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 获取待审核数据详情
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetDshInfo (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getDshInfo',
     params: params
   }).then(function (successData) {
     callback(successData.body);

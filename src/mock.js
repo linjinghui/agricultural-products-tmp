@@ -133,7 +133,7 @@ Mock.mock(/(\/portal\/areaKbData)/, {
   'success': true
 });
 
-// 获取待审核数据
+// 获取待审核数据列表
 Mock.mock(/(\/portal\/getDshData)/, {
   'msg': 'im msg',
   'code': 0,
@@ -146,3 +146,16 @@ Mock.mock(/(\/portal\/getDshData)/, {
   'success': true
 });
 
+// 获取待审核数据详情
+Mock.mock(/(\/portal\/getDshInfo)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_fzrxm_': '@name', '_dlzh_': '@name', '_sczttjsj_': '2018-11-11', '_sfyzsj_': '2018-05-11', 
+  '_yyzz_|1': [
+    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536301473555&di=3657403f86f1b858272e494400e8451c&imgtype=0&src=http%3A%2F%2Fimage.cn.made-in-china.com%2F43f34j01LEztnoDKJQis%2F3.jpg',
+    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536301423486&di=c0106e403d721e2ca3f1a14822679326&imgtype=0&src=http%3A%2F%2Fimage10.71.net%2Fimage10%2F48%2F30%2F15%2F31%2Ff2286738-c165-4777-8585-d5167d07e027.jpg',
+    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536301538656&di=4c5c41d7a0dc024e6fd032068351ffc9&imgtype=0&src=http%3A%2F%2Fdocs.ebdoor.com%2FImage%2FCompanyCertificate%2F20%2F203414.jpg',
+    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1536301571537&di=0b6badcc18a466bb6a345b01d52c21bf&imgtype=0&src=http%3A%2F%2Fwww.fzjlbj.com%2Fupload%2F201406%2F05%2F201406051528269687.jpg'
+  ], '_jjqzsj_|1': ['2016-05-11 至 2035-05-11', '2006-11-11 至 2039-01-01', '2008-05-11 至 2055-05-11'], '_fddbrzjhm_': '@id' },
+  'success': true
+});

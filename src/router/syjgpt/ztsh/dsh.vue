@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
-    <div style="padding: 0 20px;" v-if="optionTab.acitve===0">
+    <div style="padding: 0 20px;" v-show="optionTab.acitve===0">
       <div class="wrap-form horiz" :class="{'show': formShow}">
         <div class="form-layer">
           <label class="star">主体名称:</label>
@@ -79,14 +79,15 @@
       </cmp-table>
       <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
     </div>
-    <div style="padding: 0 20px;" v-else>
-      审核页面
+    <div style="padding: 0 20px;" v-if="optionTab.acitve===1">
+      <cmp-sh @callback="clkRemoveSh"></cmp-sh>
     </div>
   </div>
 </template>
 
 <script>
   import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
+  import Sh from './sh.vue';
   import geoinfo from '../../../../static/geoinfo.js';
   import {ajaxGetDshData} from '../../../data/ajax.js';
 
@@ -99,15 +100,18 @@
       'cmpDatePicker': FlatDatePicker,
       'cmpButton': Button,
       'cmpTable': Table,
-      'cmpPagebarPagesize': PagebarPagesize
+      'cmpPagebarPagesize': PagebarPagesize,
+      'cmpSh': Sh
     },
     data () {
       return {
         optionTab: {
           acitve: 0,
+          close: true,
           list: [
             {
-              name: '待审核'
+              name: '待审核',
+              close: false
             }
           ]
         },
@@ -164,9 +168,7 @@
     },
     methods: {
       cbkTab: function (data) {
-        data.name === '待审核' && (this.optionTab.acitve = 0);
-        data.name === '审核' && (this.optionTab.acitve = 1);
-        alert(this.optionTab.acitve);
+        this.optionTab.acitve = data.name === '审核' ? 1 : 0;
       },
       cbkClkCity: function (data) {
         this.$set(this.query, '_city_', data);
@@ -228,15 +230,16 @@
         });
       },
       clkTabelItem: function (data) {
-        console.log('====clkTabelItem======');
-        console.log(data);
         if (this.optionTab.list.length === 1) {
           this.optionTab.list.push({
             name: '审核'
           });
-          this.optionTab.acitve = 1;
-          this.optionTab.close = true;
         }
+        this.optionTab.acitve = 1;
+      },
+      clkRemoveSh: function () {
+        this.optionTab.acitve = 0;
+        this.optionTab.list.splice(1, 1);
       }
     }
   };
