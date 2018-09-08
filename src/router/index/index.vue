@@ -1,9 +1,9 @@
 <template>
   <div class="wrap" @click="optionMenu.show=false">
     <header>
-      <a class="logo">AdminLTE</a>
+      <a class="logo">监管系统</a>
       <nav>
-        <a v-for="(item,index) in navData" :key="'nav_'+index" :class="{'active': active===index}" v-text="item.name" @click="clkNav(index)"></a>
+        <a v-for="(item,index) in navData" :key="'nav_'+index" :class="{'active': active===index}" v-text="item.name" @click="clkNav(index,item)"></a>
       </nav>
       <nav class="l-r">
         <a><i class="fa fa-bell-o"></i></a>
@@ -14,12 +14,13 @@
         <a><i class="fa fa-cogs"></i></a>
       </nav>
     </header>
-    <router-view></router-view>
+    <router-view :navData="leftNavData"></router-view>
   </div>
 </template>
 
 <script>
   import {Menu} from 'web-base-ui';
+  import {getUserInfo} from '../../data/ajax.js';
 
   export default {
     name: 'Index',
@@ -29,24 +30,8 @@
     data () {
       return {
         active: '',
-        navData: [
-          {
-            name: '首页',
-            pathIndex: 2
-          },
-          {
-            name: '溯源监管平台',
-            pathIndex: 3
-          },
-          {
-            name: '分析预警平台',
-            pathIndex: 4
-          },
-          {
-            name: '基础平台',
-            pathIndex: 5
-          }
-        ],
+        navData: getUserInfo().permissions || [],
+        leftNavData: [],
         optionMenu: {
           show: false,
           data: ['密码修改', '退出登录'],
@@ -55,19 +40,20 @@
       };
     },
     mounted: function () {
-      // 默认进入首页
-      this.clkNav(0);
+      // 默认进入home页面
+      this.$root.toPage('', 2);
     },
     methods: {
-      clkNav: function (index) {
+      clkNav: function (index, item) {
         this.active = index;
-        this.$root.toPage('', this.navData[index].pathIndex);
+        this.leftNavData = item.children;
+        this.$root.toPage('', item.permValue);
       },
       callbackMenu: function (data) {
         console.log('===callbackMenu====');
         console.log(data);
         if (data[0] === '密码修改') {
-          this.$root.toPage('', 6);
+          this.$root.toPage('', 3);
         } else if (data[0] === '退出登录') {
           this.$root.toPage('', 0);
         }

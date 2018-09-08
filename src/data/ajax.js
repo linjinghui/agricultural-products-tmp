@@ -1,5 +1,7 @@
 import {$http} from './constant.js';
+import {ssgGetData, ssgSaveData, ssgDeleteData} from 'web-js-tool';
 
+const USER_KEY = '_current_login_user_';
 const URL = '/api';
 // ===================================================[DEMO]===================================================
 /**
@@ -43,6 +45,13 @@ export function ajaxPost (pms, callback) {
 
 // ===================================================[接口开始]===================================================
 /**
+ * 获取当前登录用户信息
+ */
+export function getUserInfo () {
+  return ssgGetData(USER_KEY);
+}
+
+/**
  * 获取验证码
  */
 export function ajaxGetVcode () {
@@ -69,7 +78,11 @@ export function ajaxLogin (pms, callback) {
     body: params,
     emulateJSON: true
   }).then(function (successData) {
-    callback(successData.body);
+    let data = successData.body;
+    callback(data);
+    if (data.code === 0) {
+      ssgSaveData(USER_KEY, data.ret);
+    }
   });
 }
 
@@ -337,6 +350,25 @@ export function ajaxGetUserData (pms, callback) {
   $http({
     method: 'GET',
     url: URL + '/portal/getUserData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 获取角色数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJsData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getJsData',
     params: params
   }).then(function (successData) {
     callback(successData.body);

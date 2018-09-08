@@ -3,7 +3,7 @@
     <div class="p-left">
       <i class="fa fa-reorder" @click="maxContent=!maxContent"></i>
       <ul class="aside-nav">
-        <li v-for="(item1,index) in navOption.navData" :key="'lay1'+index">
+        <li v-for="(item1,index) in navData" :key="'lay1'+index">
           <a :class="{'active':navOption.activeIndex_1===item1.id, 'open': navOption.openIndex_1===item1.id}" @click="clkNavItem([item1])">
             <i class="i-l" :class="item1.icon">&nbsp;</i>
             <span>{{item1.name}}</span>
@@ -34,65 +34,18 @@
     components: {
       // 
     },
+    props: {
+      navData: {
+        default: []
+      }
+    },
     data () {
       return {
         maxContent: false,
         navOption: {
           openIndex_1: '',
           activeIndex_1: '',
-          activeIndex_2: '',
-          navData: [
-            {
-              id: '1',
-              name: '监测预警配置',
-              icon: 'fa fa-file-excel-o',
-              url: '',
-              children: [
-                {
-                  id: '1-1',
-                  name: '风险配置',
-                  icon: '',
-                  url: 'fxpz',
-                  children: []
-                },
-                {
-                  id: '1-2',
-                  name: '风险指标阈值配置',
-                  icon: '',
-                  url: 'fxzbfzpz',
-                  children: []
-                },
-                {
-                  id: '1-3',
-                  name: '风险干系人配置',
-                  icon: '',
-                  url: 'fxgxrpz',
-                  children: []
-                }
-              ]
-            },
-            {
-              id: '2',
-              name: '分析与监测管理',
-              icon: 'fa fa-archive',
-              url: '',
-              children: []
-            },
-            {
-              id: '3',
-              name: '预警管理',
-              icon: 'fa fa-archive',
-              url: '',
-              children: []
-            },
-            {
-              id: '4',
-              name: '数据统计',
-              icon: 'fa fa-archive',
-              url: '',
-              children: []
-            }
-          ]
+          activeIndex_2: ''
         }
       };
     },
@@ -104,18 +57,17 @@
         var current = arr[arr.length - 1];
         var first = arr.length > 1 ? arr[0] : {};
 
-        // 激活节点
-        if (current.url) {
+        if (current.children && current.children.length > 0) {
+          // 开启子节点
+          this.navOption.openIndex_1 = this.navOption.openIndex_1 === current.id ? '' : current.id;
+          this.navOption.activeIndex_2 = '';
+        } else if (current.permValue) {
           // step1 - 跳转
-          this.$root.toPage('/#/' + current.url);
+          this.$root.toPage('', current.permValue);
           // step2 - 激活当前
           this.navOption.activeIndex_2 = current.id;
           // step3 - 激活最上层
           this.navOption.activeIndex_1 = first.id;
-        } else if (current.children && current.children.length > 0) {
-          // 开启子节点
-          this.navOption.openIndex_1 = this.navOption.openIndex_1 === current.id ? '' : current.id;
-          this.navOption.activeIndex_2 = '';
         }
       }
     }

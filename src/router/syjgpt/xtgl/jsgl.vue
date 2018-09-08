@@ -326,7 +326,7 @@
     >.p-r {
       float: left;
       width: calc(100% - 240px);
-      min-height: 800px;
+      min-height: 550px;
       border-left: solid 1px #ccc;
 
       >header {

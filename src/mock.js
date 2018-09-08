@@ -205,3 +205,13 @@ Mock.mock(/(\/portal\/getUserData)/, {
   ],
   'success': true
 });
+
+// 获取角色数据列表
+Mock.mock(/(\/portal\/getJsData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret|5-20': [
+    { '_jsmc_': '@name', '_bz_': '@string' }
+  ],
+  'success': true
+});

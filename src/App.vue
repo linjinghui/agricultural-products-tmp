@@ -121,20 +121,148 @@
               path = '/#/home';
               break;
             case 3:
-              // 溯源监管平台
-              path = '/#/syjgpt';
-              break;
-            case 4:
-              // 分析预警平台
-              path = '/#/fxyjpt';
-              break;
-            case 5:
-              // 基础平台
-              path = '/#/jcpt';
-              break;
-            case 6:
               // 修改密码
               path = '/#/mmxg';
+              break;
+            case 'admin':
+              // ------------溯源监管平台
+              path = '/#/syjgpt';
+              break;
+            case 'admin:ztsh:dsh':
+              // -----------------------ztsh--待审核
+              path = '/#/dsh';
+              break;
+            case 'admin:ztsh:lssh':
+              // -----------------------ztsh--历史审核
+              path = '/#/lssh';
+              break;
+            case 'admin:ztsh:shcx':
+              // -----------------------ztsh--审核查询
+              path = '/#/shcx';
+              break;
+            case 'admin:ztdaxc:zucx':
+              // -----------------------ztdaxc--主体巡查
+              path = '/#/ztxc';
+              break;
+            case 'admin:ztdaxc:yjxc':
+              // -----------------------ztdaxc--预警巡查
+              path = '/#/yjcx';
+              break;
+            case 'admin:ztdaxc:GISxc':
+              // -----------------------ztdaxc--GIS巡查
+              path = '/#/giszs';
+              break;
+            case 'admin:scgcxj:cpjbxxxc':
+              // -----------------------scgcxj--产品基本信息巡查
+              path = '/#/cpjbxxxc';
+              break;
+            case 'admin:scgcxj:scxkjg':
+              // -----------------------scgcxj--生产许可监管
+              path = '/#/scxkjg';
+              break;
+            case 'admin:scgcxj:scjhxc':
+              // -----------------------scgcxj--生产计划巡查
+              path = '/#/scjhxc';
+              break;
+            case 'admin:scgcxj:nzjtrpxc':
+              // -----------------------scgcxj--农资及投入品巡查
+              path = '/#/nzjtrpxc';
+              break;
+            case 'admin:scgcxj:scgghjxc':
+              // -----------------------scgcxj--生产各个环节巡查
+              path = '/#/scghjxc';
+              break;
+            case 'admin:scgcxj:ccpxxxc':
+              // -----------------------scgcxj--产成品信息巡查
+              path = '/#/ccpxxxc';
+              break;
+            case 'admin:scgcxj:jcxxxc':
+              // -----------------------scgcxj--检测信息巡查
+              path = '/#/jcxxxc';
+              break;
+            case 'admin:fmxxxc:fmxcxx':
+              // -----------------------fmxxxc--赋码信息巡查
+              path = '/#/fmxxxc';
+              break;
+            case 'admin:fmxxxc:xslxxc':
+              // -----------------------fmxxxc--销售流向巡查
+              path = '/#/xslxxc';
+              break;
+            case 'admin:jggl:xcwt':
+              // -----------------------jggl--巡查问题
+              path = '/#/xcwt';
+              break;
+            case 'admin:jggl:ajgl':
+              // -----------------------jggl--案件管理
+              path = '/#/ajgl';
+              break;
+            case 'admin:jggl:jypgl':
+              // -----------------------jggl--禁用品管理
+              path = '/#/jypgl';
+              break;
+            case 'admin:jggl:hmdgl':
+              // -----------------------jggl--黑名单管理
+              path = '/#/hmdgl';
+              break;
+            case 'admin:jggl:xzchgl':
+              // -----------------------jggl--行政处罚管理
+              path = '/#/xzcfgl';
+              break;
+            case 'admin:jggl:jdjcgl':
+              // -----------------------jggl--监督检查管理
+              path = '/#/jdjcgl';
+              break;
+            case 'admin:fwxxts:fwxxtsgl':
+              // -----------------------fwxxts--服务信息推送管理
+              path = '/#/fwxxtsgl';
+              break;
+            case 'admin:gzjd:jgdlrzcx':
+              // -----------------------gzjd--监管登录日志查询
+              path = '/#/jgdlrzcx';
+              break;
+            case 'admin:gzjd:jgczrzcx':
+              // -----------------------gzjd--监管操作日志查询
+              path = '/#/jgczrzcx';
+              break;
+            case 'admin:gzjd:scztdlrzcx':
+              // -----------------------gzjd--生产主体登录日志查询
+              path = '/#/scztdlrzcx';
+              break;
+            case 'admin:gzjd:scztczrzcx':
+              // -----------------------gzjd--生产主体操作日志查询
+              path = '/#/scztczrzcx';
+              break;
+            case 'admin:xtgl:zzjggl':
+              // -----------------------xtgl--组织机构管理
+              path = '/#/zzjggl';
+              break;
+            case 'admin:xtgl:jsgl':
+              // -----------------------xtgl--角色管理
+              path = '/#/jsgl';
+              break;
+            case 'admin:xtgl:jsjqxgl':
+              // -----------------------xtgl--角色及权限管理
+              path = '/#/jsjqxgl';
+              break;
+            case 'stat':
+              // ------------分析预警平台
+              path = '/#/fxyjpt';
+              break;
+            case 'stat:jcyjpz:fxpz':
+              // -----------------------jcyjpz--风险配置
+              path = '/#/fxpz';
+              break;
+            case 'stat:jcyjpz:fxzbyzpz':
+              // -----------------------jcyjpz--风险指标阈值配置
+              path = '/#/fxzbfzpz';
+              break;
+            case 'stat:jcyjpz:fxgxrpz':
+              // -----------------------jcyjpz--风险干系人配置
+              path = '/#/fxgxrpz';
+              break;
+            case 'bases':
+              // 基础平台
+              path = '/#/jcpt';
               break;
             default:
               path = '/#/home';
