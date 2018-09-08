@@ -91,7 +91,7 @@
           acitve: 0,
           list: [
             {
-              name: '角色管理'
+              name: '用户管理'
             }
           ]
         },

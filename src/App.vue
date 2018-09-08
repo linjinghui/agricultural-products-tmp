@@ -107,6 +107,7 @@
     },
     methods: {
       toPage: function (path, type) {
+        alert(type);
         if (!path) {
           switch (type) {
             case 0:
@@ -152,6 +153,14 @@
               // -----------------------ztdaxc--GIS巡查
               path = '/#/giszs';
               break;
+            case 'admin:ztdaxc:mcqy':
+              // -----------------------ztdaxc--明星企业
+              path = '/#/mcqy';
+              break;
+            case 'admin:ztdaxc:hmdqy':
+              // -----------------------ztdaxc--黑名单企业
+              path = '/#/hmdqy';
+              break;
             case 'admin:scgcxj:cpjbxxxc':
               // -----------------------scgcxj--产品基本信息巡查
               path = '/#/cpjbxxxc';
@@ -184,7 +193,7 @@
               // -----------------------fmxxxc--赋码信息巡查
               path = '/#/fmxxxc';
               break;
-            case 'admin:fmxxxc:xslxxc':
+            case 'admin:fmxxxc: sslxxc':
               // -----------------------fmxxxc--销售流向巡查
               path = '/#/xslxxc';
               break;
@@ -232,13 +241,13 @@
               // -----------------------gzjd--生产主体操作日志查询
               path = '/#/scztczrzcx';
               break;
-            case 'admin:xtgl:zzjggl':
+            case 'adminxtgl:zzjggl':
               // -----------------------xtgl--组织机构管理
               path = '/#/zzjggl';
               break;
-            case 'admin:xtgl:jsgl':
-              // -----------------------xtgl--角色管理
-              path = '/#/jsgl';
+            case 'admin:xtgl:yhgl':
+              // -----------------------xtgl--用户管理
+              path = '/#/yhgl';
               break;
             case 'admin:xtgl:jsjqxgl':
               // -----------------------xtgl--角色及权限管理

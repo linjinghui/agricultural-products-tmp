@@ -13,6 +13,8 @@ const Shcx = () => import('./syjgpt/ztsh/shcx.vue');
 const Ztxc = () => import('./syjgpt/ztdaxc/ztxc.vue');
 const Yjcx = () => import('./syjgpt/ztdaxc/yjcx.vue');
 const Giszs = () => import('./syjgpt/ztdaxc/giszs.vue');
+const Mcqy = () => import('./syjgpt/ztdaxc/mxqy.vue');
+const Hmdqy = () => import('./syjgpt/ztdaxc/hmdqy.vue');
 const Cpjbxxxc = () => import('./syjgpt/scgcxc/cpjbxxxc.vue');
 const Scxkjg = () => import('./syjgpt/scgcxc/scxkjg.vue');
 const Scjhxc = () => import('./syjgpt/scgcxc/scjhxc.vue');
@@ -34,7 +36,7 @@ const Jgczrzcx = () => import('./syjgpt/gzjd/jgczrzcx.vue');
 const Scztdlrzcx = () => import('./syjgpt/gzjd/scztdlrzcx.vue');
 const Scztczrzcx = () => import('./syjgpt/gzjd/scztczrzcx.vue');
 const Zzjggl = () => import('./syjgpt/xtgl/zzjggl.vue');
-const Jsgl = () => import('./syjgpt/xtgl/jsgl.vue');
+const Yhgl = () => import('./syjgpt/xtgl/yhgl.vue');
 const Jsjqxgl = () => import('./syjgpt/xtgl/jsjqxgl.vue');
 
 const Fxyjpt = () => import('./fxyjpt/index.vue');
@@ -114,6 +116,16 @@ export default new Router({
               path: '/giszs',
               name: 'giszs',
               component: Giszs
+            },
+            {
+              path: '/mcqy',
+              name: 'mcqy',
+              component: Mcqy
+            },
+            {
+              path: '/hmdqy',
+              name: 'hmdqy',
+              component: Hmdqy
             },
             {
               path: '/cpjbxxxc',
@@ -221,9 +233,9 @@ export default new Router({
               component: Zzjggl
             },
             {
-              path: '/jsgl',
-              name: 'jsgl',
-              component: Jsgl
+              path: '/yhgl',
+              name: 'yhgl',
+              component: Yhgl
             },
             {
               path: '/jsjqxgl',
