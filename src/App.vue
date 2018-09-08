@@ -159,7 +159,7 @@
     width: 100%;
     height: 100%;
     min-width: 1350px;
-    min-height: 660px;
+    min-height: 630px;
     overflow: auto;
     background-color: #3d484e;
   }

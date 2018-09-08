@@ -195,3 +195,13 @@ Mock.mock(/(\/portal\/getJgData)/, {
   ],
   'success': true
 });
+
+// 获取地区用户数据列表
+Mock.mock(/(\/portal\/getUserData)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret|5-20': [
+    { '_xm_': '@name', '_xb_|1': ['男', '女'], '_szdw_': '@address', '_zw_|1': ['部长', '处长', '科长'], '_sjh_': /^1\d{10}/, '_yhlb_|1': ['行政主管用户', '检测用户', '执法用户', '系统管理员'], '_zt_|1': [0, 1] }
+  ],
+  'success': true
+});

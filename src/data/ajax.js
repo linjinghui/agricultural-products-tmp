@@ -323,3 +323,22 @@ export function ajaxGetJgData (pms, callback) {
     callback(successData.body);
   });
 }
+
+/**
+ * 获取地区用户数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetUserData (pms, callback) {
+  let params = {
+    area: pms.area
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/portal/getUserData',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}

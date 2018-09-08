@@ -129,6 +129,7 @@
         color: #666;
         font-size: 16px;
         text-align: center;
+        z-index: 1;
       }
     }
   }

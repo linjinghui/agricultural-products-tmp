@@ -226,11 +226,11 @@
     >.p-l {
       float: left;
       padding: 20px;
-      width: 300px;
+      width: 240px;
     }
     >.p-r {
       float: left;
-      width: calc(100% - 300px);
+      width: calc(100% - 240px);
       min-height: 800px;
       border-left: solid 1px #ccc;
 
