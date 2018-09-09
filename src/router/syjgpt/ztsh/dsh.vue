@@ -14,17 +14,17 @@
         <div class="form-layer">
           <label class="star">行政区划:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer" style="width: 185px;">
           <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXian" v-model="optionXian.result" @cbkClkItem="cbkClkXian">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer" style="width: 185px;">
           <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer">
@@ -34,13 +34,13 @@
         <div class="form-layer">
           <label class="star">产业类型:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionCylx" v-model="optionCylx.result" @cbkClkItem="cbkClkCylx">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>      
         <div class="form-layer">
           <label class="star">主体性质:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionZtxz" v-model="optionZtxz.result" @cbkClkItem="cbkClkZtxz">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer">
@@ -88,8 +88,8 @@
 <script>
   import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
   import Sh from './sh.vue';
-  import geoinfo from '../../../../static/geoinfo.js';
-  import {ajaxGetDshData} from '../../../data/ajax.js';
+  // import geoinfo from '../../../../static/geoinfo.js';
+  import {ajaxGetDshData, ajaxGetChildDivision} from '../../../data/ajax.js';
 
   export default {
     name: 'Dsh',
@@ -120,7 +120,7 @@
         optionCity: {
           placeholder: '选择城市',
           show: true,
-          data: geoinfo[0].child,
+          data: this.$root.divisionTree,
           result: []
         },
         optionXian: {
@@ -174,14 +174,20 @@
         this.$set(this.query, '_city_', data);
         this.optionXian.data = [];
         this.$nextTick(function () {
-          this.optionXian.data = data[0].child;
+          this.optionXian.data = data[0].children;
         });
       },
       cbkClkXian: function (data) {
+        data = data[0];
         this.$set(this.query, '_xian_', data);
         this.optionXiang.data = [];
         this.$nextTick(function () {
-          this.optionXiang.data = data[0].child;
+          ajaxGetChildDivision({
+            code: data.divCode
+          }, function (data) {
+            // 
+          });
+          this.optionXiang.data = data[0].children;
         });
       },
       cbkClkXiang: function (data) {

@@ -39,10 +39,25 @@ const Zzjggl = () => import('./syjgpt/xtgl/zzjggl.vue');
 const Yhgl = () => import('./syjgpt/xtgl/yhgl.vue');
 const Jsjqxgl = () => import('./syjgpt/xtgl/jsjqxgl.vue');
 
+
 const Fxyjpt = () => import('./fxyjpt/index.vue');
 const Fxpz = () => import('./fxyjpt/jcyjpz/fxpz.vue');
 const Fxzbfzpz = () => import('./fxyjpt/jcyjpz/fxzbfzpz.vue');
 const Fxgxrpz = () => import('./fxyjpt/jcyjpz/fxgxrpz.vue');
+
+const Ksjcfxjc = () => import('./fxyjpt/fxyjcgl/ksjcfxjc.vue');
+const Qyzzyzjc = () => import('./fxyjpt/fxyjcgl/qyzzyzjc.vue');
+const Syncpcljc = () => import('./fxyjpt/fxyjcgl/syncpcljc.vue');
+const Syncpycfxjc = () => import('./fxyjpt/fxyjcgl/syncpycfxjc.vue');
+const Syncpzlfxjc = () => import('./fxyjpt/fxyjcgl/syncpzlfxjc.vue');
+const Syxxtxjc = () => import('./fxyjpt/fxyjcgl/syxxtxjc.vue');
+
+const Cpgylfx = () => import('./fxyjpt/sjtj/cpgylfx.vue');
+const Jdjcxxtj = () => import('./fxyjpt/sjtj/jdjcxxtj.vue');
+const Pthydfx = () => import('./fxyjpt/sjtj/pthydfx.vue');
+const Xzcfxxtj = () => import('./fxyjpt/sjtj/xzcfxxtj.vue');
+const Zscxlfx = () => import('./fxyjpt/sjtj/zscxlfx.vue');
+
 
 const Jcpt = () => import('./jcpt/index.vue');
 const Mmxg = () => import('./mmxg/index.vue');
@@ -268,6 +283,61 @@ export default new Router({
               path: '/fxgxrpz',
               name: 'fxgxrpz',
               component: Fxgxrpz
+            },
+            {
+              path: '/ksjcfxjc',
+              name: 'ksjcfxjc',
+              component: Ksjcfxjc
+            },
+            {
+              path: '/qyzzyzjc',
+              name: 'qyzzyzjc',
+              component: Qyzzyzjc
+            },
+            {
+              path: '/syncpcljc',
+              name: 'syncpcljc',
+              component: Syncpcljc
+            },
+            {
+              path: '/syncpycfxjc',
+              name: 'syncpycfxjc',
+              component: Syncpycfxjc
+            },
+            {
+              path: '/syncpzlfxjc',
+              name: 'syncpzlfxjc',
+              component: Syncpzlfxjc
+            },
+            {
+              path: '/syxxtxjc',
+              name: 'syxxtxjc',
+              component: Syxxtxjc
+            },
+            {
+              path: '/cpgylfx',
+              name: 'cpgylfx',
+              component: Cpgylfx
+            },
+            {
+              path: '/jdjcxxtj',
+              name: 'jdjcxxtj',
+              component: Jdjcxxtj
+            },
+            {
+              path: '/pthydfx',
+              name: 'pthydfx',
+              component: Pthydfx
+            },
+            {
+              path: '/xzcfxxtj',
+              name: 'xzcfxxtj',
+              component: Xzcfxxtj
+            },
+            {
+              path: '/zscxlfx',
+              name: 'zscxlfx',
+              component: Zscxlfx
             }
           ]
         },

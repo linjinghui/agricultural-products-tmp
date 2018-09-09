@@ -20,7 +20,7 @@
 
 <script>
   import {Menu} from 'web-base-ui';
-  import {getUserInfo} from '../../data/ajax.js';
+  import {getUserInfo, ajaxLoginout, ajaxGetAllDivisionTree} from '../../data/ajax.js';
 
   export default {
     name: 'Index',
@@ -40,8 +40,18 @@
       };
     },
     mounted: function () {
+      var _this = this;
+
       // 默认进入home页面
       this.$root.toPage('', 2);
+      // 获取福建全省数据
+      ajaxGetAllDivisionTree(function (data) {
+        if (data.code === 0) {
+          _this.$root.divisionTree = data.ret;
+        } else {
+          _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+        }
+      });
     },
     methods: {
       clkNav: function (index, item) {
@@ -55,6 +65,7 @@
         if (data[0] === '密码修改') {
           this.$root.toPage('', 3);
         } else if (data[0] === '退出登录') {
+          ajaxLoginout();
           this.$root.toPage('', 0);
         }
       }

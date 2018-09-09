@@ -83,7 +83,9 @@
             text: '修改',
             theme: 'warning'
           }]
-        }
+        },
+        // 福建省区域数据
+        divisionTree: []
       };
     },
     mounted: function () {
@@ -268,6 +270,50 @@
             case 'stat:jcyjpz:fxgxrpz':
               // -----------------------jcyjpz--风险干系人配置
               path = '/#/fxgxrpz';
+              break;
+            case 'stat:fxyjcpz:ksjcfxjc':
+              // -----------------------fxyjcgl--快速检测风险监测
+              path = '/#/ksjcfxjc';
+              break;
+            case 'stat:fxyjcpz:qyzzyzjc':
+              // -----------------------fxyjcgl--企业种植养殖监测
+              path = '/#/qyzzyzjc';
+              break;
+            case 'stat:fxyjcpz:syycpcljc':
+              // -----------------------fxyjcgl--食用农产品产量监测
+              path = '/#/syncpcljc';
+              break;
+            case 'stat:fxyjcpz:syncpcljc':
+              // -----------------------fxyjcgl--食用农产品药残风险监测
+              path = '/#/syncpycfxjc';
+              break;
+            case 'stat:fxyjcpz:syncpzlfxjc':
+              // -----------------------fxyjcgl--食用农产品质量风险监测
+              path = '/#/syncpzlfxjc';
+              break;
+            case 'stat:fxyjcpz:syxxtxjc':
+              // -----------------------fxyjcgl--溯源信息填写监测
+              path = '/#/syxxtxjc';
+              break;
+            case 'stat:sjtj:cpgylfx':
+              // -----------------------sjtj--产品供应量分析
+              path = '/#/cpgylfx';
+              break;
+            case 'stat:sjtj:jdjcxxtj':
+              // -----------------------sjtj--监督检查信息统计
+              path = '/#/jdjcxxtj';
+              break;
+            case 'stat:sjtj:pthydfx':
+              // -----------------------sjtj--平台活跃度分析
+              path = '/#/pthydfx';
+              break;
+            case 'stat:sjtj:xzchxxtj':
+              // -----------------------sjtj--行政处罚信息统计
+              path = '/#/xzcfxxtj';
+              break;
+            case 'stat:sjtj:zscxlfx':
+              // -----------------------sjtj--追溯查询量分析
+              path = '/#/zscxlfx';
               break;
             case 'bases':
               // 基础平台

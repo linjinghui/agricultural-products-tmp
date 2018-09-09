@@ -87,6 +87,56 @@ export function ajaxLogin (pms, callback) {
 }
 
 /**
+ * 退出登录
+ */
+export function ajaxLoginout (callback) {
+  ssgDeleteData(USER_KEY);
+  $http({
+    method: 'GET',
+    url: URL + '/logout'
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+// ===================[全局参数数据获取]===================
+
+/**
+ * 获取行政区划数据 - 福建全省
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetAllDivisionTree (callback) {
+  $http({
+    method: 'GET',
+    url: URL + '/sys_department/getAllDivisionTree'
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 根据父行政区划获取子行政区划列表
+ * @param {obj} pms.code - 当前区域编码 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetChildDivision (pms, callback) {
+  let params = {
+    parentCode: pms.code || ''
+  };
+
+  $http({
+    method: 'GET',
+    url: URL + '/sys_department/getChildDivision',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+
+
+
+/**
  * 获取产业类型占比数据
  * @param {string} pms.timeType - 时间类型 - 1：今天，2：本月，3：本年度，4：全部
  * @param {function} callback - 回调函数 
