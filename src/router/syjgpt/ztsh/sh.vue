@@ -50,7 +50,7 @@
           <td></td><td></td>
         </tr>
         <tr class="img">
-          <td>证照图片：</td><td><img height="200" style="cursor:zoom-in" title="放大查看" :src="info._yyzz_" alt="照片载入中..." @click="clkViewImg"></td>
+          <td>证照图片：</td><td><img height="200" style="cursor:zoom-in" title="放大查看" :src="data._yyzz_" alt="照片载入中..." @click="clkViewImg"></td>
           <td></td><td></td>
         </tr>
         <tr v-if="type==='sh'">
@@ -236,6 +236,7 @@
                 optOpinion: ''
               }, function (data) {
                 if (data.code === 0) {
+                  _this.$tip({ show: true, text: '审核通过操作成功！', theme: 'success' });
                   _this.$emit('callback', 'fresh');
                 } else {
                   _this.$tip({ show: true, text: data.msg, theme: 'danger' });
@@ -260,7 +261,8 @@
             authId: this.data.authId
           }, function (data) {
             if (data.code === 0) {
-              _this.logArr = data.ret;
+              _this.logArr = data.ret.operations || [];
+              _this.data._yyzz_ = data.ret.files[0] || '';
             } else {
               _this.$tip({ show: true, text: data.msg, theme: 'danger' });
             }
@@ -289,6 +291,7 @@
               optOpinion: reason.join('|')
             }, function (data) {
               if (data.code === 0) {
+                _this.$tip({ show: true, text: '审核不通过操作成功！', theme: 'success' });
                 _this.$emit('callback', 'fresh');
               } else {
                 _this.$tip({ show: true, text: data.msg, theme: 'danger' });
