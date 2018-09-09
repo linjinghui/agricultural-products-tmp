@@ -1,16 +1,29 @@
 <template>
   <div class="wrap">
     <cmp-tab v-bind="optionTab"></cmp-tab>
-    企业种植养殖监测
+    <cmp-table v-bind="optionTabel">
+      <tr slot="head">
+        <td>风险类型</td><td>主要来源</td><td>数据指标</td>
+      </tr>
+      <tr slot="body" slot-scope="props">
+        <td>{{props.item.name}}</td><td>{{props.item.qysl}}</td><td>{{props.item.qyxzsl}}</td>
+      </tr>
+    </cmp-table>
   </div>
 </template>
 
 <script>
-  import {Tab} from 'web-base-ui';
+  import {Echarts, Radio, Checkbox, Table, Tab} from 'web-base-ui';
+  import {ajaxGetAreaKbData} from '../../../data/ajax.js';
+
   export default {
-    name: 'Qyzzyzjc',
+    name: 'Login',
     components: {
-      'cmpTab': Tab 
+      'cmpEcharts': Echarts,
+      'cmpRadio': Radio,
+      'cmpCheckbox': Checkbox,
+      'cmpTable': Table,
+      'cmpTab': Tab
     },
     data () {
       return {
@@ -21,11 +34,22 @@
               name: '企业种植养殖监测'
             }
           ]
-        } 
+        },
+        optionTabel: {
+          data: []
+        }
       };
     },
     mounted: function () {
-      // 
+      var _this = this;
+
+      ajaxGetAreaKbData({}, function (data) {
+        if (data.code === 0) {
+          _this.optionTabel.data = data.ret;
+        } else {
+          _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+        }
+      });
     },
     methods: {
       // 

@@ -5,11 +5,7 @@
       <div class="wrap-form horiz" :class="{'show': formShow}">
         <div class="form-layer">
           <label class="star">主体名称:</label>
-          <cmp-input class="f-dom" v-model="query._ztmc_" maxlength="50"></cmp-input>
-        </div>
-        <div class="form-layer">
-          <label class="star">主体代码:</label>
-          <cmp-input class="f-dom" v-model="query._ztdm" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query.entName" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">行政区划:</label>
@@ -29,23 +25,23 @@
         </div>
         <div class="form-layer">
           <label class="star">法定代表人:</label>
-          <cmp-input class="f-dom" v-model="query._fddbr_" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query.legal" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">产业类型:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionCylx" v-model="optionCylx.result" @cbkClkItem="cbkClkCylx">
-            <span slot="line" slot-scope="props">{{props.item.division}}</span>
+            <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
         </div>      
         <div class="form-layer">
           <label class="star">主体性质:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionZtxz" v-model="optionZtxz.result" @cbkClkItem="cbkClkZtxz">
-            <span slot="line" slot-scope="props">{{props.item.division}}</span>
+            <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer">
           <label class="star">负责人姓名:</label>
-          <cmp-input class="f-dom" v-model="query._fzrxm_" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query.principalName" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">主体提交时间:</label>
@@ -54,13 +50,6 @@
         <div class="form-layer" style="width: 185px;">
           <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query._tjsjend_"></cmp-date-picker>
         </div>
-        <div class="form-layer">
-          <label class="star">身份验证时间:</label>
-          <cmp-date-picker class="f-dom" v-model="query._sfyzsjstart_"></cmp-date-picker>
-        </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query._sfyzsjend_"></cmp-date-picker>
-        </div>      
         <div class="form-layer" style="width: 100%;text-align:center;">
           <cmp-button theme="line" @click="clkRest">重置</cmp-button>
           <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
@@ -71,25 +60,42 @@
       </div>
       <cmp-table v-bind="optionTabel">
         <tr slot="head">
-          <td>主体名称</td><td>主体代码</td><td>经营场所</td><td>法定代表人</td><td>产业类型</td><td>主体性质</td><td>负责人姓名</td><td>登录账号</td><td>生产主体提交时间</td><td>身份验证时间</td>
+          <td>主体名称</td>
+          <td>经营场所</td>
+          <td>产业类型</td>
+          <td>主体性质</td>
+          <td>负责人姓名</td>
+          <td>审核类型</td>
+          <td>身份验证</td>
+          <td>审核提交时间</td>
+          <td>操作</td>
         </tr>
-        <tr slot="body" slot-scope="props" @click="clkTabelItem(props.item)">
-          <td>{{props.item._ztmc_}}</td><td>{{props.item._ztdm_}}</td><td>{{props.item._jycs_}}</td><td>{{props.item._fddbr_}}</td><td>{{props.item._cylx_}}</td><td>{{props.item._ztxz_}}</td><td>{{props.item._fzrxm_}}</td><td>{{props.item._dlzh_}}</td><td>{{props.item._sczttjsj_}}</td><td>{{props.item._sfyzsj_}}</td>
+        <tr slot="body" slot-scope="props">
+          <td>{{props.item.entName}}</td>
+          <td>{{props.item.busiPlace}}</td>
+          <td>{{props.item.entIndustrySub}}</td>
+          <td>{{props.item.entProperty}}</td>
+          <td>{{props.item.principalName}}</td>
+          <td>{{props.item.entStatus===2?'注册审核':props.item.entStatus===3?'修改审核':'注销审核'}}</td>
+          <td>{{props.item.codeCheckFlag===1?'是':'否'}}</td>
+          <td>{{utlFormatDate(props.item.createTime)}}</td>
+          <td><cmp-button class="theme" @click="clkTabelItem(props.item)">审核</cmp-button></td>
         </tr>
       </cmp-table>
       <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
     </div>
-    <div style="padding: 0 20px;" v-if="optionTab.acitve===1">
-      <cmp-sh @callback="clkRemoveSh"></cmp-sh>
+    <div style="padding: 0 20px;" v-show="optionTab.acitve>0">
+      <cmp-sh v-bind="optionSh" @callback="callbackSh"></cmp-sh>
     </div>
   </div>
 </template>
 
 <script>
   import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
+  import {dataFormat} from 'web-js-tool';
   import Sh from './sh.vue';
   // import geoinfo from '../../../../static/geoinfo.js';
-  import {ajaxGetDshData, ajaxGetChildDivision} from '../../../data/ajax.js';
+  import {ajaxGetDshDataList, ajaxGetChildDivision} from '../../../data/ajax.js';
 
   export default {
     name: 'Dsh',
@@ -160,34 +166,51 @@
             10, 20, 30, 40, 50
           ],
           pagesize: 20
+        },
+        optionSh: {
+          type: '',
+          data: {}
         }
       };
+    },
+    computed: {
+      // 
     },
     mounted: function () {
       // 
     },
     methods: {
       cbkTab: function (data) {
-        this.optionTab.acitve = data.name === '审核' ? 1 : 0;
+        if (data.name === '审核') {
+          this.optionTab.acitve = 1;
+          this.optionSh.type = 'sh';
+        } else if (data.name === '审批日志') {
+          this.optionTab.acitve = 2;
+          this.optionSh.type = 'log';
+        } else {
+          this.optionTab.acitve = 0;
+        }
       },
       cbkClkCity: function (data) {
+        data = data[0];
         this.$set(this.query, '_city_', data);
         this.optionXian.data = [];
         this.$nextTick(function () {
-          this.optionXian.data = data[0].children;
+          this.optionXian.data = data.children;
         });
       },
       cbkClkXian: function (data) {
+        var _this = this;
+
         data = data[0];
         this.$set(this.query, '_xian_', data);
-        this.optionXiang.data = [];
-        this.$nextTick(function () {
-          ajaxGetChildDivision({
-            code: data.divCode
-          }, function (data) {
-            // 
+        ajaxGetChildDivision({
+          code: data.divCode
+        }, function (_data) {
+          _this.optionXiang.data = [];
+          _this.$nextTick(function () {
+            _this.optionXiang.data = _data.ret;
           });
-          this.optionXiang.data = data[0].children;
         });
       },
       cbkClkXiang: function (data) {
@@ -197,7 +220,7 @@
         this.$set(this.query, '_cylx_', data);
       },
       cbkClkZtxz: function (data) {
-        this.$set(this.query, '_ztxz_', data);
+        this.$set(this.query, 'entProperty', data);
       },
       clkRest: function () {
         this.query = {};
@@ -223,13 +246,13 @@
         console.log(data);
         this.optionPagebarPagesize.index = data.currentPage;
         this.optionPagebarPagesize.pagesize = data.pagesize;
-        ajaxGetDshData(Object.assign({
-          current: this.optionPagebarPagesize.index,
-          pageSize: this.optionPagebarPagesize.pagesize
+        ajaxGetDshDataList(Object.assign({
+          page: this.optionPagebarPagesize.index,
+          size: this.optionPagebarPagesize.pagesize
         }, this.query), function (data) {
           if (data.code === 0) {
             _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.total - 1) / _this.optionPagebarPagesize.pagesize) + 1;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
@@ -240,12 +263,27 @@
           this.optionTab.list.push({
             name: '审核'
           });
+          this.optionTab.list.push({
+            name: '审批日志'
+          });
         }
+        this.optionSh.data = data;
         this.optionTab.acitve = 1;
+        this.optionSh.type = 'sh';
       },
-      clkRemoveSh: function () {
+      callbackSh: function (data) {
         this.optionTab.acitve = 0;
-        this.optionTab.list.splice(1, 1);
+        this.optionTab.list.splice(1, this.optionTab.list.length);
+        if (data === 'fresh') {
+          // 更新列表
+          this.callbackPagebar({
+            currentPage: 1,
+            pagesize: this.optionPagebarPagesize.pagesize
+          });
+        }
+      },
+      utlFormatDate: function (dateLong) {
+        return dataFormat(new Date(dateLong), ' yyyy-MM-dd');
       }
     }
   };

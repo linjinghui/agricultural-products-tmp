@@ -133,8 +133,85 @@ export function ajaxGetChildDivision (pms, callback) {
   });
 }
 
+// ===================[待审批相关接口]===================
+
+/**
+ * 获取待审核数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetDshDataList (pms, callback) {
+  let params = pms;
+  
+  $http({
+    method: 'GET',
+    url: URL + '/ent_approve_operation/selectMyAuditList',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 获取审批日志列表
+ * @param {string} pms.authId - 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetSpLogList (pms, callback) {
+  let params = {
+    authId: pms.authId
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/ent_approve_operation/getAllInfo',
+    params: params
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
+
+/**
+ * 执行审批操作 - 待审批
+ * @param {string} pms.authId - ID 
+ * @param {string} pms.optResult - 审批结果optResult 0不通过 1通过 
+ * @param {string} pms.optOpinion - 审批意见 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDoAuditOperation (pms, callback) {
+  let userInfo = getUserInfo().user;
+  let optLevel = userInfo.adminDivision + '';
+  
+  console.log(userInfo);
+  if (optLevel.substr(optLevel.length - 4, optLevel.length) === '0000') {
+    optLevel = 3;
+  } else if (optLevel.substr(optLevel.length - 2, optLevel.length) === '00') {
+    optLevel = 2;
+  } else {
+    optLevel = 1;
+  }
+  let params = {
+    authId: pms.authId,
+    optLevel: optLevel,
+    optResult: pms.optResult,
+    optOpinion: pms.optOpinion
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/ent_approve_operation/doAuditOperation',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback(successData.body);
+  });
+}
 
 
+
+
+
+// ===================================================[虚拟数据接口]===================================================
 
 /**
  * 获取产业类型占比数据

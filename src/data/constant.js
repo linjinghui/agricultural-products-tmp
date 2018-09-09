@@ -26,10 +26,15 @@ $http.interceptors.push(function (request, next) {
     _this.$loading({show: false});
     if (response.status === 404) {
       _this.$tip({ show: true, text: '请求地址不存在：【' + response.url + '】', theme: 'danger' });
-    } else if ((response.status === 400 && token.length === 0) || response.status === 401) {
-      // 身份认证已失效，请重新登录
-      // _this.$tip({ show: true, text: '身份认证已失效，请重新登录！', theme: 'danger' });
+    } else if (response.body.code === 3) {
+      window.location.href = '/#/login';
+      _this.$tip({ show: true, text: '身份认证已失效，请重新登录！', theme: 'danger' });
+      return null;
     }
+    //  else if ((response.status === 400 && token.length === 0) || response.status === 401 || response.body.code === 3) {
+    //   // 身份认证已失效，请重新登录
+    //   _this.$tip({ show: true, text: '身份认证已失效，请重新登录！', theme: 'danger' });
+    // }
     let body = response.body;
     if (typeof body === 'string' && body.indexOf('html') >= 0) {
       window.EVENTBUS.$emit('changeTip', {'display': true, 'theme': 'error', 'content': ERRORSERVICE});

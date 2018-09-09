@@ -1,16 +1,29 @@
 <template>
   <div class="wrap">
     <cmp-tab v-bind="optionTab"></cmp-tab>
-    食用农产品质量风险监测
+    <cmp-table v-bind="optionTabel">
+      <tr slot="head">
+        <td>姓名</td><td>性别</td><td>所在单位</td><td>职务</td><td>手机号</td><td>所属角色</td>
+      </tr>
+      <tr slot="body" slot-scope="props">
+        <td>{{props.item.name}}</td><td>{{props.item.qysl}}</td><td>{{props.item.qyxzsl}}</td><td>{{props.item.zzcyl}}</td><td>{{props.item.xmycl}}</td><td>{{props.item.zzcyl}}</td>
+      </tr>
+    </cmp-table>
   </div>
 </template>
 
 <script>
-  import {Tab} from 'web-base-ui';
+  import {Echarts, Radio, Checkbox, Table, Tab} from 'web-base-ui';
+  import {ajaxGetAreaKbData} from '../../../data/ajax.js';
+
   export default {
-    name: 'Syncpzlfxjc',
+    name: 'Login',
     components: {
-      'cmpTab': Tab 
+      'cmpEcharts': Echarts,
+      'cmpRadio': Radio,
+      'cmpCheckbox': Checkbox,
+      'cmpTable': Table,
+      'cmpTab': Tab
     },
     data () {
       return {
@@ -21,11 +34,22 @@
               name: '食用农产品质量风险监测'
             }
           ]
-        } 
+        },
+        optionTabel: {
+          data: []
+        }
       };
     },
     mounted: function () {
-      // 
+      var _this = this;
+
+      ajaxGetAreaKbData({}, function (data) {
+        if (data.code === 0) {
+          _this.optionTabel.data = data.ret;
+        } else {
+          _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+        }
+      });
     },
     methods: {
       // 
