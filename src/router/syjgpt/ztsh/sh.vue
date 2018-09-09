@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap sh">
     <div class="wrap-form horiz">
       <div class="form-layer">
         <label class="star">主体名称:</label>
@@ -53,7 +53,7 @@
       </div>
       <div class="form-layer wrap-button" v-show="type==='sh'">
         <cmp-button theme="line" @click="clkNo">不通过</cmp-button>
-        <cmp-button @click="clkTgbsh">通过并审核</cmp-button>
+        <cmp-button class="theme" @click="clkTgbsh">通过并审核</cmp-button>
       </div>
     </div>
     <div style="padding-top:20px;border-top: solid 1px #ccc;" class="wrap-form horiz" v-show="type==='ck'">
@@ -254,7 +254,9 @@
 </script>
 
 <style lang="scss">
-  .wrap {}
+  .wrap {
+    // 
+  }
 </style>
 <style scoped lang="scss">
   .wrap {

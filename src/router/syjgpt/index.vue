@@ -118,12 +118,13 @@
         text-align: center;
         font-size: 14px;
         color: #fff;
-        background-color: #367fa9;
+        background-color: var(--theme);
+        filter: sepia(30%);
         z-index: 1;
         cursor: pointer;
       }
       .fa-reorder:hover {
-        background-color: #00c1de;
+        filter: sepia(0%);
       }
     }
     >.p-content {
@@ -202,7 +203,7 @@
       width: 100%;
       overflow: hidden;
       color: #8aa4af;
-      /* background-color: #2c3b41; */
+      background-color: #2c3b41;
       transition: max-height .4s ease;
     }
     .aside-nav ul > li > a {
@@ -233,7 +234,7 @@
       background-color: #1e282c;
     }
     .aside-nav > li > a.active {
-      border-color: #3c8dbc;
+      border-color: var(--theme);
     }  
   }
 </style>

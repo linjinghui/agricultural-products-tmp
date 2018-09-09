@@ -73,7 +73,7 @@
       line-height: 50px;
       font-size: 16px;
       color: #fff;
-      background-color: #3c8dbc;
+      background-color: var(--theme);
       user-select: none;
 
       .logo {
@@ -82,7 +82,8 @@
         font-size: 20px;
         font-weight: 700;
         text-align: center;
-        background-color: #367fa9;
+        background-color: var(--theme);
+        filter: sepia(30%);
       }
 
       nav {
@@ -98,7 +99,8 @@
         }
         a.active,
         a:not(.logo):hover {
-          background-color: #306f94;
+          background-color: var(--theme);
+          filter: sepia(50%);
         }
       }
 

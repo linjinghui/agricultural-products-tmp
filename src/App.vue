@@ -107,7 +107,7 @@
     },
     methods: {
       toPage: function (path, type) {
-        alert(type);
+        // alert(type);
         if (!path) {
           switch (type) {
             case 0:
@@ -193,7 +193,7 @@
               // -----------------------fmxxxc--赋码信息巡查
               path = '/#/fmxxxc';
               break;
-            case 'admin:fmxxxc: sslxxc':
+            case 'admin:fmxxxc:sslxxc':
               // -----------------------fmxxxc--销售流向巡查
               path = '/#/xslxxc';
               break;
@@ -241,7 +241,7 @@
               // -----------------------gzjd--生产主体操作日志查询
               path = '/#/scztczrzcx';
               break;
-            case 'adminxtgl:zzjggl':
+            case 'admin:xtgl:zzjggl':
               // -----------------------xtgl--组织机构管理
               path = '/#/zzjggl';
               break;
@@ -291,6 +291,10 @@
 </script>
 
 <style type="text/css">
+  /* 自定义主体色 */
+  #app {
+    --theme: #00a65a;
+  }
   #app {
     position: relative;
     width: 100%;
@@ -299,6 +303,41 @@
     min-height: 630px;
     overflow: auto;
     background-color: #3d484e;
+  }
+  .flatpickr-calendar .flatpickr-day.selected,
+  .flatpickr-calendar .flatpickr-day.selected:hover {
+    background: #00a65a;
+    border-color: #00a65a;
+  }
+  .wrap-confirm > footer > .button:last-of-type {
+    background-color: var(--theme)!important;
+  }
+  .wrap-dialog > footer > .button:last-of-type {
+    background-color: var(--theme)!important;
+  }
+  .wrapper-pagebar-pagesize .pagebar-wrapper span.active {
+    background-color: var(--theme)!important;
+  }
+  .button.theme {
+    background-color: var(--theme)!important;
+  }
+  .wrap-menu > .line:active,
+  .wrap-menu > .line.active {
+    color: var(--theme)!important;
+  }
+  .radio > .selected {
+    border-color: var(--theme)!important;
+    background-color: var(--theme)!important;
+  }
+ .checkbox > .cicon-tick-cbdr {
+    border-color: var(--theme)!important;
+    background-color: var(--theme)!important;
+  }
+  .input > input:not([readonly]):focus {
+    border-color: var(--theme)!important;
+  }
+  .text-area.focus {
+    border-color: var(--theme)!important;
   }
 </style>
 

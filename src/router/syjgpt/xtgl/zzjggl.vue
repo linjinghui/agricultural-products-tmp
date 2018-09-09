@@ -6,7 +6,7 @@
     </div>
     <div class="p-r">
       <header>
-        <cmp-button @click="clkAdd">添加</cmp-button>
+        <cmp-button class="theme" @click="clkAdd">添加</cmp-button>
       </header>
       <cmp-table v-bind="optionTabel">
         <tr slot="head">

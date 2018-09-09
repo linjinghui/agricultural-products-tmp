@@ -2,7 +2,7 @@
   <div class="wrap jsjqxgl">
     <cmp-tab v-bind="optionTab"></cmp-tab>
     <ul class="p-l">
-      <cmp-button @click="clkAdd">添加</cmp-button>
+      <cmp-button class="theme" @click="clkAdd">添加</cmp-button>
       <li v-for="(item,index) in jsData" :key="'_js_'+index" :class="{'active': active===index}" @click="clkItem(index,item)">
         <span v-text="item._jsmc_"></span>
         <i class="fa fa-edit" @click="clkEdit(item)"></i>
@@ -13,7 +13,7 @@
       <cmp-tree ref="jtree" :treeData="treeData" :isCheckBox="checkbox" :undetermined="undetermined" :isWholerow="wholerow" @checkBoxCallback="checkCallback"></cmp-tree>
       <footer>
         <cmp-button theme="line" @click="clkReset">重置</cmp-button>
-        <cmp-button @click="clkSave">保存</cmp-button>
+        <cmp-button class="theme" @click="clkSave">保存</cmp-button>
       </footer>
     </div>
     <cmp-dialog v-model="optionDialog.show" v-bind="optionDialog" @callback="callbackDialog">

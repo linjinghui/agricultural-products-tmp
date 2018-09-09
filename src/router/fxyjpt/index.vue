@@ -117,12 +117,13 @@
         text-align: center;
         font-size: 14px;
         color: #fff;
-        background-color: #367fa9;
+        background-color: var(--theme);
+        filter: sepia(30%);
         z-index: 1;
         cursor: pointer;
       }
       .fa-reorder:hover {
-        background-color: #00c1de;
+        filter: sepia(0%);
       }
     }
     >.p-content {
@@ -231,7 +232,7 @@
       background-color: #1e282c;
     }
     .aside-nav > li > a.active {
-      border-color: #3c8dbc;
+      border-color: var(--theme);
     }  
   }
 </style>

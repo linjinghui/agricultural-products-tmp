@@ -63,7 +63,7 @@
         </div>      
         <div class="form-layer" style="width: 100%;text-align:center;">
           <cmp-button theme="line" @click="clkRest">重置</cmp-button>
-          <cmp-button @click="clkSearch">搜索</cmp-button>
+          <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
         </div>
       </div>
       <div class="fgx">
@@ -247,9 +247,11 @@
 
 <style lang="scss">
   .wrap {
-    .wrapper-pagebar-pagesize .wrap-menu {
-      top: unset!important;
-      bottom: calc(100% + 4px)!important;
+    .wrapper-pagebar-pagesize {
+      .wrap-menu {
+        top: unset!important;
+        bottom: calc(100% + 4px)!important;
+      }
     }
   }
 </style>

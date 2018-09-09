@@ -19,7 +19,7 @@
           </cmp-input>
           <i class="icon iconfont icon-jinzhi" v-show="passwordCheck===false"></i><br>
           <small class="tip">{{passwordCheck===false?'请正确填写密码':''}}&nbsp;</small>
-          <small class="tip find-pwd">忘记密码?</small>
+          <!-- <small class="tip find-pwd">忘记密码?</small> -->
         </div>
         <div class="form-layer">
           <label class="star">验证码: </label><br>
@@ -27,8 +27,8 @@
           <img class="vcode" :src="vcodeUrl" width="100" height="32" @click="getVcode">
         </div>
         <div class="form-layer" style="margin-top: 40px;">
-          <cmp-button class="login" theme="#00a459" @click="clkLogin">登录</cmp-button>
-          <cmp-checkbox class="rememberMe" theme="#00a459" v-model="rememberMe">记住我</cmp-checkbox>
+          <cmp-button class="theme login" @click="clkLogin">登录</cmp-button>
+          <cmp-checkbox class="rememberMe" v-model="rememberMe">记住我</cmp-checkbox>
         </div>
       </div>
       <p class="copyright">
@@ -193,7 +193,7 @@
         margin-top: 40px;
         margin-bottom: 20px;
         font-size: 20px;
-        color: #00a459;
+        color: var(--theme);
       }
 
       >.wrap-form {
