@@ -49,10 +49,6 @@
           val: '',
           arr: [
             {
-              val: '1',
-              name: '今天'
-            },
-            {
               val: '2',
               name: '本月'
             },
@@ -123,7 +119,7 @@
     },
     mounted: function () {
       // 默认取当天数据
-      this.timeArr.val = '1';
+      this.timeArr.val = '2';
       // 默认取全省区域企业数据
       this.clkArea();
     },
@@ -291,9 +287,6 @@
 </script>
 
 <style lang="scss">
-  #app {
-    background-color: #fff;
-  }
   .wrap {
     .wrap-table table {
       text-align: center;

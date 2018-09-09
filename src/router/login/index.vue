@@ -151,7 +151,6 @@
 
 <style lang="scss">
   .wrap {
-
     .input input {
       border-radius: 4px;
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap" @click="optionMenu.show=false">
+  <div class="wrap index" @click="optionMenu.show=false">
     <header>
       <a class="logo">监管系统</a>
       <nav>
@@ -9,10 +9,10 @@
         <a><i class="fa fa-bell-o"></i></a>
         <a @click.stop="optionMenu.show=!optionMenu.show">
           <i class="fa fa-user"></i>
-          <cmp-menu v-bind="optionMenu" @cbkClkItem="callbackMenu"></cmp-menu>
         </a>
         <a><i class="fa fa-cogs"></i></a>
       </nav>
+      <cmp-menu v-bind="optionMenu" @cbkClkItem="callbackMenu"></cmp-menu>
     </header>
     <router-view :navData="leftNavData"></router-view>
   </div>
@@ -63,11 +63,12 @@
 </script>
 
 <style lang="scss">
-  .wrap {}
+  
 </style>
 <style scoped lang="scss">
-  .wrap {
-
+  .wrap.index {
+    background-color: #fff;
+    
     >header {
       height: 50px;
       line-height: 50px;
@@ -111,13 +112,13 @@
 
       .wrap-menu {
         position: absolute;
-        top: calc(100% + 0px);
-        right: 0;
+        top: 50px;
+        right: 60px;
         width: 120px;
         color: #666;
         font-size: 16px;
         text-align: center;
-        z-index: 1;
+        z-index: 1112;
       }
     }
   }
