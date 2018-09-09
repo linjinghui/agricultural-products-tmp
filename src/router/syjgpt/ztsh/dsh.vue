@@ -84,7 +84,7 @@
       </cmp-table>
       <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
     </div>
-    <div style="padding: 0 20px;" v-show="optionTab.acitve>0">
+    <div style="padding: 0 20px;" v-if="optionTab.acitve>0">
       <cmp-sh v-bind="optionSh" @callback="callbackSh"></cmp-sh>
     </div>
   </div>

@@ -255,15 +255,17 @@
       getLogData: function () {
         var _this = this;
 
-        ajaxGetSpLogList({
-          authId: this.data.authId
-        }, function (data) {
-          if (data.code === 0) {
-            _this.logArr = data.ret;
-          } else {
-            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
-          }
-        });
+        if (JSON.stringify(this.data) !== '{}') {
+          ajaxGetSpLogList({
+            authId: this.data.authId
+          }, function (data) {
+            if (data.code === 0) {
+              _this.logArr = data.ret;
+            } else {
+              _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+            }
+          });
+        }
       },
       callbackDialog: function (data) {
         console.log('==========callbackDialog=======');

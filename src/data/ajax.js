@@ -184,7 +184,7 @@ export function ajaxDoAuditOperation (pms, callback) {
   
   console.log(userInfo);
   if (optLevel.substr(optLevel.length - 4, optLevel.length) === '0000') {
-    optLevel = 3;
+    optLevel = 2;
   } else if (optLevel.substr(optLevel.length - 2, optLevel.length) === '00') {
     optLevel = 2;
   } else {
