@@ -50,8 +50,10 @@
       };
     },
     mounted: function () {
-      console.log('===========1=========');
-      console.log(this.navData);
+      var firstNav = this.navData[0];
+
+      this.clkNavItem([firstNav]);
+      this.clkNavItem([firstNav, firstNav.children[0]]);
     },
     methods: {
       clkNavItem: function (arr) {

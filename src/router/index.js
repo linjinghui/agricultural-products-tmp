@@ -97,11 +97,11 @@ export default new Router({
               name: 'dbsx',
               component: Dbsx
             },
-            {
-              path: '/',
-              name: 'dsh',
-              component: Dsh
-            },
+            // {
+            //   path: '/',
+            //   name: 'dsh',
+            //   component: Dsh
+            // },
             {
               path: '/dsh',
               name: 'dsh',

@@ -19,7 +19,7 @@ export function ajaxGet (pms, callback) {
     url: URL + '/portal/widget',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -39,7 +39,7 @@ export function ajaxPost (pms, callback) {
     body: params,
     emulateJSON: true
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -79,7 +79,7 @@ export function ajaxLogin (pms, callback) {
     emulateJSON: true
   }).then(function (successData) {
     let data = successData.body;
-    callback(data);
+    callback && callback(data);
     if (data.code === 0) {
       ssgSaveData(USER_KEY, data.ret);
     }
@@ -95,7 +95,7 @@ export function ajaxLoginout (callback) {
     method: 'GET',
     url: URL + '/logout'
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -110,7 +110,7 @@ export function ajaxGetAllDivisionTree (callback) {
     method: 'GET',
     url: URL + '/sys_department/getAllDivisionTree'
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -129,7 +129,7 @@ export function ajaxGetChildDivision (pms, callback) {
     url: URL + '/sys_department/getChildDivision',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -148,7 +148,7 @@ export function ajaxGetDshDataList (pms, callback) {
     url: URL + '/ent_approve_operation/selectMyAuditList',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -167,7 +167,7 @@ export function ajaxGetSpLogList (pms, callback) {
     url: URL + '/ent_approve_operation/getAllInfo',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -203,10 +203,26 @@ export function ajaxDoAuditOperation (pms, callback) {
     body: params,
     emulateJSON: true
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
+/**
+ * 获取已审批数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetYshDataList (pms, callback) {
+  let params = pms;
+  
+  $http({
+    method: 'GET',
+    url: URL + '/ent_approve_operation/selectPublicAuditList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 
 
@@ -228,7 +244,7 @@ export function ajaxGetCylxzb (pms, callback) {
     url: URL + '/portal/cylxzb',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -247,7 +263,7 @@ export function ajaxGetFmsltj (pms, callback) {
     url: URL + '/portal/fmsltj',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -266,7 +282,7 @@ export function ajaxGetQyxs (pms, callback) {
     url: URL + '/portal/qyxs',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -289,7 +305,7 @@ export function ajaxGetEnterpriseByArea (pms, callback) {
     url: URL + '/portal/enterpriseByArea',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -308,7 +324,7 @@ export function ajaxGetScztSltj (pms, callback) {
     url: URL + '/portal/scztSltj',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -327,7 +343,7 @@ export function ajaxGetQycl (pms, callback) {
     url: URL + '/portal/qycl',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -346,7 +362,7 @@ export function ajaxGetAreaKbData (pms, callback) {
     url: URL + '/portal/areaKbData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -365,7 +381,7 @@ export function ajaxGetDshData (pms, callback) {
     url: URL + '/portal/getDshData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -384,7 +400,7 @@ export function ajaxGetDshInfo (pms, callback) {
     url: URL + '/portal/getDshInfo',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -403,7 +419,7 @@ export function ajaxGetLsshData (pms, callback) {
     url: URL + '/portal/getLsshData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -422,7 +438,7 @@ export function ajaxGetShcxData (pms, callback) {
     url: URL + '/portal/getShcxData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -441,7 +457,7 @@ export function ajaxGetDshShcxData (pms, callback) {
     url: URL + '/portal/getDshShcxData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -460,7 +476,7 @@ export function ajaxGetJgData (pms, callback) {
     url: URL + '/portal/getJgData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -479,7 +495,7 @@ export function ajaxGetUserData (pms, callback) {
     url: URL + '/portal/getUserData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }
 
@@ -498,6 +514,6 @@ export function ajaxGetJsData (pms, callback) {
     url: URL + '/portal/getJsData',
     params: params
   }).then(function (successData) {
-    callback(successData.body);
+    callback && callback(successData.body);
   });
 }

@@ -43,7 +43,7 @@
       var _this = this;
 
       // 默认进入home页面
-      this.$root.toPage('', 2);
+      this.clkNav(0, this.navData[0]);
       // 获取福建全省数据
       ajaxGetAllDivisionTree(function (data) {
         if (data.code === 0) {
