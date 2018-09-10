@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
-    <div style="padding: 0 20px;" v-show="optionTab.acitve===0">
+    <div style="padding: 0 20px;" v-show="optionTab.current.id===1">
       <div class="wrap-form horiz" :class="{'show': formShow}">
         <div class="form-layer">
           <label class="star">主体名称:</label>
@@ -84,7 +84,7 @@
       </cmp-table>
       <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
     </div>
-    <div style="padding: 0 20px;" v-if="optionTab.acitve>0">
+    <div style="padding: 0 20px;" v-if="optionTab.current.id!==1">
       <cmp-sh v-bind="optionSh" @callback="callbackSh"></cmp-sh>
     </div>
   </div>
@@ -112,10 +112,12 @@
     data () {
       return {
         optionTab: {
-          acitve: 0,
+          active: 0,
           close: true,
+          current: {},
           list: [
             {
+              id: 1,
               name: '待审核',
               close: false
             }
@@ -181,14 +183,13 @@
     },
     methods: {
       cbkTab: function (data) {
-        if (data.name === '审核') {
-          this.optionTab.acitve = 1;
-          this.optionSh.type = 'sh';
-        } else if (data.name === '审批日志') {
-          this.optionTab.acitve = 2;
-          this.optionSh.type = 'log';
-        } else {
-          this.optionTab.acitve = 0;
+        if (data) {
+          this.optionTab.current = data;
+          if (data.id === 2) {
+            this.optionSh.type = 'sh';
+          } else if (data.id === 3) {
+            this.optionSh.type = 'log';
+          }
         }
       },
       cbkClkCity: function (data) {
@@ -259,20 +260,30 @@
         });
       },
       clkTabelItem: function (data) {
-        if (this.optionTab.list.length === 1) {
-          this.optionTab.list.push({
+        this.optionTab.list = [];
+        this.$nextTick(function () {
+          this.optionTab.list = [{
+            id: 1,
+            name: '待审核',
+            close: false
+          }, {
+            id: 2,
             name: '审核'
-          });
-          this.optionTab.list.push({
+          }, {
+            id: 3,
             name: '审批日志'
-          });
-        }
-        this.optionSh.data = data;
-        this.optionTab.acitve = 1;
-        this.optionSh.type = 'sh';
+          }];
+          this.optionSh.data = data;
+          this.$set(this.optionTab, 'active', '');
+          this.$nextTick(function () { this.$set(this.optionTab, 'active', 1); });
+          this.optionSh.type = 'sh';
+        });
       },
       callbackSh: function (data) {
-        this.optionTab.acitve = 0;
+        this.$set(this.optionTab, 'active', '');
+        this.$nextTick(function () {
+          this.$set(this.optionTab, 'active', 0);
+        });
         this.optionTab.list.splice(1, this.optionTab.list.length);
         if (data === 'fresh') {
           // 更新列表

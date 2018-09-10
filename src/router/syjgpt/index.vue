@@ -50,6 +50,7 @@
       };
     },
     mounted: function () {
+      console.log(11111);
       var firstNav = this.navData[0];
 
       this.clkNavItem([firstNav]);
