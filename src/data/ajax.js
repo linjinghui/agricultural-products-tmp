@@ -184,7 +184,7 @@ export function ajaxDoAuditOperation (pms, callback) {
   
   console.log(userInfo);
   if (optLevel.substr(optLevel.length - 4, optLevel.length) === '0000') {
-    optLevel = 2;
+    optLevel = 3;
   } else if (optLevel.substr(optLevel.length - 2, optLevel.length) === '00') {
     optLevel = 2;
   } else {
@@ -224,8 +224,82 @@ export function ajaxGetYshDataList (pms, callback) {
   });
 }
 
+// ===================[系统管理相关接口]===================
 
+/**
+ * 获取组织机构树
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetOrgJgTree (callback) {  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_department/getDeptTree'
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
+/**
+ * 获取机构列表
+ * @param {string} pms.adminDivision - 行政区划 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgDataList (pms, callback) {
+  let params = {
+    adminDivision: pms.adminDivision
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_department/getDeptList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 保存|编辑机构信息
+ * @param {string} pms - 机构信息对象 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSaveUpdataJg (pms, callback) {
+  let params = {
+    deptId: pms.deptId || '',
+    deptName: pms.deptName,
+    deptCode: pms.deptCode,
+    adminDivision: pms.adminDivision,
+    parentId: pms.parentId
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/sys_department/saveOrUpdate',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 删除机构信息
+ * @param {string} pms.deptId - 机构ID 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDelJg (pms, callback) {
+  let params = {
+    deptId: pms.deptId
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_department/delete',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 // ===================================================[虚拟数据接口]===================================================
 

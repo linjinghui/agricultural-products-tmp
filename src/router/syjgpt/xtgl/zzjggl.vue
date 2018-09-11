@@ -13,7 +13,7 @@
           <td>所属行政区划</td><td>机构名称</td><td>机构编码</td><td>操作</td>
         </tr>
         <tr slot="body" slot-scope="props">
-          <td>{{currentTreeItem.text}}</td><td>{{props.item._jgmc_}}</td><td>{{props.item._jgbm_}}</td>
+          <td>{{currentTreeItem.text}}</td><td>{{props.item.deptName}}</td><td>{{props.item.deptCode}}</td>
           <td><cmp-button theme="line" @click="clkView(props.item)">查看</cmp-button><cmp-button @click="clkEdit(props.item)">编辑</cmp-button><cmp-button theme="danger" @click="clkDel(props.item)">删除</cmp-button></td>
         </tr>
       </cmp-table>
@@ -30,13 +30,13 @@
             <div class="form-layer">
               <label class="star">机构名称：</label>
               <span class="f-dom">
-                <cmp-input class="f-dom" v-model="currentJgInfo._jgmc_" maxlength="100"></cmp-input>
+                <cmp-input class="f-dom" v-model="currentJgInfo.deptName" maxlength="100"></cmp-input>
               </span>
             </div>
             <div class="form-layer">
               <label class="star">机构编码：</label>
               <span class="f-dom">
-                <cmp-input class="f-dom" v-model="currentJgInfo._jgbm_" maxlength="100"></cmp-input>
+                <cmp-input class="f-dom" v-model="currentJgInfo.deptCode" maxlength="100"></cmp-input>
               </span>
             </div>
           </div>
@@ -48,8 +48,7 @@
 
 <script>
   import {Tab, Tree, Table, Button, Dialog, Input} from 'web-base-ui';
-  import geoinfoFjXian from '../../../../static/geoinfo-fj-xian.js';
-  import {ajaxGetJgData} from '../../../data/ajax.js';
+  import {ajaxGetOrgJgTree, ajaxGetJgDataList, ajaxSaveUpdataJg, ajaxDelJg} from '../../../data/ajax.js';
 
   export default {
     name: 'Zzjggl',
@@ -91,34 +90,43 @@
       };
     },
     mounted: function () {
-      var _this = this;
-
-      this.treeData = this.formateDataToPluginData(geoinfoFjXian);
-      // 设置默认激活项
-      this.$nextTick(function () {
-        _this.activeId = _this.jsTreeIdStr + '_0';
-      });
+      this.getTreeData();
     },
     methods: {
-      testEachGeoinfo: function () {
-        var arr = geoinfoFjXian;
+      // testEachGeoinfo: function () {
+      //   var arr = geoinfoFjXian;
       
-        arr.forEach((element, index) => {
-          element.id = '_' + index;
-          element.child.forEach((element2, index2) => {
-            element2.id = '_' + index + '_' + index2;
-          });
+      //   arr.forEach((element, index) => {
+      //     element.id = '_' + index;
+      //     element.child.forEach((element2, index2) => {
+      //       element2.id = '_' + index + '_' + index2;
+      //     });
+      //   });
+      //   console.log(arr);
+      //   console.log(JSON.stringify(arr));
+      // },
+      getTreeData: function () {
+        var _this = this;
+
+        ajaxGetOrgJgTree(function (data) {
+          if (data.code === 0) {
+            _this.treeData = _this.formateDataToPluginData(data.ret);
+            // 设置默认激活项
+            _this.$nextTick(function () {
+              _this.activeId = _this.jsTreeIdStr + data.ret[0].id;
+            });
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
         });
-        console.log(arr);
-        console.log(JSON.stringify(arr));
       },
       callbackTree: function (data) {
-        console.log('======callbackTree=======');
-        console.log(data);
         var _this = this;
 
         this.currentTreeItem = data[data.length - 1];
-        ajaxGetJgData({}, function (data) {
+        ajaxGetJgDataList({
+          adminDivision: this.currentTreeItem.divCode
+        }, function (data) {
           if (data.code === 0) {
             _this.optionTabel.data = [];
             _this.$nextTick(function () {
@@ -131,7 +139,7 @@
       },
       formateDataToPluginData: function (data) {
         data = JSON.stringify(data);
-        data = data.replace(/"child"/g, '"children"');
+        data = data.replace(/"division"/g, '"text"');
         data = data.replace(/"id":"/g, '"id":"' + this.jsTreeIdStr);
         return JSON.parse(data);
       },
@@ -154,16 +162,24 @@
           }],
           callback: function (data) {
             _this.$confirm({ show: false });
-            console.log('======confirm callback=====');
-            if (data.text === '确定') {
-              _this.callbackTree([_this.currentTreeItem]);
-            }
+            ajaxDelJg({
+              deptId: info.deptId
+            }, function (result) {
+              if (result.code === 0) {
+                _this.$tip({ show: true, text: '已成功删除！', theme: 'succcess' });
+                _this.callbackTree([_this.currentTreeItem]);
+              } else {
+                _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+              }
+            });
           }
         });
       },
       clkAdd: function () {
         this.currentJgInfo = {
-          '_ssxzqh_': this.currentTreeItem.text
+          '_ssxzqh_': this.currentTreeItem.text,
+          'adminDivision': this.currentTreeItem.divCode,
+          'parentId': this.currentTreeItem.id.replace(this.jsTreeIdStr, '')
         };
         this.optionDialog.heading = '添加机构';
         this.optionDialog.buttons = [{
@@ -183,7 +199,7 @@
         this.optionDialog.show = true;
       },
       clkEdit: function (info) {
-        this.currentJgInfo = info;
+        this.currentJgInfo = JSON.parse(JSON.stringify(info));
         this.currentJgInfo._ssxzqh_ = this.currentTreeItem.text;
         this.optionDialog.heading = '编辑机构';
         this.optionDialog.buttons = [{
@@ -196,13 +212,22 @@
         this.optionDialog.show = true;
       },
       callbackDialog: function (data) {
+        var _this = this;
+
         this.optionDialog.show = false;
-        if (data.text === '添加') {
-          this.$tip({ show: true, text: '添加机构成功！', theme: 'success' });
-          this.callbackTree([this.currentTreeItem]);
-        } else if (data.text === '编辑') {
-          this.$tip({ show: true, text: '编辑机构成功！', theme: 'success' });
-          this.callbackTree([this.currentTreeItem]);
+        if (data.text === '添加' || data.text === '编辑') {
+          ajaxSaveUpdataJg(this.currentJgInfo, function (result) {
+            if (result.code === 0) {
+              if (data.text === '添加') {
+                _this.$tip({ show: true, text: '添加机构成功！', theme: 'success' });
+              } else if (data.text === '编辑') {
+                _this.$tip({ show: true, text: '编辑机构成功！', theme: 'success' });
+              }
+              _this.callbackTree([_this.currentTreeItem]);
+            } else {
+              _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+            }
+          });
         }
       }
     }
