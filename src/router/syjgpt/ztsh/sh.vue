@@ -196,7 +196,7 @@
     },
     methods: {
       clkViewImg: function () {
-        window.open(this.info._yyzz_);
+        window.open(this.data._yyzz_);
       },
       clkTgbsh: function () {
         var _this = this;
@@ -262,7 +262,7 @@
           }, function (data) {
             if (data.code === 0) {
               _this.logArr = data.ret.operations || [];
-              _this.data._yyzz_ = data.ret.files[0] || '';
+              _this.$set(_this.data, '_yyzz_', (data.ret.files[0] && data.ret.files[0].downloadUrl) || '');
             } else {
               _this.$tip({ show: true, text: data.msg, theme: 'danger' });
             }
