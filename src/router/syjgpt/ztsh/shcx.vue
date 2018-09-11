@@ -62,16 +62,16 @@
       <div class="fgx">
         <i class="cicon-triangle-top triangle center-h" :title="formShow?'隐藏搜索':'展开搜索'" @click="formShow=!formShow"></i>
       </div>
-      <cmp-table v-bind="optionTabel">
+      <cmp-table ref="rtable" v-bind="optionTabel">
         <tr slot="head">
-          <td>主体名称</td>
-          <td>经营场所</td>
-          <td>产业类型</td>
-          <td>主体性质</td>
-          <td>审核类型</td>
-          <td>审核提交时间</td>
-          <td>审核状态</td>
-          <td>操作</td>
+          <td @click="clkOrder('entName')">主体名称</td>
+          <td @click="clkOrder('busiPlace')">经营场所</td>
+          <td @click="clkOrder('entIndustrySub')">产业类型</td>
+          <td @click="clkOrder('entProperty')">主体性质</td>
+          <td @click="clkOrder('entStatus')">审核类型</td>
+          <td @click="clkOrder('createTime')">审核提交时间</td>
+          <td @click="clkOrder('auditStatus')">审核状态</td>
+          <td class="no-order">操作</td>
         </tr>
         <tr slot="body" slot-scope="props">
           <td>{{props.item.entName}}</td>
@@ -158,7 +158,8 @@
           result: []
         },
         optionTabel: {
-          data: []
+          data: [],
+          order: true
         },
         optionPagebarPagesize: {
           // 当期页
@@ -273,10 +274,12 @@
             close: false
           }, {
             id: 2,
-            name: '基本信息'
+            name: '基本信息',
+            closeCnt: '1'
           }, {
             id: 3,
-            name: '审批日志'
+            name: '审批日志',
+            closeCnt: '1'
           }];
           this.optionSh.data = data;
           this.$set(this.optionTab, 'active', '');
@@ -295,8 +298,11 @@
           });
         }
       },
+      clkOrder: function (orderBy) {
+        this.$refs.rtable.setOrder(this.optionTabel.data, orderBy);
+      },
       utlFormatDate: function (dateLong) {
-        return dataFormat(new Date(dateLong), ' yyyy-MM-dd');
+        return dataFormat(new Date(dateLong), ' yyyy-MM-dd hh:mm:ss');
       }
     }
   };
