@@ -10,14 +10,20 @@
       </header>
       <cmp-table v-bind="optionTabel">
         <tr slot="head">
-          <td>姓名</td><td>性别</td><td>所在单位</td><td>职务</td><td>手机号</td><td>用户类别</td><td>操作</td>
+          <td>姓名</td><td>性别</td><td>所在单位</td><td>手机号</td><td>所属角色</td><td>所属乡镇</td><td>操作</td>
         </tr>
         <tr slot="body" slot-scope="props">
-          <td>{{props.item._xm_}}</td><td>{{props.item._xb_}}</td><td>{{props.item._szdw_}}</td><td>{{props.item._zw_}}</td><td>{{props.item._sjh_}}</td><td>{{props.item._yhlb_}}</td>
+          <td>{{props.item.realName}}</td>
+          <td>{{props.item.sex===1?'男':props.item.sex===2?'女':''}}</td>
+          <td>{{props.item.deptName}}</td>
+          <td>{{props.item.mobile}}</td>
+          <td>{{props.item.roleNames}}</td>
+          <td>{{props.item.townDivisionName}}</td>
           <td>
+            <!-- props.item.userStatus 用户状态0正常，2禁用 -->
             <!-- primary|success|info|warning|danger|line -->
             <cmp-button theme="line" @click="clkEdit(props.item)">修改</cmp-button>
-            <cmp-button v-if="props.item._zt_===1" theme="warning" @click="clkJy(props.item)">禁用</cmp-button>
+            <cmp-button v-if="props.item.userStatus===0" theme="warning" @click="clkJy(props.item)">禁用</cmp-button>
             <cmp-button v-else @click="clkQy(props.item)">启用</cmp-button>
             <cmp-button theme="danger" @click="clkDel(props.item)">删除</cmp-button></td>
         </tr>
@@ -28,13 +34,13 @@
           <div class="wrap-form horiz">
             <div class="form-layer">
               <label class="star">姓名：</label>
-              <cmp-input class="f-dom" autofocus="true" v-model="currentUserInfo._xm_" maxlength="50"></cmp-input>
+              <cmp-input class="f-dom" autofocus="true" v-model="currentUserInfo.realName" maxlength="50"></cmp-input>
             </div>
             <div class="form-layer">
               <label class="star">性别：</label>
               <span class="f-dom">
-                <cmp-radio v-model="currentUserInfo._xb_" val="男">男</cmp-radio>
-                <cmp-radio v-model="currentUserInfo._xb_" val="女">女</cmp-radio>
+                <cmp-radio v-model="currentUserInfo.sex" val="1">男</cmp-radio>
+                <cmp-radio v-model="currentUserInfo.sex" val="2">女</cmp-radio>
               </span>
             </div>
             <div class="form-layer">
@@ -43,11 +49,11 @@
             </div>            
             <div class="form-layer">
               <label class="star">手机号：</label>
-              <cmp-input class="f-dom" v-model="currentUserInfo._sjh_" maxlength="50"></cmp-input>
+              <cmp-input class="f-dom" v-model="currentUserInfo.mobile" maxlength="50"></cmp-input>
             </div>
             <div class="form-layer">
               <label class="star">所在单位：</label>
-              <cmp-input class="f-dom" v-model="currentUserInfo._szdw_" maxlength="100"></cmp-input>
+              <cmp-input class="f-dom" v-model="currentUserInfo.deptName" maxlength="100"></cmp-input>
             </div>
             <div class="form-layer">
               <label class="star">用户类别：</label>
@@ -70,8 +76,7 @@
 
 <script>
   import {Tab, Tree, Table, Button, Dialog, Input, Radio, DropMenu} from 'web-base-ui';
-  import geoinfoFjXian from '../../../../static/geoinfo-fj-xian.js';
-  import {ajaxGetUserData} from '../../../data/ajax.js';
+  import {ajaxGetOrgJgTree, ajaxGetUserDataList} from '../../../data/ajax.js';
 
   export default {
     name: 'Jsgl',
@@ -127,26 +132,23 @@
       };
     },
     mounted: function () {
-      var _this = this;
-
-      this.treeData = this.formateDataToPluginData(geoinfoFjXian);
-      // 设置默认激活项
-      this.$nextTick(function () {
-        _this.activeId = _this.jsTreeIdStr + '_0';
-      });
+      this.getTreeData();
     },
     methods: {
-      testEachGeoinfo: function () {
-        var arr = geoinfoFjXian;
-      
-        arr.forEach((element, index) => {
-          element.id = '_' + index;
-          element.child.forEach((element2, index2) => {
-            element2.id = '_' + index + '_' + index2;
-          });
+      getTreeData: function () {
+        var _this = this;
+
+        ajaxGetOrgJgTree(function (data) {
+          if (data.code === 0) {
+            _this.treeData = _this.formateDataToPluginData(data.ret);
+            // 设置默认激活项
+            _this.$nextTick(function () {
+              _this.activeId = _this.jsTreeIdStr + data.ret[0].id;
+            });
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
         });
-        console.log(arr);
-        console.log(JSON.stringify(arr));
       },
       callbackTree: function (data) {
         console.log('======callbackTree=======');
@@ -154,20 +156,23 @@
         var _this = this;
 
         this.currentTreeItem = data[data.length - 1];
-        ajaxGetUserData({}, function (data) {
-          if (data.code === 0) {
+        ajaxGetUserDataList({
+          divCode: this.currentTreeItem.divCode,
+          deptId: this.currentTreeItem.deptId
+        }, function (result) {
+          if (result.code === 0) {
             _this.optionTabel.data = [];
             _this.$nextTick(function () {
-              _this.optionTabel.data = data.ret;
+              _this.optionTabel.data = result.ret.list;
             });
           } else {
-            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+            _this.$tip({ show: true, text: result.msg, theme: 'danger' });
           }
         });
       },
       formateDataToPluginData: function (data) {
         data = JSON.stringify(data);
-        data = data.replace(/"child"/g, '"children"');
+        data = data.replace(/"division"/g, '"text"');
         data = data.replace(/"id":"/g, '"id":"' + this.jsTreeIdStr);
         return JSON.parse(data);
       },
@@ -175,7 +180,7 @@
         this.$set(this.currentUserInfo, '_zw_', data);
       },
       cbkClkYhlb: function (data) {
-        this.$set(this.currentUserInfo, '_yhlb_', data);
+        this.$set(this.currentUserInfo, 'userStatus', data);
       },
       clkDel: function (info) {
         var _this = this;
@@ -272,7 +277,7 @@
         });
       },
       clkEdit: function (info) {
-        this.currentUserInfo = info;
+        this.currentUserInfo = JSON.parse(JSON.stringify(info));
         this.optionDialog.heading = '编辑用户';
         this.optionDialog.buttons = [{
           text: '取消',

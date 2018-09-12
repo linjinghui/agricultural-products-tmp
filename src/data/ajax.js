@@ -301,6 +301,29 @@ export function ajaxDelJg (pms, callback) {
   });
 }
 
+/**
+ * 获取用户列表
+ * @param {string} pms.divCode - 行政区划divCode 
+ * @param {string} pms.deptId - 机构记录ID 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetUserDataList (pms, callback) {
+  let params = {
+    divCode: pms.divCode || '',
+    deptId: pms.deptId || '',
+    page: 1,
+    size: 10000
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_user/getDeptTreeUser',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
 // ===================================================[虚拟数据接口]===================================================
 
 /**
