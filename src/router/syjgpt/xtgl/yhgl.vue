@@ -1,8 +1,8 @@
 <template>
-  <div class="wrap">
+  <div class="wrap yhgl">
     <cmp-tab v-bind="optionTab"></cmp-tab>
     <div class="p-l">
-      <cmp-tree :treeData="treeData" :activeId="activeId" :autoActiveRoot="autoActiveRoot" @callback="callbackTree"></cmp-tree>
+      <cmp-tree :treeData="treeData" :activeId="activeId" @callback="callbackTree"></cmp-tree>
     </div>
     <div class="p-r">
       <header>
@@ -43,10 +43,10 @@
                 <cmp-radio v-model="currentUserInfo.sex" val="2">女</cmp-radio>
               </span>
             </div>
-            <div class="form-layer">
+            <!-- <div class="form-layer">
               <label class="star">职务：</label>
               <cmp-drop-menu class="f-dom" v-bind="optionZwDropMenu" v-model="optionZwDropMenu.result" @cbkClkItem="cbkClkZw"></cmp-drop-menu>
-            </div>            
+            </div>             -->
             <div class="form-layer">
               <label class="star">手机号：</label>
               <cmp-input class="f-dom" v-model="currentUserInfo.mobile" maxlength="50"></cmp-input>
@@ -55,9 +55,15 @@
               <label class="star">所在单位：</label>
               <cmp-input class="f-dom" v-model="currentUserInfo.deptName" maxlength="100"></cmp-input>
             </div>
-            <div class="form-layer">
+            <!-- <div class="form-layer">
               <label class="star">用户类别：</label>
               <cmp-drop-menu class="f-dom" v-bind="optionYhlbDropMenu" v-model="optionYhlbDropMenu.result" @cbkClkItem="cbkClkYhlb"></cmp-drop-menu>
+            </div> -->
+            <div class="form-layer">
+              <label class="star">所属乡镇：</label>
+              <cmp-drop-menu class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
+                <span slot="line" slot-scope="props">{{props.item.division}}</span>
+              </cmp-drop-menu>
             </div>
             <div class="form-layer">
               <label class="star">登录账号：</label>
@@ -65,7 +71,7 @@
             </div>
             <div class="form-layer">
               <label class="star">密码：</label>
-              <cmp-input class="f-dom" v-model="currentUserInfo._mm_" maxlength="100"></cmp-input>
+              <cmp-input class="f-dom" v-model="currentUserInfo.password" maxlength="100"></cmp-input>
             </div>
           </div>
         </div>
@@ -76,10 +82,11 @@
 
 <script>
   import {Tab, Tree, Table, Button, Dialog, Input, Radio, DropMenu} from 'web-base-ui';
-  import {ajaxGetOrgJgTree, ajaxGetUserDataList} from '../../../data/ajax.js';
+  import {ajaxGetOrgJgTree, ajaxGetChildDivision, ajaxGetUserDataList, ajaxSaveUpdataUser, ajaxChangeUserStatus, ajaxDeleteUser} from '../../../data/ajax.js';
+  import {getZoomLevel} from '../../../tool/tool.js';
 
   export default {
-    name: 'Jsgl',
+    name: 'Yhgl',
     components: {
       'cmpTab': Tab,
       'cmpTree': Tree,
@@ -128,6 +135,12 @@
           show: true,
           data: ['行政主管用户', '检测用户', '执法用户', '系统管理员'],
           result: []
+        },
+        optionXiang: {
+          placeholder: '选择乡镇',
+          show: true,
+          data: [],
+          result: []
         }
       };
     },
@@ -140,7 +153,7 @@
 
         ajaxGetOrgJgTree(function (data) {
           if (data.code === 0) {
-            _this.treeData = _this.formateDataToPluginData(data.ret);
+            _this.treeData = _this.formateDataToPluginData(_this.utlDoTreeData(data.ret));
             // 设置默认激活项
             _this.$nextTick(function () {
               _this.activeId = _this.jsTreeIdStr + data.ret[0].id;
@@ -169,10 +182,21 @@
             _this.$tip({ show: true, text: result.msg, theme: 'danger' });
           }
         });
+        // 获取乡镇数据
+        _this.optionXiang.data = [];
+        if (getZoomLevel(this.currentTreeItem.divCode) === 1) {
+          ajaxGetChildDivision({
+            code: this.currentTreeItem.divCode
+          }, function (result) {
+            _this.$nextTick(function () {
+              _this.optionXiang.data = result.ret;
+            });
+          }); 
+        }
       },
       formateDataToPluginData: function (data) {
         data = JSON.stringify(data);
-        data = data.replace(/"division"/g, '"text"');
+        data = data.replace(/"division"/g, '"text"').replace(/"deptName"/g, '"text"');
         data = data.replace(/"id":"/g, '"id":"' + this.jsTreeIdStr);
         return JSON.parse(data);
       },
@@ -181,6 +205,11 @@
       },
       cbkClkYhlb: function (data) {
         this.$set(this.currentUserInfo, 'userStatus', data);
+      },
+      cbkClkXiang: function (data) {
+        data = data[0];
+        // divCode
+        this.$set(this.currentUserInfo, 'townDivision', data.division);
       },
       clkDel: function (info) {
         var _this = this;
@@ -203,13 +232,26 @@
             _this.$confirm({ show: false });
             console.log('======confirm callback=====');
             if (data.text === '确定') {
+              ajaxDeleteUser({
+                userId: info.id
+              }, function (result) {
+                if (result.code === 0) {
+                  _this.$tip({ show: true, text: '删除用户成功！', theme: 'success' });
+                  _this.callbackTree([_this.currentTreeItem]); 
+                } else {
+                  _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+                }
+              });
               _this.callbackTree([_this.currentTreeItem]);
             }
           }
         });
       },
       clkAdd: function () {
-        this.currentUserInfo = {};
+        this.currentUserInfo = {
+          adminDivision: this.currentTreeItem.divCode,
+          deptId: this.currentTreeItem.deptId
+        };
         this.optionZwDropMenu.result = [];
         this.optionYhlbDropMenu.result = [];
         this.optionDialog.heading = '添加用户';
@@ -243,8 +285,17 @@
             _this.$confirm({ show: false });
             console.log('======confirm callback=====');
             if (data.text === '确定') {
-              _this.$tip({ show: true, text: '禁用成功！', theme: 'success' });
-              _this.callbackTree([_this.currentTreeItem]);
+              ajaxChangeUserStatus({
+                userId: info.id,
+                opt: 2
+              }, function (result) {
+                if (result.code === 0) {
+                  _this.$tip({ show: true, text: '禁用成功！', theme: 'success' });
+                  _this.callbackTree([_this.currentTreeItem]); 
+                } else {
+                  _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+                }
+              });
             }
           }
         });
@@ -270,8 +321,17 @@
             _this.$confirm({ show: false });
             console.log('======confirm callback=====');
             if (data.text === '确定') {
-              _this.$tip({ show: true, text: '启用成功！', theme: 'success' });
-              _this.callbackTree([_this.currentTreeItem]);
+              ajaxChangeUserStatus({
+                userId: info.id,
+                opt: 1
+              }, function (result) {
+                if (result.code === 0) {
+                  _this.$tip({ show: true, text: '启用成功！', theme: 'success' });
+                  _this.callbackTree([_this.currentTreeItem]); 
+                } else {
+                  _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+                }
+              });
             }
           }
         });
@@ -290,20 +350,39 @@
       },
       callbackDialog: function (data) {
         this.optionDialog.show = false;
-        if (data.text === '添加') {
-          this.$tip({ show: true, text: '添加用户成功！', theme: 'success' });
-          this.callbackTree([this.currentTreeItem]);
-        } else if (data.text === '编辑') {
-          this.$tip({ show: true, text: '编辑用户成功！', theme: 'success' });
-          this.callbackTree([this.currentTreeItem]);
+        if (data.text === '添加' || data.text === '编辑') {
+          ajaxSaveUpdataUser(this.currentUserInfo, function (result) {
+            // 
+          });
         }
+        // this.callbackTree([this.currentTreeItem]);
+        // this.$tip({ show: true, text: '编辑用户成功！', theme: 'success' });
+        // this.$tip({ show: true, text: '添加用户成功！', theme: 'success' });
+      },
+      utlDoTreeData: function (treeData) {
+        treeData = JSON.parse(JSON.stringify(treeData));
+        var fec = function (item) {
+          if (item.depts && item.depts.length > 0) {
+            item.children = item.depts.concat(item.children);
+          }
+          if (item.children && item.children.length > 0) {
+            item.children.forEach(item1 => {
+              fec(item1);
+            });
+          }
+        };
+
+        treeData.forEach(item => {
+          fec(item);
+        });
+        return treeData;
       }
     }
   };
 </script>
 
 <style lang="scss">
-  .wrap {
+  .wrap.yhgl {
 
     >.p-r {
       .wrap-table table {
@@ -315,6 +394,10 @@
 
       .wrap-dialog >section {
         padding: 0 100px;
+
+        .wrap-menu {
+          max-height: 200px;
+        }
       }
     }
   }

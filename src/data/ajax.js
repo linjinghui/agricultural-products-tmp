@@ -324,6 +324,76 @@ export function ajaxGetUserDataList (pms, callback) {
   });
 }
 
+/**
+ * 保存|编辑用户信息
+ * @param {string} pms - 用户信息对象 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSaveUpdataUser (pms, callback) {
+  let params = {
+    id: pms.id || '',
+    username: pms.realName || '',
+    realName: pms.realName || '',
+    password: pms.password || '',
+    mobile: pms.mobile || '',
+    sex: pms.sex,
+    adminDivision: pms.adminDivision,
+    townDivision: pms.townDivision || '',
+    deptId: pms.deptId || ''
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/sys_user/saveOrUpdate',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 禁用|启用 用户
+ * @param {string} pms.userId - 用户id 
+ * @param {string} pms.opt - 1启用，2禁用
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxChangeUserStatus (pms, callback) {
+  let params = {
+    userId: pms.userId,
+    opt: pms.opt
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_user/changeUserStatus',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 删除 用户
+ * @param {string} pms.userId - 用户id
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDeleteUser (pms, callback) {
+  let params = {
+    userId: pms.userId
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_user/delete',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+
+
 // ===================================================[虚拟数据接口]===================================================
 
 /**
