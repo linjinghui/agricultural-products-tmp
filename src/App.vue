@@ -91,6 +91,7 @@
     mounted: function () {
       let _this = this;
 
+      window.addEventListener('resize', this.winResize);
       Vue.prototype.$loading = function (option) {
         _this.optionLoading = Object.assign(_this.optionLoading, option);
       };
@@ -331,6 +332,10 @@
           search = '?' + search[1];
         }
         window.location.href = location.origin + path + search;
+      },
+      winResize: function () {
+        this.swidth = document.documentElement.clientWidth || document.body.clientWidth;
+        this.sheight = document.documentElement.clientHeight || document.body.clientHeight;
       }
     }
   };

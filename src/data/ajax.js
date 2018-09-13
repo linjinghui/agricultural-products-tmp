@@ -392,6 +392,116 @@ export function ajaxDeleteUser (pms, callback) {
   });
 }
 
+/**
+ * 获取角色列表
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxRoleDataList (callback) {
+  $http({
+    method: 'GET',
+    url: URL + '/sys_role/getAllInfo'
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 删除角色
+ * @param {number} pms.id - 角色ID
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDeleteRole (pms, callback) {
+  let params = {
+    id: pms.id
+  };
+
+  $http({
+    method: 'GET',
+    url: URL + '/sys_role/delete',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 新增角色
+ * @param {number} pms.id - 角色ID
+ * @param {string} pms.name - 角色名称
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSaveUpdateRole (pms, callback) {
+  let params = {
+    id: pms.id || '',
+    name: pms.name
+  };
+
+  $http({
+    method: 'GET',
+    url: URL + '/sys_role/save',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取完整的权限列表
+ * @param {number} pms.id - 角色ID
+ * @param {string} pms.name - 角色名称
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetAllPermissionTreeData (callback) {
+  $http({
+    method: 'GET',
+    url: URL + '/sys_permission/getUserPermissionList'
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 根据角色ID获取角色权限列表
+ * @param {number} pms.roleId - 角色ID
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetPermissionTreeByRoleId (pms, callback) {
+  let params = {
+    roleId: pms.roleId
+  };
+
+  $http({
+    method: 'GET',
+    url: URL + '/sys_permission/getRolePermissionTree',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 设置角色权限列表
+ * @param {number} pms.roleId - 角色ID
+ * @param {array} pms.permIds - 权限ID列表
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSetPermission (pms, callback) {
+  let params = {
+    roleId: pms.roleId,
+    permIds: pms.permIds
+  };
+
+  $http({
+    method: 'POST',
+    url: URL + '/sys_permission/setRolePermission',
+    body: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+
+
 
 
 // ===================================================[虚拟数据接口]===================================================
