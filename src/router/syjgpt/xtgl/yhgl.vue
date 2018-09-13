@@ -6,7 +6,7 @@
     </div>
     <div class="p-r">
       <header>
-        <cmp-button class="theme" @click="clkAdd">添加</cmp-button>
+        <cmp-button class="theme" v-if="currentTreeItem.deptId" @click="clkAdd">添加</cmp-button>
       </header>
       <cmp-table v-bind="optionTabel">
         <tr slot="head">
@@ -55,10 +55,12 @@
               <label class="star">所在单位：</label>
               <cmp-input class="f-dom" v-model="currentUserInfo.deptName" maxlength="100"></cmp-input>
             </div>
-            <!-- <div class="form-layer">
-              <label class="star">用户类别：</label>
-              <cmp-drop-menu class="f-dom" v-bind="optionYhlbDropMenu" v-model="optionYhlbDropMenu.result" @cbkClkItem="cbkClkYhlb"></cmp-drop-menu>
-            </div> -->
+            <div class="form-layer">
+              <label class="star">角色：</label>
+              <cmp-drop-menu class="f-dom" v-bind="optionRoleDropMenu" v-model="optionRoleDropMenu.result" @cbkClkItem="cbkClkRole">
+                <span slot="line" slot-scope="props">{{props.item.name}}</span>
+              </cmp-drop-menu>
+            </div>
             <div class="form-layer">
               <label class="star">所属乡镇：</label>
               <cmp-drop-menu class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
@@ -67,7 +69,7 @@
             </div>
             <div class="form-layer">
               <label class="star">登录账号：</label>
-              <cmp-input class="f-dom" v-model="currentUserInfo._dlzh_" maxlength="100"></cmp-input>
+              <cmp-input class="f-dom" v-model="currentUserInfo.userName" maxlength="100"></cmp-input>
             </div>
             <div class="form-layer">
               <label class="star">密码：</label>
@@ -82,8 +84,8 @@
 
 <script>
   import {Tab, Tree, Table, Button, Dialog, Input, Radio, DropMenu} from 'web-base-ui';
-  import {ajaxGetOrgJgTree, ajaxGetChildDivision, ajaxGetUserDataList, ajaxSaveUpdataUser, ajaxChangeUserStatus, ajaxDeleteUser} from '../../../data/ajax.js';
-  import {getZoomLevel} from '../../../tool/tool.js';
+  import {ajaxRoleDataList, ajaxGetOrgJgTree, ajaxGetChildDivision, ajaxGetUserDataList, ajaxSaveUpdataUser, ajaxChangeUserStatus, ajaxDeleteUser} from '../../../data/ajax.js';
+  // import {getZoomLevel} from '../../../tool/tool.js';
 
   export default {
     name: 'Yhgl',
@@ -130,10 +132,11 @@
           data: ['部长', '科长', '处长'],
           result: []
         },
-        optionYhlbDropMenu: {
+        optionRoleDropMenu: {
           placeholder: '请选择内容',
           show: true,
-          data: ['行政主管用户', '检测用户', '执法用户', '系统管理员'],
+          multi: true,
+          data: [],
           result: []
         },
         optionXiang: {
@@ -146,6 +149,8 @@
     },
     mounted: function () {
       this.getTreeData();
+      // 获取角色列表
+      this.getJslist();
     },
     methods: {
       getTreeData: function () {
@@ -158,6 +163,17 @@
             _this.$nextTick(function () {
               _this.activeId = _this.jsTreeIdStr + data.ret[0].id;
             });
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+      },
+      getJslist: function (callback) {
+        var _this = this;
+
+        ajaxRoleDataList(function (data) {
+          if (data.code === 0) {
+            _this.optionRoleDropMenu.data = data.ret;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
@@ -184,15 +200,15 @@
         });
         // 获取乡镇数据
         _this.optionXiang.data = [];
-        if (getZoomLevel(this.currentTreeItem.divCode) === 1) {
-          ajaxGetChildDivision({
-            code: this.currentTreeItem.divCode
-          }, function (result) {
-            _this.$nextTick(function () {
-              _this.optionXiang.data = result.ret;
-            });
-          }); 
-        }
+        // if (getZoomLevel(this.currentTreeItem.divCode) === 1) {
+        ajaxGetChildDivision({
+          code: this.currentTreeItem.divCode || this.currentTreeItem.adminDivision
+        }, function (result) {
+          _this.$nextTick(function () {
+            _this.optionXiang.data = result.ret;
+          });
+        }); 
+        // }
       },
       formateDataToPluginData: function (data) {
         data = JSON.stringify(data);
@@ -203,8 +219,18 @@
       cbkClkZw: function (data) {
         this.$set(this.currentUserInfo, '_zw_', data);
       },
-      cbkClkYhlb: function (data) {
-        this.$set(this.currentUserInfo, 'userStatus', data);
+      cbkClkRole: function (data) {
+        // roleIds
+        console.log(data);
+
+        this.$set(this.currentUserInfo, 'roleIds', (function () {
+          var arr = [];
+
+          data.forEach(item => {
+            arr[arr.length] = item.id;
+          });
+          return arr;
+        }()));
       },
       cbkClkXiang: function (data) {
         data = data[0];
@@ -253,7 +279,7 @@
           deptId: this.currentTreeItem.deptId
         };
         this.optionZwDropMenu.result = [];
-        this.optionYhlbDropMenu.result = [];
+        this.optionRoleDropMenu.result = [];
         this.optionDialog.heading = '添加用户';
         this.optionDialog.buttons = [{
           text: '取消',
@@ -349,15 +375,19 @@
         this.optionDialog.show = true;
       },
       callbackDialog: function (data) {
+        var _this = this;
+
         this.optionDialog.show = false;
         if (data.text === '添加' || data.text === '编辑') {
           ajaxSaveUpdataUser(this.currentUserInfo, function (result) {
-            // 
+            if (result.code === 0) {
+              _this.$tip({ show: true, text: data.text === '添加' ? '添加用户成功！' : '编辑用户成功！', theme: 'success' });
+              _this.callbackTree([_this.currentTreeItem]);
+            } else {
+              _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+            }
           });
         }
-        // this.callbackTree([this.currentTreeItem]);
-        // this.$tip({ show: true, text: '编辑用户成功！', theme: 'success' });
-        // this.$tip({ show: true, text: '添加用户成功！', theme: 'success' });
       },
       utlDoTreeData: function (treeData) {
         treeData = JSON.parse(JSON.stringify(treeData));
@@ -418,6 +448,7 @@
       border-left: solid 1px #ccc;
 
       >header {
+        height: 51px;
         text-align: right;
         border-bottom: solid 1px #ccc;
 

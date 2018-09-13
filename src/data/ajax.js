@@ -332,21 +332,22 @@ export function ajaxGetUserDataList (pms, callback) {
 export function ajaxSaveUpdataUser (pms, callback) {
   let params = {
     id: pms.id || '',
-    username: pms.realName || '',
+    userName: pms.userName || '',
     realName: pms.realName || '',
     password: pms.password || '',
     mobile: pms.mobile || '',
     sex: pms.sex,
     adminDivision: pms.adminDivision,
     townDivision: pms.townDivision || '',
-    deptId: pms.deptId || ''
+    deptId: pms.deptId || '',
+    roleIds: pms.roleIds || []
   };
   
   $http({
     method: 'POST',
     url: URL + '/sys_user/saveOrUpdate',
-    body: params,
-    emulateJSON: true
+    body: params
+    // ,emulateJSON: true
   }).then(function (successData) {
     callback && callback(successData.body);
   });
