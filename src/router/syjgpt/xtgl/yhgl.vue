@@ -69,7 +69,7 @@
             </div>
             <div class="form-layer">
               <label class="star">登录账号：</label>
-              <cmp-input class="f-dom" v-model="currentUserInfo.userName" maxlength="100"></cmp-input>
+              <cmp-input class="f-dom" v-model="currentUserInfo.username" maxlength="100"></cmp-input>
             </div>
             <div class="form-layer">
               <label class="star">密码：</label>

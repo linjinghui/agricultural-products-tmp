@@ -350,7 +350,7 @@ export function ajaxGetUserInfo (pms, callback) {
 export function ajaxSaveUpdataUser (pms, callback) {
   let params = {
     id: pms.id || '',
-    username: pms.userName || '',
+    username: pms.username || '',
     realName: pms.realName || '',
     password: pms.password || '',
     mobile: pms.mobile || '',
