@@ -51,10 +51,10 @@
               <label class="star">手机号：</label>
               <cmp-input class="f-dom" v-model="currentUserInfo.mobile" maxlength="50"></cmp-input>
             </div>
-            <div class="form-layer">
+            <!-- <div class="form-layer">
               <label class="star">所在单位：</label>
               <cmp-input class="f-dom" v-model="currentUserInfo.deptName" maxlength="100"></cmp-input>
-            </div>
+            </div> -->
             <div class="form-layer">
               <label class="star">角色：</label>
               <cmp-drop-menu class="f-dom" v-bind="optionRoleDropMenu" v-model="optionRoleDropMenu.result" @cbkClkItem="cbkClkRole">
@@ -84,7 +84,7 @@
 
 <script>
   import {Tab, Tree, Table, Button, Dialog, Input, Radio, DropMenu} from 'web-base-ui';
-  import {ajaxRoleDataList, ajaxGetOrgJgTree, ajaxGetChildDivision, ajaxGetUserDataList, ajaxSaveUpdataUser, ajaxChangeUserStatus, ajaxDeleteUser} from '../../../data/ajax.js';
+  import {ajaxRoleDataList, ajaxGetOrgJgTree, ajaxGetChildDivision, ajaxGetUserDataList, ajaxSaveUpdataUser, ajaxChangeUserStatus, ajaxDeleteUser, ajaxGetUserInfo} from '../../../data/ajax.js';
   // import {getZoomLevel} from '../../../tool/tool.js';
 
   export default {
@@ -180,8 +180,6 @@
         });
       },
       callbackTree: function (data) {
-        console.log('======callbackTree=======');
-        console.log(data);
         var _this = this;
 
         this.currentTreeItem = data[data.length - 1];
@@ -220,9 +218,6 @@
         this.$set(this.currentUserInfo, '_zw_', data);
       },
       cbkClkRole: function (data) {
-        // roleIds
-        console.log(data);
-
         this.$set(this.currentUserInfo, 'roleIds', (function () {
           var arr = [];
 
@@ -235,7 +230,7 @@
       cbkClkXiang: function (data) {
         data = data[0];
         // divCode
-        this.$set(this.currentUserInfo, 'townDivision', data.division);
+        this.$set(this.currentUserInfo, 'townDivision', data.divCode);
       },
       clkDel: function (info) {
         var _this = this;
@@ -256,7 +251,6 @@
           }],
           callback: function (data) {
             _this.$confirm({ show: false });
-            console.log('======confirm callback=====');
             if (data.text === '确定') {
               ajaxDeleteUser({
                 userId: info.id
@@ -275,11 +269,13 @@
       },
       clkAdd: function () {
         this.currentUserInfo = {
-          adminDivision: this.currentTreeItem.divCode,
-          deptId: this.currentTreeItem.deptId
+          adminDivision: this.currentTreeItem.divCode || this.currentTreeItem.adminDivision,
+          deptId: this.currentTreeItem.deptId,
+          sex: '1'
         };
         this.optionZwDropMenu.result = [];
         this.optionRoleDropMenu.result = [];
+        this.optionXiang.result = [];
         this.optionDialog.heading = '添加用户';
         this.optionDialog.buttons = [{
           text: '取消',
@@ -309,7 +305,6 @@
           }],
           callback: function (data) {
             _this.$confirm({ show: false });
-            console.log('======confirm callback=====');
             if (data.text === '确定') {
               ajaxChangeUserStatus({
                 userId: info.id,
@@ -345,7 +340,6 @@
           }],
           callback: function (data) {
             _this.$confirm({ show: false });
-            console.log('======confirm callback=====');
             if (data.text === '确定') {
               ajaxChangeUserStatus({
                 userId: info.id,
@@ -363,16 +357,61 @@
         });
       },
       clkEdit: function (info) {
-        this.currentUserInfo = JSON.parse(JSON.stringify(info));
-        this.optionDialog.heading = '编辑用户';
-        this.optionDialog.buttons = [{
-          text: '取消',
-          theme: 'line'
-        }, {
-          text: '编辑',
-          theme: 'primary'
-        }];
-        this.optionDialog.show = true;
+        var _this = this;
+        var _xiang = this.optionXiang.data;
+        var _role = this.optionRoleDropMenu.data;
+
+        ajaxGetUserInfo({
+          userId: info.id
+        }, function (result) {
+          if (result.code === 0) {
+            let userInfo = result.ret;
+
+            // 计算所属乡镇
+            _this.optionXiang.result = (function () {
+              let arr = [];
+
+              for (let i = 0;i < _xiang.length;i++) {
+                if (_xiang[i].divCode === userInfo.townDivision) {
+                  arr = [i];
+                  break;
+                }
+              }
+              return arr;
+            }());
+            // 计算角色
+            _this.optionRoleDropMenu.result = (function () {
+              let arr = [];
+
+              for (let i = 0;i < userInfo.roles.length;i++) {
+                var _roleId = userInfo.roles[i].id;
+
+                for (let j = 0;j < _role.length;j++) {
+                  if (_roleId === _role[j].id) {
+                    arr.indexOf(j) < 0 && (arr[arr.length] = j);
+                    break;
+                  }
+                }
+              }
+              return arr;
+            }());
+
+            _this.currentUserInfo = result.ret;
+            _this.currentUserInfo.sex += '';
+            
+            _this.optionDialog.heading = '编辑用户';
+            _this.optionDialog.buttons = [{
+              text: '取消',
+              theme: 'line'
+            }, {
+              text: '编辑',
+              theme: 'primary'
+            }];
+            _this.optionDialog.show = true;
+          } else {
+            _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+          }
+        });
       },
       callbackDialog: function (data) {
         var _this = this;

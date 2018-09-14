@@ -5,8 +5,8 @@
       <cmp-button class="theme" @click="clkAdd">添加</cmp-button>
       <li v-for="(item,index) in jsData" :key="'_js_'+index" :class="{'active': active===index}" @click="clkItem(index,item)">
         <span v-text="item.name"></span>
-        <i class="fa fa-edit" @click="clkEdit(item)"></i>
-        <i class="fa fa-trash-o" @click="clkDel(item)"></i>
+        <i class="fa fa-edit" @click.stop="clkEdit(item)"></i>
+        <i class="fa fa-trash-o" @click.stop="clkDel(item)"></i>
       </li>
     </ul>
     <div class="p-r">
@@ -24,10 +24,10 @@
             <label class="star">角色名称：</label>
             <cmp-input class="f-dom" autofocus="true" v-model="currentJsInfo.name" maxlength="50"></cmp-input>
           </div>
-          <div class="form-layer">
+          <!-- <div class="form-layer">
             <label class="star">备注：</label>
             <cmp-textarea class="f-dom" v-model="currentJsInfo._bz_" v-bind="optionTextarea"></cmp-textarea>
-          </div>
+          </div> -->
         </div>
       </div>
     </cmp-dialog>
@@ -339,6 +339,7 @@
         height: 40px;
         line-height: 40px;
         border-top: solid 1px #ccc;
+        cursor: pointer;
         >span {
           float: left;
           width: calc(100% - 30px - 30px);

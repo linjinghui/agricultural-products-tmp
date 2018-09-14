@@ -182,7 +182,6 @@ export function ajaxDoAuditOperation (pms, callback) {
   let userInfo = getUserInfo().user;
   let optLevel = userInfo.adminDivision + '';
   
-  console.log(userInfo);
   if (optLevel.substr(optLevel.length - 4, optLevel.length) === '0000') {
     optLevel = 3;
   } else if (optLevel.substr(optLevel.length - 2, optLevel.length) === '00') {
@@ -325,6 +324,25 @@ export function ajaxGetUserDataList (pms, callback) {
 }
 
 /**
+ * 获取用户详细信息
+ * @param {string} pms.userId - 用户id 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetUserInfo (pms, callback) {
+  let params = {
+    userId: pms.userId
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/sys_user/getUserInfo',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
  * 保存|编辑用户信息
  * @param {string} pms - 用户信息对象 
  * @param {function} callback - 回调函数 
@@ -332,22 +350,22 @@ export function ajaxGetUserDataList (pms, callback) {
 export function ajaxSaveUpdataUser (pms, callback) {
   let params = {
     id: pms.id || '',
-    userName: pms.userName || '',
+    username: pms.userName || '',
     realName: pms.realName || '',
     password: pms.password || '',
     mobile: pms.mobile || '',
     sex: pms.sex,
-    adminDivision: pms.adminDivision,
+    adminDivision: pms.adminDivision || '',
     townDivision: pms.townDivision || '',
     deptId: pms.deptId || '',
-    roleIds: pms.roleIds || []
+    roleIds: pms.roleIds && pms.roleIds.join(',') || ''
   };
   
   $http({
     method: 'POST',
     url: URL + '/sys_user/saveOrUpdate',
-    body: params
-    // ,emulateJSON: true
+    body: params,
+    emulateJSON: true
   }).then(function (successData) {
     callback && callback(successData.body);
   });
@@ -489,13 +507,14 @@ export function ajaxGetPermissionTreeByRoleId (pms, callback) {
 export function ajaxSetPermission (pms, callback) {
   let params = {
     roleId: pms.roleId,
-    permIds: pms.permIds
+    permIds: pms.permIds && pms.permIds.join(',') || ''
   };
 
   $http({
     method: 'POST',
     url: URL + '/sys_permission/setRolePermission',
-    body: params
+    body: params,
+    emulateJSON: true
   }).then(function (successData) {
     callback && callback(successData.body);
   });
