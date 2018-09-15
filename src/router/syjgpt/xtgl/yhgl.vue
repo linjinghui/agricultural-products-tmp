@@ -398,7 +398,8 @@
 
             _this.currentUserInfo = result.ret;
             _this.currentUserInfo.sex += '';
-            
+            // _this.currentUserInfo.roleIds = userInfo.roles.join(',');
+            _this.cbkClkRole(userInfo.roles);
             _this.optionDialog.heading = '编辑用户';
             _this.optionDialog.buttons = [{
               text: '取消',
@@ -432,7 +433,7 @@
         treeData = JSON.parse(JSON.stringify(treeData));
         var fec = function (item) {
           if (item.depts && item.depts.length > 0) {
-            item.children = item.depts.concat(item.children);
+            item.children = item.depts.concat(item.children || []);
           }
           if (item.children && item.children.length > 0) {
             item.children.forEach(item1 => {
