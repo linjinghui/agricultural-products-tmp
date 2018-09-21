@@ -22,7 +22,7 @@
       </ul>
     </div>
     <div class="p-content" :style="{'min-height': 'calc('+$root.sheight+'px - 50px)'}">
-      <router-view></router-view>
+      <router-view :title="title"></router-view>
     </div>
   </div>
 </template>
@@ -46,17 +46,27 @@
           openIndex_1: '',
           activeIndex_1: '',
           activeIndex_2: ''
-        }
+        },
+        title: ''
       };
     },
+    watch: {
+      '$route': function (to, from) {
+        if (to.name === 'syjgpt') {
+          this.clkFirstNav();
+        }
+      }
+    },
     mounted: function () {
-      console.log(11111);
-      var firstNav = this.navData[0];
-
-      this.clkNavItem([firstNav]);
-      this.clkNavItem([firstNav, firstNav.children[0]]);
+      this.clkFirstNav();
     },
     methods: {
+      clkFirstNav: function () {
+        var firstNav = this.navData[0];
+
+        this.clkNavItem([firstNav]);
+        this.clkNavItem([firstNav, firstNav.children[0]]);
+      },
       clkNavItem: function (arr) {
         var current = arr[arr.length - 1];
         var first = arr.length > 1 ? arr[0] : {};
@@ -67,6 +77,7 @@
           this.navOption.activeIndex_2 = '';
         } else if (current.permValue) {
           // step1 - 跳转
+          this.title = current.name;
           this.$root.toPage('', current.permValue);
           // step2 - 激活当前
           this.navOption.activeIndex_2 = current.id;

@@ -110,6 +110,9 @@
       'cmpPagebarPagesize': PagebarPagesize,
       'cmpSh': Sh
     },
+    props: {
+      title: ''
+    },
     data () {
       return {
         optionTab: {
@@ -119,7 +122,7 @@
           list: [
             {
               id: 1,
-              name: '审核查询',
+              name: this.title,
               close: false
             }
           ]

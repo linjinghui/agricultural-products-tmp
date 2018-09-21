@@ -110,7 +110,6 @@
     },
     methods: {
       toPage: function (path, type) {
-        // alert(type);
         if (!path) {
           switch (type) {
             case 0:
@@ -244,18 +243,6 @@
               // -----------------------gzjd--生产主体操作日志查询
               path = '/#/scztczrzcx';
               break;
-            case 'admin:xtgl:zzjggl':
-              // -----------------------xtgl--组织机构管理
-              path = '/#/zzjggl';
-              break;
-            case 'admin:xtgl:yhgl':
-              // -----------------------xtgl--用户管理
-              path = '/#/yhgl';
-              break;
-            case 'admin:xtgl:jsjqxgl':
-              // -----------------------xtgl--角色及权限管理
-              path = '/#/jsjqxgl';
-              break;
             case 'stat':
               // ------------分析预警平台
               path = '/#/fxyjpt';
@@ -319,6 +306,18 @@
             case 'bases':
               // 基础平台
               path = '/#/jcpt';
+              break;
+            case 'bases:xtgl:zzjggl':
+              // -----------------------xtgl--组织机构管理
+              path = '/#/zzjggl';
+              break;
+            case 'bases:xtgl:yhgl':
+              // -----------------------xtgl--用户管理
+              path = '/#/yhgl';
+              break;
+            case 'bases:xtgl:jsjqxgl':
+              // -----------------------xtgl--角色及权限管理
+              path = '/#/jsjqxgl';
               break;
             default:
               path = '/#/home';

@@ -35,9 +35,6 @@ const Jgdlrzcx = () => import('./syjgpt/gzjd/jgdlrzcx.vue');
 const Jgczrzcx = () => import('./syjgpt/gzjd/jgczrzcx.vue');
 const Scztdlrzcx = () => import('./syjgpt/gzjd/scztdlrzcx.vue');
 const Scztczrzcx = () => import('./syjgpt/gzjd/scztczrzcx.vue');
-const Zzjggl = () => import('./syjgpt/xtgl/zzjggl.vue');
-const Yhgl = () => import('./syjgpt/xtgl/yhgl.vue');
-const Jsjqxgl = () => import('./syjgpt/xtgl/jsjqxgl.vue');
 
 
 const Fxyjpt = () => import('./fxyjpt/index.vue');
@@ -60,6 +57,12 @@ const Zscxlfx = () => import('./fxyjpt/sjtj/zscxlfx.vue');
 
 
 const Jcpt = () => import('./jcpt/index.vue');
+
+const Zzjggl = () => import('./jcpt/xtgl/zzjggl.vue');
+const Yhgl = () => import('./jcpt/xtgl/yhgl.vue');
+const Jsjqxgl = () => import('./jcpt/xtgl/jsjqxgl.vue');
+
+
 const Mmxg = () => import('./mmxg/index.vue');
 
 Vue.use(Router);
@@ -97,11 +100,11 @@ export default new Router({
               name: 'dbsx',
               component: Dbsx
             },
-            {
-              path: '/',
-              name: 'dsh',
-              component: Dsh
-            },
+            // {
+            //   path: '/',
+            //   name: 'dsh',
+            //   component: Dsh
+            // },
             {
               path: '/dsh',
               name: 'dsh',
@@ -241,21 +244,6 @@ export default new Router({
               path: '/scztczrzcx',
               name: 'scztczrzcx',
               component: Scztczrzcx
-            },
-            {
-              path: '/zzjggl',
-              name: 'zzjggl',
-              component: Zzjggl
-            },
-            {
-              path: '/yhgl',
-              name: 'yhgl',
-              component: Yhgl
-            },
-            {
-              path: '/jsjqxgl',
-              name: 'jsjqxgl',
-              component: Jsjqxgl
             }
           ]
         },
@@ -344,7 +332,24 @@ export default new Router({
         {
           path: '/jcpt',
           name: 'jcpt',
-          component: Jcpt
+          component: Jcpt,
+          children: [
+            {
+              path: '/zzjggl',
+              name: 'zzjggl',
+              component: Zzjggl
+            },
+            {
+              path: '/yhgl',
+              name: 'yhgl',
+              component: Yhgl
+            },
+            {
+              path: '/jsjqxgl',
+              name: 'jsjqxgl',
+              component: Jsjqxgl
+            }
+          ]
         },
         {
           path: '/mmxg',

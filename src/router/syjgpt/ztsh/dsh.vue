@@ -109,6 +109,9 @@
       'cmpPagebarPagesize': PagebarPagesize,
       'cmpSh': Sh
     },
+    props: {
+      title: ''
+    },
     data () {
       return {
         optionTab: {
@@ -118,7 +121,7 @@
           list: [
             {
               id: 1,
-              name: '待审核',
+              name: this.title,
               close: false
             }
           ]
@@ -229,8 +232,6 @@
         this.clkSearch();
       },
       clkSearch: function () {
-        console.log('===search===');
-        console.log(this.query);
         this.optionPagebarPagesize.index = 1;
         if (this.optionPagebarPagesize.index === 1) {
           this.callbackPagebar({
@@ -244,8 +245,6 @@
       callbackPagebar: function (data) {
         var _this = this;
 
-        console.log('====callbackPagebar====');
-        console.log(data);
         this.optionPagebarPagesize.index = data.currentPage;
         this.optionPagebarPagesize.pagesize = data.pagesize;
         ajaxGetDshDataList(Object.assign({
