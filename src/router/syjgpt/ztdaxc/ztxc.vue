@@ -1,25 +1,31 @@
 <template>
-  <div class="wrap">
+  <div class="wrap dsh">
     <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
-    <div style="padding: 0 20px;">
+    <div style="padding: 0 20px;" v-show="optionTab.current.id===1">
       <div class="wrap-form horiz" :class="{'show': formShow}">
         <div class="form-layer">
           <label class="star">主体名称:</label>
-          <cmp-input class="f-dom" v-model="query._ztmc_" maxlength="50"></cmp-input>
+          <cmp-input class="f-dom" v-model="query.entName" maxlength="50"></cmp-input>
         </div>
         <div class="form-layer">
           <label class="star">行政区划:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer" style="width: 185px;">
           <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXian" v-model="optionXian.result" @cbkClkItem="cbkClkXian">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer" style="width: 185px;">
           <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
+            <span slot="line" slot-scope="props">{{props.item.division}}</span>
+          </cmp-drop-menu>
+        </div>    
+        <div class="form-layer">
+          <label class="star">主体性质:</label>
+          <cmp-drop-menu class="f-dom" v-bind="optionZtxz" v-model="optionZtxz.result" @cbkClkItem="cbkClkZtxz">
             <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
         </div>
@@ -28,13 +34,20 @@
           <cmp-drop-menu class="f-dom" v-bind="optionCylx" v-model="optionCylx.result" @cbkClkItem="cbkClkCylx">
             <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
-        </div>      
+        </div>
         <div class="form-layer">
-          <label class="star">主体性质:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionZtxz" v-model="optionZtxz.result" @cbkClkItem="cbkClkZtxz">
+          <label class="star">注册时间:</label>
+          <cmp-date-picker class="f-dom" v-model="query.startTime"></cmp-date-picker>
+        </div>
+        <div class="form-layer" style="width: 185px;">
+          <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query.endTime"></cmp-date-picker>
+        </div>
+        <div class="form-layer">
+          <label class="star">主体状态:</label>
+          <cmp-drop-menu class="f-dom" v-bind="optionZtzt" v-model="optionZtzt.result" @cbkClkItem="cbkClkZtzt">
             <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
-        </div>    
+        </div>
         <div class="form-layer" style="width: 100%;text-align:center;">
           <cmp-button theme="line" @click="clkRest">重置</cmp-button>
           <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
@@ -43,23 +56,44 @@
       <div class="fgx">
         <i class="cicon-triangle-top triangle center-h" :title="formShow?'隐藏搜索':'展开搜索'" @click="formShow=!formShow"></i>
       </div>
-      <cmp-table v-bind="optionTabel">
+      <cmp-table ref="rtable" v-bind="optionTabel">
         <tr slot="head">
-          <td>主体名称</td><td>经营场所</td><td>法定代表人</td><td>产业类型</td><td>主体性质</td><td>负责人姓名</td>
+          <td @click="clkOrder('entName')">主体名称</td>
+          <td @click="clkOrder('busiPlace')">经营场所</td>
+          <td @click="clkOrder('entIndustrySub')">产业类型</td>
+          <td @click="clkOrder('entProperty')">主体性质</td>
+          <td @click="clkOrder('principalName')">负责人姓名</td>
+          <td @click="clkOrder('createTime')">注册时间</td>
+          <td class="no-order">操作</td>
         </tr>
-        <tr slot="body" slot-scope="props" @click="clkTabelItem(props.item)">
-          <td>{{props.item._ztmc_}}</td><td>{{props.item._jycs_}}</td><td>{{props.item._fddbr_}}</td><td>{{props.item._cylx_}}</td><td>{{props.item._ztxz_}}</td><td>{{props.item._fzrxm_}}</td>
+        <tr slot="body" slot-scope="props">
+          <td>{{props.item.entName}}</td>
+          <td>{{props.item.busiPlace}}</td>
+          <td>{{props.item.entIndustrySub}}</td>
+          <td>{{props.item.entProperty}}</td>
+          <td>{{props.item.principalName}}</td>
+          <td>{{utlFormatDate(props.item.createTime)}}</td>
+          <td>
+            <cmp-button class="theme" @click="clkTabelItem(props.item)">查看</cmp-button>
+            <cmp-button class="theme" @click="clkTabelItem(props.item)">标记明星企业</cmp-button>
+            <cmp-button class="theme" @click="clkTabelItem(props.item)">标记黑名单</cmp-button>
+            <cmp-button class="theme" @click="clkTabelItem(props.item)">问题记录</cmp-button>
+          </td>
         </tr>
       </cmp-table>
       <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
+    </div>
+    <div style="padding: 0 20px;" v-if="optionTab.current.id!==1">
+      <cmp-sh v-bind="optionSh" @callback="callbackSh"></cmp-sh>
     </div>
   </div>
 </template>
 
 <script>
   import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
-  import geoinfo from '../../../../static/geoinfo.js';
-  import {ajaxGetDshData} from '../../../data/ajax.js';
+  import {dataFormat} from 'web-js-tool';
+  import Sh from './sh.vue';
+  import {ajaxGetScztDataList, ajaxGetChildDivision} from '../../../data/ajax.js';
 
   export default {
     name: 'Ztxc',
@@ -70,16 +104,23 @@
       'cmpDatePicker': FlatDatePicker,
       'cmpButton': Button,
       'cmpTable': Table,
-      'cmpPagebarPagesize': PagebarPagesize
+      'cmpPagebarPagesize': PagebarPagesize,
+      'cmpSh': Sh
+    },
+    props: {
+      title: ''
     },
     data () {
       return {
         optionTab: {
-          acitve: 0,
+          active: 0,
           close: true,
+          current: {},
           list: [
             {
-              name: '主体巡查'
+              id: 1,
+              name: this.title,
+              close: false
             }
           ]
         },
@@ -88,7 +129,7 @@
         optionCity: {
           placeholder: '选择城市',
           show: true,
-          data: geoinfo[0].child,
+          data: this.$root.divisionTree,
           result: []
         },
         optionXian: {
@@ -107,17 +148,30 @@
         optionCylx: {
           placeholder: '请选择',
           show: true,
-          data: [ {text: '蔬菜种植', value: 1}, {text: '食用菌种植', value: 2}, {text: '水果种植', value: 3}, {text: '茶叶种植', value: 4}, {text: '中药材种植', value: 5}, {text: '牲畜饲养', value: 6}, {text: '家禽饲养', value: 7}, {text: '屠宰及肉类加工', value: 8} ],
+          data: this.$root.cylx,
           result: []
         },
         optionZtxz: {
           placeholder: '请选择',
           show: true,
-          data: [ {text: '省级以上龙头企业', value: 1}, {text: '设区市级龙头企业', value: 2}, {text: '其他生产企业', value: 3}, {text: '示范社', value: 4}, {text: '规范社', value: 5}, {text: '合作社', value: 6}, {text: '家庭农场', value: 7} ],
+          data: this.$root.ztxz,
+          result: []
+        },
+        optionZtzt: {
+          placeholder: '请选择',
+          show: true,
+          data: [
+            {text: '全部', value: 1},
+            {text: '主体启用', value: 2},
+            {text: '主体禁用', value: 3},
+            {text: '明星企业', value: 4},
+            {text: '黑名单企业', value: 5}
+          ],
           result: []
         },
         optionTabel: {
-          data: []
+          data: [],
+          order: true
         },
         optionPagebarPagesize: {
           // 当期页
@@ -128,46 +182,73 @@
             10, 20, 30, 40, 50
           ],
           pagesize: 20
+        },
+        optionSh: {
+          type: '',
+          data: {}
         }
       };
+    },
+    computed: {
+      // 
     },
     mounted: function () {
       // 
     },
     methods: {
       cbkTab: function (data) {
-        this.optionTab.acitve = data.name === '审核' ? 1 : 0;
+        if (data) {
+          this.optionTab.current = data;
+          if (data.id === 2) {
+            this.optionSh.type = 'sh';
+          } else if (data.id === 3) {
+            this.optionSh.type = 'log';
+          }
+        }
       },
       cbkClkCity: function (data) {
-        this.$set(this.query, '_city_', data);
+        data = data[0];
+        this.$set(this.query, 'adminDivision', data.divCode);
         this.optionXian.data = [];
         this.$nextTick(function () {
-          this.optionXian.data = data[0].child;
+          this.optionXian.data = data.children;
         });
       },
       cbkClkXian: function (data) {
-        this.$set(this.query, '_xian_', data);
-        this.optionXiang.data = [];
-        this.$nextTick(function () {
-          this.optionXiang.data = data[0].child;
+        var _this = this;
+
+        data = data[0];
+        this.$set(this.query, 'adminDivisionCity', data.divCode);
+        ajaxGetChildDivision({
+          code: data.divCode
+        }, function (_data) {
+          _this.optionXiang.data = [];
+          _this.$nextTick(function () {
+            _this.optionXiang.data = _data.ret;
+          });
         });
       },
       cbkClkXiang: function (data) {
-        this.$set(this.query, '_xiang_', data);
+        data = data[0];
+        this.$set(this.query, 'townDivision', data.divCode);
       },
       cbkClkCylx: function (data) {
-        this.$set(this.query, '_cylx_', data);
+        data = data[0];
+        this.$set(this.query, 'entIndustry', data.value);
+      },
+      cbkClkZtzt: function (data) {
+        data = data[0];
+        this.$set(this.query, '_ztzt_', data.value);
       },
       cbkClkZtxz: function (data) {
-        this.$set(this.query, '_ztxz_', data);
+        data = data[0];
+        this.$set(this.query, 'entProperty', data.text);
       },
       clkRest: function () {
         this.query = {};
         this.clkSearch();
       },
       clkSearch: function () {
-        console.log('===search===');
-        console.log(this.query);
         this.optionPagebarPagesize.index = 1;
         if (this.optionPagebarPagesize.index === 1) {
           this.callbackPagebar({
@@ -181,33 +262,61 @@
       callbackPagebar: function (data) {
         var _this = this;
 
-        console.log('====callbackPagebar====');
-        console.log(data);
         this.optionPagebarPagesize.index = data.currentPage;
         this.optionPagebarPagesize.pagesize = data.pagesize;
-        ajaxGetDshData(Object.assign({
-          current: this.optionPagebarPagesize.index,
-          pageSize: this.optionPagebarPagesize.pagesize
+        ajaxGetScztDataList(Object.assign({
+          page: this.optionPagebarPagesize.index,
+          size: this.optionPagebarPagesize.pagesize
         }, this.query), function (data) {
           if (data.code === 0) {
             _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.total - 1) / _this.optionPagebarPagesize.pagesize) + 1;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
         });
       },
       clkTabelItem: function (data) {
-        if (this.optionTab.list.length === 1) {
-          this.optionTab.list.push({
-            name: '审核'
+        this.optionTab.list = [];
+        this.$nextTick(function () {
+          this.optionTab.list = [{
+            id: 1,
+            name: '待审核',
+            close: false
+          }, {
+            id: 2,
+            name: '审核',
+            closeCnt: '1'
+          }, {
+            id: 3,
+            name: '审批日志',
+            closeCnt: '1'
+          }];
+          this.optionSh.data = data;
+          this.$set(this.optionTab, 'active', '');
+          this.$nextTick(function () { this.$set(this.optionTab, 'active', 1); });
+          this.optionSh.type = 'sh';
+        });
+      },
+      callbackSh: function (data) {
+        this.$set(this.optionTab, 'active', '');
+        this.$nextTick(function () {
+          this.$set(this.optionTab, 'active', 0);
+        });
+        this.optionTab.list.splice(1, this.optionTab.list.length);
+        if (data === 'fresh') {
+          // 更新列表
+          this.callbackPagebar({
+            currentPage: 1,
+            pagesize: this.optionPagebarPagesize.pagesize
           });
         }
-        this.optionTab.acitve = 1;
       },
-      clkRemoveSh: function () {
-        this.optionTab.acitve = 0;
-        this.optionTab.list.splice(1, 1);
+      clkOrder: function (orderBy) {
+        this.$refs.rtable.setOrder(this.optionTabel.data, orderBy);
+      },
+      utlFormatDate: function (dateLong) {
+        return dataFormat(new Date(dateLong), ' yyyy-MM-dd hh:mm:ss');
       }
     }
   };
@@ -224,7 +333,8 @@
   }
 </style>
 <style scoped lang="scss">
-  .wrap {
+  .dsh {
+    min-height: 500px;
     background-color: transparent;
 
     .wrap-form {

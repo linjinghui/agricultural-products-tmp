@@ -12,6 +12,58 @@ let demo = {
   'success': true
 }
 
+// ===================[生产主体监管相关接口 v]===================
+
+// 获取生产主体巡查数据列表
+Mock.mock(/(\/admin_ent_main_info\/select_ent_main_list)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20': [
+      { 
+        'entId': '@id', 
+        'entName': '@name', 
+        // 经营场所
+        'busiPlace': '@string',
+        // 行政区划 
+        'adminDivision': '@name', 
+        // 产业类型，多个以英文逗号分隔
+        'entIndustrySub': '@name', 
+        // 主体性质
+        'entProperty': '@name',
+        'createTime': new Date().getTime(), 
+        // 企业状态：0正常、4注销、5禁用，其他状态预留
+        'entStatus|1': [0, 4, 5]
+      }
+    ],
+    'totalSize': '221'
+  },
+  'success': true
+});
+
+// ===================[服务推送相关接口 v]===================
+
+// 获取栏目设置数据列表
+Mock.mock(/(\/news_column\/getAllList)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20': [
+      { 
+        'columnId': '@id', 
+        'columnName': '@name', 
+        // 是否启用，1是0否
+        'inuseFlg|1': [0, 1],
+        'createTime': new Date().getTime()
+      }
+    ],
+    'totalSize': '221'
+  },
+  'success': true
+});
+
+
+
 // 获取产业类型占比数据
 Mock.mock(/(\/portal\/cylxzb)/, {
   'msg': 'im msg',

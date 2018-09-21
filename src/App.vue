@@ -85,7 +85,29 @@
           }]
         },
         // 福建省区域数据
-        divisionTree: []
+        divisionTree: [],
+        // 产业类型
+        cylx: [ 
+          {text: '蔬菜', value: 1}, 
+          {text: '食用菌', value: 2}, 
+          {text: '水果', value: 3}, 
+          {text: '茶叶', value: 4}, 
+          {text: '中药材', value: 5}, 
+          {text: '家畜', value: 6}, 
+          {text: '家禽', value: 7}, 
+          {text: '蛋', value: 8},
+          {text: '奶', value: 9}
+        ],
+        // 主体性质
+        ztxz: [ 
+          {text: '省级以上龙头企业', value: 1}, 
+          {text: '设区市级龙头企业', value: 2}, 
+          {text: '其他生产企业', value: 3}, 
+          {text: '示范社', value: 4}, 
+          {text: '规范社', value: 5}, 
+          {text: '合作社', value: 6}, 
+          {text: '家庭农场', value: 7} 
+        ]
       };
     },
     mounted: function () {
@@ -110,6 +132,7 @@
     },
     methods: {
       toPage: function (path, type) {
+        // alert(type);
         if (!path) {
           switch (type) {
             case 0:
@@ -223,9 +246,21 @@
               // -----------------------jggl--监督检查管理
               path = '/#/jdjcgl';
               break;
-            case 'admin:fwxxts:fwxxtsgl':
-              // -----------------------fwxxts--服务信息推送管理
-              path = '/#/fwxxtsgl';
+            case 'admin:fwts:lmsz':
+              // -----------------------fwts--栏目设置
+              path = '/#/lmsz';
+              break;
+            case 'admin:fwts:ydxx':
+              // -----------------------fwts--阅读信息
+              path = '/#/ydxx';
+              break;
+            case 'admin:fwts:fbxx':
+              // -----------------------fwts--发布信息
+              path = '/#/fbxx';
+              break;
+            case 'admin:fwts:xxjg':
+              // -----------------------fwts--信息监管
+              path = '/#/xxjg';
               break;
             case 'admin:gzjd:jgdlrzcx':
               // -----------------------gzjd--监管登录日志查询

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap dsh">
     <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
     <div style="padding: 0 20px;" v-show="optionTab.current.id===1">
       <div class="wrap-form horiz" :class="{'show': formShow}">
@@ -150,13 +150,13 @@
         optionCylx: {
           placeholder: '请选择',
           show: true,
-          data: [ {text: '蔬菜种植', value: 1}, {text: '食用菌种植', value: 2}, {text: '水果种植', value: 3}, {text: '茶叶种植', value: 4}, {text: '中药材种植', value: 5}, {text: '牲畜饲养', value: 6}, {text: '家禽饲养', value: 7}, {text: '屠宰及肉类加工', value: 8} ],
+          data: this.$root.cylx,
           result: []
         },
         optionZtxz: {
           placeholder: '请选择',
           show: true,
-          data: [ {text: '省级以上龙头企业', value: 1}, {text: '设区市级龙头企业', value: 2}, {text: '其他生产企业', value: 3}, {text: '示范社', value: 4}, {text: '规范社', value: 5}, {text: '合作社', value: 6}, {text: '家庭农场', value: 7} ],
+          data: this.$root.ztxz,
           result: []
         },
         optionTabel: {
@@ -316,7 +316,8 @@
   }
 </style>
 <style scoped lang="scss">
-  .wrap {
+  .dsh {
+    min-height: 500px;
     background-color: transparent;
 
     .wrap-form {

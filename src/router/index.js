@@ -30,11 +30,20 @@ const Jypgl = () => import('./syjgpt/jggl/jypgl.vue');
 const Hmdgl = () => import('./syjgpt/jggl/hmdgl.vue');
 const Xzcfgl = () => import('./syjgpt/jggl/xzcfgl.vue');
 const Jdjcgl = () => import('./syjgpt/jggl/jdjcgl.vue');
-const Fwxxtsgl = () => import('./syjgpt/fwxxts/fwxxtsgl.vue');
 const Jgdlrzcx = () => import('./syjgpt/gzjd/jgdlrzcx.vue');
 const Jgczrzcx = () => import('./syjgpt/gzjd/jgczrzcx.vue');
 const Scztdlrzcx = () => import('./syjgpt/gzjd/scztdlrzcx.vue');
 const Scztczrzcx = () => import('./syjgpt/gzjd/scztczrzcx.vue');
+
+//========= 服务推送 ============
+// 栏目设置
+const Lmsz = () => import('./syjgpt/fwxxts/lmsz.vue');
+// 阅读信息
+const Ydxx = () => import('./syjgpt/fwxxts/ydxx.vue');
+// 发布信息
+const Fbxx = () => import('./syjgpt/fwxxts/fbxx.vue');
+// 信息监管
+const Xxjg = () => import('./syjgpt/fwxxts/xxjg.vue');
 
 
 const Fxyjpt = () => import('./fxyjpt/index.vue');
@@ -221,9 +230,24 @@ export default new Router({
               component: Jdjcgl
             },
             {
-              path: '/fwxxtsgl',
-              name: 'fwxxtsgl',
-              component: Fwxxtsgl
+              path: '/lmsz',
+              name: 'lmsz',
+              component: Lmsz
+            },
+            {
+              path: '/ydxx',
+              name: 'ydxx',
+              component: Ydxx
+            },
+            {
+              path: '/fbxx',
+              name: 'fbxx',
+              component: Fbxx
+            },
+            {
+              path: '/xxjg',
+              name: 'xxjg',
+              component: Xxjg
             },
             {
               path: '/jgdlrzcx',

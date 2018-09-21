@@ -520,6 +520,54 @@ export function ajaxSetPermission (pms, callback) {
   });
 }
 
+// ===================[生产主体监管相关接口 v]===================
+
+/**
+ * 获取生产主体巡查数据列表 - mock
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetScztDataList (pms, callback) {
+  let params = pms;
+  
+  console.log(params);
+  $http({
+    method: 'GET',
+    url: URL + '/admin_ent_main_info/select_ent_main_list',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+
+// ===================[服务推送相关接口 v]===================
+
+/**
+ * 获取栏目设置数据列表 - mock
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetLmszDataList (pms, callback) {
+  let params = pms;
+  
+  console.log(params);
+  $http({
+    method: 'GET',
+    url: URL + '/news_column/getAllList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+
+
+
+
+
+
+
 
 
 
