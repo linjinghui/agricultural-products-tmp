@@ -561,6 +561,69 @@ export function ajaxGetLmszDataList (pms, callback) {
   });
 }
 
+/**
+ * 编辑|保存栏目数据
+ * @param {string} pms - 栏目对象 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSaveUpdataLmsz (pms, callback) {
+  let params = {
+    columnId: pms.columnId || '', 
+    columnName: pms.columnName,
+    inuseFlg: pms.inuseFlg
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/news_column/saveOrUpdate',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 删除栏目信息
+ * @param {string} pms.columnId - 栏目ID 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDelLmsz (pms, callback) {
+  let params = {
+    columnId: pms.columnId
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/news_column/delete',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 设置栏目状态
+ * @param {string} pms - 栏目对象 
+ * @param {string} pms.columnId - 栏目ID 
+ * @param {number} pms.inuseFlg - 栏目状态 - 1表示启用，0表示禁用
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSetLmFlag (pms, callback) {
+  let params = {
+    columnId: pms.columnId || '',
+    inuseFlg: pms.inuseFlg
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/news_column/setUseFlg',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 
 

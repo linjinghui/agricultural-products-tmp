@@ -62,6 +62,30 @@ Mock.mock(/(\/news_column\/getAllList)/, {
   'success': true
 });
 
+// 编辑|保存栏目数据
+Mock.mock(/(\/news_column\/saveOrUpdate)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': true,
+  'success': true
+});
+
+// 删除栏目数据
+Mock.mock(/(\/news_column\/delete)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': true,
+  'success': true
+});
+
+// 设置栏目状态
+Mock.mock(/(\/news_column\/setUseFlg)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': true,
+  'success': true
+});
+
 
 
 // 获取产业类型占比数据
