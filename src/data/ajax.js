@@ -625,7 +625,47 @@ export function ajaxSetLmFlag (pms, callback) {
   });
 }
 
+/**
+ * 获取阅读信息列表 - mock
+ * @param {string} pms
+ * @param {number} pms.columnId
+ * @param {string} pms.title
+ * @param {long} pms.startTime
+ * @param {long} pms.endTime
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetYdxxDataList (pms, callback) {
+  let params = pms;
+  
+  console.log(params);
+  $http({
+    method: 'GET',
+    url: URL + '/news_article/getReadList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
+/**
+ * 查看信息详情 - mock
+ * @param {string} pms
+ * @param {number} pms.recId 文章ID
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetYdxxData (pms, callback) {
+  let params = {
+    recId: pms.recId
+  };
+  
+  $http({
+    method: 'GET',
+    url: URL + '/news_article/getArticleInfo',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 
 

@@ -252,7 +252,7 @@
           modal: true,
           heading: '开启栏目',
           content: ' 确定开启该栏目？',
-          type: 'warning',
+          type: '',
           buttons: [{
             text: '取消',
             theme: 'line'
@@ -286,7 +286,7 @@
           modal: true,
           heading: '关闭栏目',
           content: ' 确定关闭该栏目？',
-          type: 'warning',
+          type: '',
           buttons: [{
             text: '取消',
             theme: 'line'
