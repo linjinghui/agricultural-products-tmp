@@ -1,41 +1,39 @@
 <template>
   <div class="wrap fbxx">
-    <cmp-tab v-bind="optionTab"></cmp-tab>
-    <div class="main">
+    <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
+    <div class="main" v-show="optionTab.current.id===1">
       <ul class="p-l">
         <p>栏目选择</p>
-        <li class="active">asdasdddasd</li>
-        <li>asdasdddasd</li>
-        <li>asdasdddasd</li>
-        <li>asdasdddasd</li>
+        <li :class="{'active': lmList.active===index}" v-for="(item,index) in lmList.data" 
+          :key="'ylm_'+index" @click="lmList.active=index">{{item.columnName}}</li>
       </ul>
       <div class="p-r">
         <div class="wrap-form">
           <div class="form-layer">
             <label class="star">推送信息标题：</label>
-            <cmp-input class="f-dom" autofocus="true" v-model="currentInfo.name" maxlength="50"></cmp-input>
+            <cmp-input class="f-dom" autofocus="true" v-model="currentInfo.title" maxlength="50"></cmp-input>
             <small class="tip">&nbsp;</small>
           </div>
           <div class="form-layer">
             <label class="star"></label>
-            <!--  useCustomImageHandler @imageAdded="handleImageAdded" -->
-            <vue-editor id="editor" :editorToolbar2="customToolbar" v-model="currentInfo.content"></vue-editor>
+            <cmp-editor v-model="currentInfo.content" v-bind="optionEditor"></cmp-editor>
             <small class="tip">&nbsp;</small>
           </div>
           <div class="form-layer" style="text-align:right;">
-            <cmp-button class="theme">发布</cmp-button>
-            <cmp-button theme="line">存草稿</cmp-button>
+            <cmp-button class="theme" @click="clkSend(1)">发布</cmp-button>
+            <cmp-button theme="line" @click="clkSend(0)">存草稿</cmp-button>
           </div>
         </div>
       </div>
     </div>
+    <cmp-mypublish v-if="optionTab.current.id===2"></cmp-mypublish>
   </div>
 </template>
 
 <script>
-  import {Tab, Input, Button} from 'web-base-ui';
-  import { VueEditor } from 'vue2-editor';
-  // import {} from '../../../data/ajax.js';
+  import {Tab, Input, Button, Editor} from 'web-base-ui';
+  import MyPublish from './myPublish.vue';
+  import {ajaxGetCanUseLmDataList, ajaxPublish} from '../../../data/ajax.js';
 
   export default {
     name: 'Fbxx',
@@ -43,7 +41,8 @@
       'cmpTab': Tab,
       'cmpInput': Input,
       'cmpButton': Button,
-      'vueEditor': VueEditor
+      'cmpEditor': Editor,
+      'cmpMypublish': MyPublish
     },
     props: {
       title: ''
@@ -59,27 +58,75 @@
               id: 1,
               name: this.title,
               close: false
+            },
+            {
+              id: 2,
+              name: '我发布的信息',
+              close: false
             }
           ]
         },
-        customToolbar: [
-          ['bold', 'italic', 'underline'],
-          [
-            { 'list': 'ordered' }, 
-            { 'list': 'bullet' }
-          ],
-          ['image', 'code-block']
-        ],
-        currentInfo: {}
+        optionEditor: {
+          placeholder: '请输入内容...',
+          upImage: this.upImage
+        },
+        currentInfo: {},
+        lmList: {
+          active: 0,
+          data: []
+        }
       };
     },
     mounted: function () {
-      // 
+      var _this = this;
+
+      // 获取有权限的栏目列表
+      ajaxGetCanUseLmDataList(function (result) {
+        if (result.code === 0) {
+          _this.lmList.data = result.ret;
+        } else {
+          _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+        }
+      });
     },
     methods: {
-      handleImageAdded: function (data) {
-        console.log('======handleImageAdded=======');
-        console.log(data);
+      cbkTab: function (data) {
+        if (data) {
+          this.optionTab.current = data;
+        }
+      },
+      upImage: function (data, callback) {
+        console.log('======上传图片=======');      
+        // var file = data[0].file;
+        var size = data[0].size;
+        var name = data[0].name;
+        var suffix = data[0].suffix;
+        var result = {
+          code: 200,
+          url: 'http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg'
+        };
+
+        console.log(size + ':' + name + ':' + suffix);
+        callback && callback(result);
+      },
+      clkSend: function (type) {
+        var _this = this;
+        var info = JSON.parse(JSON.stringify(this.currentInfo));
+
+        info.status = type;
+        if (this.lmList.active !== '') {
+          info.columnId = this.lmList.data[this.lmList.active].columnId;
+        }
+        ajaxPublish(info, function (result) {
+          if (result.code === 0) {
+            _this.$tip({ show: true, text: type === 0 ? '已存为草稿！' : '发布成功！', theme: 'success' });
+            _this.currentInfo = {};
+            _this.lmList.active = '';
+            setTimeout(function () { _this.optionTab.active = 1; }, 1000);
+          } else {
+            _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+          }
+        });
       }
     }
   };

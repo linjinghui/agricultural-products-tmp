@@ -1,11 +1,21 @@
 <template>
-  <div class="wrap xxJg">
+  <div class="wrap myPublish">
     <div style="padding: 0 20px;">
       <div class="wrap-form search horiz" :class="{'show': formShow}">
+        <div class="form-layer">
+          <label class="star">推送信息标题:</label>
+          <cmp-input class="f-dom" v-model="query.title" maxlength="50"></cmp-input>
+        </div>
         <div class="form-layer">
           <label class="star">栏目:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionLm" v-model="optionLm.result" @cbkClkItem="cbkClkLm">
             <span slot="line" slot-scope="props">{{props.item.columnName}}</span>
+          </cmp-drop-menu>
+        </div>
+        <div class="form-layer">
+          <label class="star">发布状态:</label>
+          <cmp-drop-menu class="f-dom" v-bind="optionZt" v-model="optionZt.result" @cbkClkItem="cbkClkZt">
+            <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
         </div>
         <div class="form-layer">
@@ -14,26 +24,6 @@
         </div>
         <div class="form-layer" style="width: 185px;">
           <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query.endTime"></cmp-date-picker>
-        </div>
-        <div class="form-layer">
-          <label class="star">推送信息标题:</label>
-          <cmp-input class="f-dom" v-model="query.title" maxlength="50"></cmp-input>
-        </div>
-        <div class="form-layer">
-          <label class="star">行政区划:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity">
-            <span slot="line" slot-scope="props">{{props.item.division}}</span>
-          </cmp-drop-menu>
-        </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXian" v-model="optionXian.result" @cbkClkItem="cbkClkXian">
-            <span slot="line" slot-scope="props">{{props.item.division}}</span>
-          </cmp-drop-menu>
-        </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
-            <span slot="line" slot-scope="props">{{props.item.division}}</span>
-          </cmp-drop-menu>
         </div>
         <div class="form-layer" style="width: 100%;text-align:center;">
           <cmp-button theme="line" @click="clkRest">重置</cmp-button>
@@ -48,14 +38,14 @@
           <td @click="clkOrder('columnName')">栏目</td>
           <td @click="clkOrder('title')">推送信息标题</td>
           <td @click="clkOrder('createTime')">发布时间</td>
-          <td @click="clkOrder('userName')">发布人</td>
+          <td @click="clkOrder('status')">发布状态</td>
           <td class="no-order">操作</td>
         </tr>
         <tr slot="body" slot-scope="props">
           <td>{{props.item.columnName}}</td>
           <td>{{props.item.title}}</td>
           <td>{{utlFormatDate(props.item.createTime)}}</td>
-          <td>{{props.item.userName}}</td>
+          <td>{{props.item.status===1?'已发布':props.item.status===2?'已撤回':''}}</td>
           <td>
             <cmp-button theme="danger" v-if="props.item.status===2" @click="clkDel(props.item)">删除</cmp-button>
             <cmp-button class="theme" v-if="props.item.status===1" @click="clkRecover(props.item)">撤回</cmp-button>
@@ -70,10 +60,10 @@
 <script>
   import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
   import {dataFormat} from 'web-js-tool';
-  import {ajaxGetLmszDataList, ajaxGetChildDivision, ajaxGetJgxxDataList, ajaxSetStatus} from '../../../data/ajax.js';
+  import {ajaxGetLmszDataList, ajaxGetMyPublishDataList, ajaxSetStatus} from '../../../data/ajax.js';
 
   export default {
-    name: 'Xxjg',
+    name: 'MyPublish',
     components: {
       'cmpTab': Tab,
       'cmpInput': Input,
@@ -97,23 +87,10 @@
           data: [],
           result: []
         },
-        optionCity: {
-          placeholder: '选择城市',
+        optionZt: {
+          placeholder: '请选择',
           show: true,
-          data: this.$root.divisionTree,
-          result: []
-        },
-        optionXian: {
-          placeholder: '选择区县',
-          show: true,
-          data: [],
-          result: []
-        },
-        optionXiang: {
-          placeholder: '选择乡镇',
-          show: true,
-          // '福州市', '宁德市', '莆田市', '泉州市', '厦门市', '漳州市', '南平市', '三明市', '龙岩市'
-          data: [],
+          data: [ {'text': '全部', 'value': 1} ],
           result: []
         },
         optionTabel: {
@@ -156,38 +133,14 @@
         data = data[0];
         this.$set(this.query, 'columnId', data.columnId);
       },
-      cbkClkCity: function (data) {
+      cbkClkZt: function (data) {
         data = data[0];
-        this.$set(this.query, 'adminDivisionCity', data.divCode);
-        this.optionXian.data = [];
-        this.$nextTick(function () {
-          this.optionXian.data = data.children;
-        });
-      },
-      cbkClkXian: function (data) {
-        var _this = this;
-
-        data = data[0];
-        this.$set(this.query, 'adminDivisionCountry', data.divCode);
-        ajaxGetChildDivision({
-          code: data.divCode
-        }, function (_data) {
-          _this.optionXiang.data = [];
-          _this.$nextTick(function () {
-            _this.optionXiang.data = _data.ret;
-          });
-        });
-      },
-      cbkClkXiang: function (data) {
-        data = data[0];
-        this.$set(this.query, 'townDivision', data.divCode);
+        this.$set(this.query, 'status', data.value);
       },
       clkRest: function () {
         this.query = {};
         this.optionLm.result = [];
-        this.optionCity.result = [];
-        this.optionXian.result = [];
-        this.optionXiang.result = [];
+        this.optionZt.result = [];
         this.clkSearch();
       },
       clkSearch: function () {
@@ -206,7 +159,7 @@
 
         this.optionPagebarPagesize.index = data.currentPage;
         this.optionPagebarPagesize.pagesize = data.pagesize;
-        ajaxGetJgxxDataList(Object.assign({
+        ajaxGetMyPublishDataList(Object.assign({
           page: this.optionPagebarPagesize.index,
           size: this.optionPagebarPagesize.pagesize
         }, this.query), function (data) {
@@ -297,7 +250,7 @@
 </script>
 
 <style lang="scss">
-  .wrap.xxJg {
+  .wrap.myPublish {
     .wrapper-pagebar-pagesize {
       .wrap-menu {
         top: unset!important;
@@ -307,7 +260,7 @@
   }
 </style>
 <style scoped lang="scss">
-  .xxJg {
+  .myPublish {
     min-height: 500px;
     background-color: transparent;
 

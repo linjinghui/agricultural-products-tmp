@@ -169,7 +169,7 @@
         }, this.query), function (data) {
           if (data.code === 0) {
             _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.total - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }

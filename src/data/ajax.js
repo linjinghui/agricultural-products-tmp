@@ -667,6 +667,119 @@ export function ajaxGetYdxxData (pms, callback) {
   });
 }
 
+/**
+ * 获取有发布权限的栏目列表 - mock
+ * @param {string} pms
+ * @param {number} pms.recId 文章ID
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetCanUseLmDataList (callback) {
+  $http({
+    method: 'GET',
+    url: URL + '/news_column/getColumnList'
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取用户自己发布的文章列表 - mock
+ * @param {string} pms
+ * @param {number} pms.columnId
+ * @param {string} pms.title
+ * @param {long} pms.startTime
+ * @param {long} pms.endTime
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetMyPublishDataList (pms, callback) {
+  let params = pms;
+  
+  console.log(params);
+  $http({
+    method: 'GET',
+    url: URL + '/news_article/getMyPublishList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 发布信息
+ * @param {string} pms.recId - 信息ID 
+ * @param {string} pms.columnId - 栏目ID 
+ * @param {string} pms.title - 标题 
+ * @param {string} pms.content - 内容 
+ * @param {string} pms.status - 状态 - 0保存草稿、1发布(默认) 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxPublish (pms, callback) {
+  let params = {
+    recId: pms.recId || '',
+    columnId: pms.columnId,
+    title: pms.title,
+    content: pms.content,
+    status: pms.status,
+    fields: pms.fields || []
+  };
+  
+  console.log(params);
+  $http({
+    method: 'POST',
+    url: URL + '/news_article/saveOrUpdate',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 设置文章状态操作
+ * @param {string} pms.recId - 信息ID 
+ * @param {string} pms.setStatus - 状态 - 1撤回、2删除
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSetStatus (pms, callback) {
+  let params = {
+    recId: pms.recId || '',
+    setStatus: pms.setStatus
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/news_article/setArticleStatus',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取监管信息列表 - mock
+ * @param {string} pms
+ * @param {number} pms.columnId
+ * @param {string} pms.title
+ * @param {long} pms.startTime
+ * @param {long} pms.endTime
+ * @param {string} pms.adminDivisionCity - 市级区划
+ * @param {string} pms.adminDivisionCountry - 县级区划
+ * @param {string} pms.townDivision - 乡镇区划
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgxxDataList (pms, callback) {
+  let params = pms;
+  
+  console.log(params);
+  $http({
+    method: 'GET',
+    url: URL + '/news_article/getAdminList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 
 

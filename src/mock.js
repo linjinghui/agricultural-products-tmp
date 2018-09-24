@@ -133,6 +133,90 @@ Mock.mock(/(\/news_article\/getArticleInfo)/, {
   'success': true
 });
 
+// 获取有发布权限的栏目列表
+Mock.mock(/(\/news_column\/getColumnList)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret|10-24': [
+    {
+      'columnId': '@id',
+      'columnName': '@name'
+    }
+  ],
+  'success': true
+});
+
+// 获取用户自己发布的文章列表
+Mock.mock(/(\/news_article\/getMyPublishList)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20': [
+      { 
+        // 信息ID
+        'recId': '@id',
+        // 栏目名称
+        'columnName': '@name', 
+        // 信息标题
+        'title': '@string', 
+        // 信息发布时间
+        'createTime': new Date().getTime(),
+        // 发布人ID
+        'userId': '@id',
+        // 发布人姓名
+        'userName': '@name',
+        // 0草稿、1发布、2撤回、3删除
+        'status|1': [1, 2]
+      }
+    ],
+    'totalSize': '221'
+  },
+  'success': true
+});
+
+// 发布信息
+Mock.mock(/(\/news_article\/saveOrUpdate)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': true,
+  'success': true
+});
+
+// 设置文章状态操作
+Mock.mock(/(\/news_article\/setArticleStatus)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': true,
+  'success': true
+});
+
+// 获取监管信息列表
+Mock.mock(/(\/news_article\/getAdminList)/, {
+  'msg': 'im msg',
+  'code': 0,
+  'ret': {
+    'list|20': [
+      { 
+        // 信息ID
+        'recId': '@id',
+        // 栏目名称
+        'columnName': '@name', 
+        // 信息标题
+        'title': '@string', 
+        // 信息发布时间
+        'createTime': new Date().getTime(),
+        // 发布人ID
+        'userId': '@id',
+        // 发布人姓名
+        'userName': '@name',
+        // 0草稿、1发布、2撤回、3删除
+        'status|1': [1, 2]
+      }
+    ],
+    'totalSize': '221'
+  },
+  'success': true
+});
 
 
 
