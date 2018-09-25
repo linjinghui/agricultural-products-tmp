@@ -21,7 +21,7 @@
           </div>
           <div class="form-layer" style="text-align:right;">
             <cmp-button class="theme" @click="clkSend(1)">发布</cmp-button>
-            <cmp-button theme="line" @click="clkSend(0)">存草稿</cmp-button>
+            <!-- <cmp-button theme="line" @click="clkSend(0)">存草稿</cmp-button> -->
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
 <script>
   import {Tab, Input, Button, Editor} from 'web-base-ui';
   import MyPublish from './myPublish.vue';
-  import {ajaxGetCanUseLmDataList, ajaxPublish} from '../../../data/ajax.js';
+  import {ajaxGetCanUseLmDataList, ajaxPublish, ajaxUploadFile} from '../../../data/ajax.js';
 
   export default {
     name: 'Fbxx',
@@ -95,19 +95,25 @@
           this.optionTab.current = data;
         }
       },
-      upImage: function (data, callback) {
-        console.log('======上传图片=======');      
-        // var file = data[0].file;
+      upImage: function (data, callback) {    
+        var _this = this;
+        var file = data[0].file;
         var size = data[0].size;
         var name = data[0].name;
-        var suffix = data[0].suffix;
-        var result = {
-          code: 200,
-          url: 'http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg'
-        };
+        // var suffix = data[0].suffix;
 
-        console.log(size + ':' + name + ':' + suffix);
-        callback && callback(result);
+        ajaxUploadFile({
+          size: size,
+          fileName: name,
+          datafile: file
+        }, function (result) {
+          if (result.code !== 0) {
+            _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+          }
+          result.code = result.code === 0 ? 200 : result.code;
+          result.url = result.ret.downloadUrl;
+          callback && callback(result);          
+        });        
       },
       clkSend: function (type) {
         var _this = this;

@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div class="scltop" v-show="showTotop" @click="toTop" title="回到顶部">
+      <i class="fa fa-toggle-up" aria-hidden="true"></i>
+    </div>
     <router-view></router-view>
     <loading v-model="optionLoading.show" v-bind="optionLoading"></loading>
     <tip v-model="optionTip.show" v-bind="optionTip"></tip>
@@ -20,6 +23,7 @@
     name: 'app',
     data: function () {
       return {
+        showTotop: false,
         swidth: document.documentElement.clientWidth || document.body.clientWidth,
         sheight: document.documentElement.clientHeight || document.body.clientHeight,
         optionLoading: {
@@ -110,7 +114,12 @@
         ]
       };
     },
+    watch: {
+      //
+    },
     mounted: function () {
+      document.getElementById('app').addEventListener('scroll', this.toggleShowTop);
+
       let _this = this;
 
       window.addEventListener('resize', this.winResize);
@@ -127,10 +136,14 @@
         _this.optionPrompt = Object.assign(_this.optionPrompt, option);
       };
     },
-    watch: {
-      //
-    },
     methods: {
+      toggleShowTop: function (e) {
+        e = e || window.event;
+        var dom = e.srcElement || e.target;
+        var st = dom.scrollTop;
+        
+        this.showTotop = st >= 200;
+      },
       toPage: function (path, type) {
         // alert(type);
         if (!path) {
@@ -370,6 +383,9 @@
       winResize: function () {
         this.swidth = document.documentElement.clientWidth || document.body.clientWidth;
         this.sheight = document.documentElement.clientHeight || document.body.clientHeight;
+      },
+      toTop: function () {
+        document.getElementById('app').scrollTop = 0;
       }
     }
   };
@@ -388,6 +404,26 @@
     min-height: 630px;
     overflow: auto;
     background-color: #3d484e;
+  }
+  #app > .scltop {
+    position: fixed;
+    right: 30px;
+    bottom: 50px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    text-align: center;
+    z-index: 3;
+    background-color: #e5e5e5;
+    cursor: pointer;
+  }
+  #app > .scltop:hover {
+    background-color: #b5b5b5;
+  }
+  #app > .scltop > .fa-toggle-up {
+    line-height: 44px;
+    font-size: 25px;
+    color: #fff;
   }
   .flatpickr-calendar .flatpickr-day.selected,
   .flatpickr-calendar .flatpickr-day.selected:hover {

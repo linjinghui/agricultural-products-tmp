@@ -20,10 +20,10 @@
           <label class="star">推送信息标题:</label>
           <cmp-input class="f-dom" v-model="query.title" maxlength="50"></cmp-input>
         </div>
-        <div class="form-layer">
+        <!-- <div class="form-layer">
           <label class="star">发布人:</label>
           <cmp-input class="f-dom" v-model="query._fbr_" maxlength="50"></cmp-input>
-        </div>
+        </div> -->
         <div class="form-layer" style="width: 100%;text-align:center;">
           <cmp-button theme="line" @click="clkRest">重置</cmp-button>
           <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
@@ -145,6 +145,7 @@
       },
       clkRest: function () {
         this.query = {};
+        this.optionLm.result = [];
         this.clkSearch();
       },
       clkSearch: function () {

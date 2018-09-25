@@ -12,12 +12,12 @@
             <span slot="line" slot-scope="props">{{props.item.columnName}}</span>
           </cmp-drop-menu>
         </div>
-        <div class="form-layer">
+        <!-- <div class="form-layer">
           <label class="star">发布状态:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionZt" v-model="optionZt.result" @cbkClkItem="cbkClkZt">
             <span slot="line" slot-scope="props">{{props.item.text}}</span>
           </cmp-drop-menu>
-        </div>
+        </div> -->
         <div class="form-layer">
           <label class="star">发布时间:</label>
           <cmp-date-picker class="f-dom" v-model="query.startTime"></cmp-date-picker>
@@ -171,7 +171,7 @@
           }
         });
       },
-      clkDel: function (data) {
+      clkDel: function (info) {
         var _this = this;
 
         this.$confirm({
@@ -191,7 +191,7 @@
             _this.$confirm({ show: false });
             if (data.text === '确定') {
               ajaxSetStatus({
-                recId: data.recId,
+                recId: info.recId,
                 setStatus: 2
               }, function (result) {
                 if (result.code === 0) {
@@ -205,7 +205,7 @@
           }
         });
       },
-      clkRecover: function (data) {
+      clkRecover: function (info) {
         var _this = this;
 
         this.$confirm({
@@ -225,7 +225,7 @@
             _this.$confirm({ show: false });
             if (data.text === '确定') {
               ajaxSetStatus({
-                recId: data.recId,
+                recId: info.recId,
                 setStatus: 1
               }, function (result) {
                 if (result.code === 0) {

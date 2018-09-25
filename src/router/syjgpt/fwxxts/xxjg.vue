@@ -1,5 +1,6 @@
 <template>
   <div class="wrap xxJg">
+    <cmp-tab v-bind="optionTab"></cmp-tab>
     <div style="padding: 0 20px;">
       <div class="wrap-form search horiz" :class="{'show': formShow}">
         <div class="form-layer">
@@ -9,16 +10,17 @@
           </cmp-drop-menu>
         </div>
         <div class="form-layer">
+          <label class="star">推送信息标题:</label>
+          <cmp-input class="f-dom" v-model="query.title" maxlength="50"></cmp-input>
+        </div>
+        <div class="form-layer">
           <label class="star">发布时间:</label>
           <cmp-date-picker class="f-dom" v-model="query.startTime"></cmp-date-picker>
         </div>
         <div class="form-layer" style="width: 185px;">
           <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query.endTime"></cmp-date-picker>
         </div>
-        <div class="form-layer">
-          <label class="star">推送信息标题:</label>
-          <cmp-input class="f-dom" v-model="query.title" maxlength="50"></cmp-input>
-        </div>
+        <br>
         <div class="form-layer">
           <label class="star">行政区划:</label>
           <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity">
@@ -88,6 +90,18 @@
     },
     data () {
       return {
+        optionTab: {
+          active: 0,
+          close: true,
+          current: {},
+          list: [
+            {
+              id: 1,
+              name: this.title,
+              close: false
+            }
+          ]
+        },
         formShow: true,
         query: {},
         tableItemInfo: {},
@@ -218,7 +232,7 @@
           }
         });
       },
-      clkDel: function (data) {
+      clkDel: function (info) {
         var _this = this;
 
         this.$confirm({
@@ -238,7 +252,7 @@
             _this.$confirm({ show: false });
             if (data.text === '确定') {
               ajaxSetStatus({
-                recId: data.recId,
+                recId: info.recId,
                 setStatus: 2
               }, function (result) {
                 if (result.code === 0) {
@@ -252,7 +266,7 @@
           }
         });
       },
-      clkRecover: function (data) {
+      clkRecover: function (info) {
         var _this = this;
 
         this.$confirm({
@@ -272,7 +286,7 @@
             _this.$confirm({ show: false });
             if (data.text === '确定') {
               ajaxSetStatus({
-                recId: data.recId,
+                recId: info.recId,
                 setStatus: 1
               }, function (result) {
                 if (result.code === 0) {

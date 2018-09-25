@@ -1,8 +1,9 @@
-import {$http} from './constant.js';
+import {$http, $tip} from './constant.js';
 import {ssgGetData, ssgSaveData, ssgDeleteData} from 'web-js-tool';
 
 const USER_KEY = '_current_login_user_';
 const URL = '/api';
+const URLUPFILE = '/upfileapi';
 // ===================================================[DEMO]===================================================
 /**
  * demo-get
@@ -99,7 +100,7 @@ export function ajaxLoginout (callback) {
   });
 }
 
-// ===================[全局参数数据获取]===================
+// ===================[全局数据]===================
 
 /**
  * 获取行政区划数据 - 福建全省
@@ -131,6 +132,37 @@ export function ajaxGetChildDivision (pms, callback) {
   }).then(function (successData) {
     callback && callback(successData.body);
   });
+}
+
+/**
+ * 将文件上传提交到服务
+ * @param {obj} pms.fileName - 文件名 
+ * @param {multipartFile} pms.datafile - 文件
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxUploadFile (pms, callback) {
+  let formData = new FormData();
+  let config = {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  };
+
+  // formData.append('fileName', pms.fileName);
+  formData.append('file', pms.datafile);
+
+  if (pms.size > 5 * 1024 * 1024) {
+    $tip({ show: true, text: '图片大小不能超过5M', theme: 'warning' });
+  } else {
+    $http({
+      method: 'POST',
+      headers: config.headers,
+      url: URLUPFILE + '/base_attachment/uploadFile?fileName=' + pms.fileName,
+      body: formData
+    }).then(function (successData) {
+      callback(successData.body);
+    });
+  }
 }
 
 // ===================[待审批相关接口]===================
@@ -544,14 +576,13 @@ export function ajaxGetScztDataList (pms, callback) {
 // ===================[服务推送相关接口 v]===================
 
 /**
- * 获取栏目设置数据列表 - mock
+ * 获取栏目设置数据列表
  * @param {string} pms
  * @param {function} callback - 回调函数 
  */
 export function ajaxGetLmszDataList (pms, callback) {
   let params = pms;
   
-  console.log(params);
   $http({
     method: 'GET',
     url: URL + '/news_column/getAllList',
@@ -573,14 +604,18 @@ export function ajaxSaveUpdataLmsz (pms, callback) {
     inuseFlg: pms.inuseFlg
   };
   
-  $http({
-    method: 'POST',
-    url: URL + '/news_column/saveOrUpdate',
-    body: params,
-    emulateJSON: true
-  }).then(function (successData) {
-    callback && callback(successData.body);
-  });
+  if (!params.columnName) {
+    $tip({ show: true, text: '请输入栏目名称', theme: 'warning' });
+  } else {
+    $http({
+      method: 'POST',
+      url: URL + '/news_column/saveOrUpdate',
+      body: params,
+      emulateJSON: true
+    }).then(function (successData) {
+      callback && callback(successData.body);
+    });
+  }
 }
 
 /**
@@ -616,17 +651,16 @@ export function ajaxSetLmFlag (pms, callback) {
   };
   
   $http({
-    method: 'POST',
+    method: 'GET',
     url: URL + '/news_column/setUseFlg',
-    body: params,
-    emulateJSON: true
+    params: params
   }).then(function (successData) {
     callback && callback(successData.body);
   });
 }
 
 /**
- * 获取阅读信息列表 - mock
+ * 获取阅读信息列表
  * @param {string} pms
  * @param {number} pms.columnId
  * @param {string} pms.title
@@ -636,8 +670,13 @@ export function ajaxSetLmFlag (pms, callback) {
  */
 export function ajaxGetYdxxDataList (pms, callback) {
   let params = pms;
-  
-  console.log(params);
+
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
   $http({
     method: 'GET',
     url: URL + '/news_article/getReadList',
@@ -648,7 +687,7 @@ export function ajaxGetYdxxDataList (pms, callback) {
 }
 
 /**
- * 查看信息详情 - mock
+ * 查看信息详情
  * @param {string} pms
  * @param {number} pms.recId 文章ID
  * @param {function} callback - 回调函数 
@@ -668,7 +707,7 @@ export function ajaxGetYdxxData (pms, callback) {
 }
 
 /**
- * 获取有发布权限的栏目列表 - mock
+ * 获取有发布权限的栏目列表
  * @param {string} pms
  * @param {number} pms.recId 文章ID
  * @param {function} callback - 回调函数 
@@ -683,7 +722,7 @@ export function ajaxGetCanUseLmDataList (callback) {
 }
 
 /**
- * 获取用户自己发布的文章列表 - mock
+ * 获取用户自己发布的文章列表
  * @param {string} pms
  * @param {number} pms.columnId
  * @param {string} pms.title
@@ -694,7 +733,12 @@ export function ajaxGetCanUseLmDataList (callback) {
 export function ajaxGetMyPublishDataList (pms, callback) {
   let params = pms;
   
-  console.log(params);
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
   $http({
     method: 'GET',
     url: URL + '/news_article/getMyPublishList',
@@ -757,7 +801,7 @@ export function ajaxSetStatus (pms, callback) {
 }
 
 /**
- * 获取监管信息列表 - mock
+ * 获取监管信息列表
  * @param {string} pms
  * @param {number} pms.columnId
  * @param {string} pms.title
@@ -771,7 +815,12 @@ export function ajaxSetStatus (pms, callback) {
 export function ajaxGetJgxxDataList (pms, callback) {
   let params = pms;
   
-  console.log(params);
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
   $http({
     method: 'GET',
     url: URL + '/news_article/getAdminList',

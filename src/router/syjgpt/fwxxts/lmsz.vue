@@ -2,7 +2,7 @@
   <div class="wrap lmsz">
     <cmp-tab v-bind="optionTab"></cmp-tab>
     <div style="padding: 0 20px;">
-      <div class="wrap-form search horiz" :class="{'show': formShow}">
+      <!-- <div class="wrap-form search horiz" :class="{'show': formShow}">
         <div class="form-layer">
           <label class="star">标题:</label>
           <cmp-input class="f-dom" v-model="query.entName" maxlength="50"></cmp-input>
@@ -27,11 +27,11 @@
       </div>
       <div class="fgx">
         <i class="cicon-triangle-top triangle center-h" :title="formShow?'隐藏搜索':'展开搜索'" @click="formShow=!formShow"></i>
-      </div>
+      </div> -->
       <cmp-button class="add theme" @click="clkAdd">添加</cmp-button>
       <cmp-table ref="rtable" v-bind="optionTabel">
         <tr slot="head">
-          <td @click="clkOrder('columnName')">标题</td>
+          <td @click="clkOrder('columnName')">栏目名称</td>
           <td @click="clkOrder('createTime')">创建日期</td>
           <td @click="clkOrder('inuseFlg')">状态</td>
           <td class="no-order">操作</td>
@@ -43,7 +43,7 @@
           <td>{{props.item.inuseFlg===1?'已开启':'已关闭'}}</td>
           <td>
             <cmp-button theme="line" @click="clkEdit(props.item)">编辑</cmp-button>
-            <cmp-button theme="danger" v-if="props.item.inuseFlg===0" @click="clkDelete(props.item)">删除</cmp-button>
+            <!-- <cmp-button theme="danger" v-if="props.item.inuseFlg===0" @click="clkDelete(props.item)">删除</cmp-button> -->
             <cmp-button theme="warning" v-if="props.item.inuseFlg===1" @click="clkTurnOff(props.item)">关闭</cmp-button>
             <cmp-button class="theme" v-if="props.item.inuseFlg===0" @click="clkTurnOn(props.item)">开启</cmp-button>
           </td>
@@ -60,13 +60,13 @@
             <cmp-input class="f-dom" v-model="dialogDataInfo.columnName" maxlength="100"></cmp-input>
             <small class="tip">&nbsp;</small>
           </div>
-          <div class="form-layer">
+          <!-- <div class="form-layer">
             <label class="star">状态：</label>
             <span class="f-dom">
-              <cmp-radio v-model="dialogDataInfo.inuseFlg" val="1">启用</cmp-radio>
-              <cmp-radio v-model="dialogDataInfo.inuseFlg" val="0">禁用</cmp-radio>
+              <cmp-radio v-model="dialogDataInfo.inuseFlg" val="1" :disabled="!!dialogDataInfo.columnId">启用</cmp-radio>
+              <cmp-radio v-model="dialogDataInfo.inuseFlg" val="0" :disabled="!!dialogDataInfo.columnId">禁用</cmp-radio>
             </span>
-          </div>
+          </div> -->
         </div>
       </div>
     </cmp-dialog>
@@ -192,7 +192,7 @@
         }, this.query), function (data) {
           if (data.code === 0) {
             _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.total - 1) / _this.optionPagebarPagesize.pagesize) + 1;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
@@ -244,7 +244,7 @@
           }
         });
       },
-      clkTurnOn: function (data) {
+      clkTurnOn: function (info) {
         var _this = this;
 
         this.$confirm({
@@ -264,7 +264,7 @@
             _this.$confirm({ show: false });
             if (data.text === '确定') {
               ajaxSetLmFlag({
-                columnId: data.columnId,
+                columnId: info.columnId,
                 inuseFlg: 1
               }, function (result) {
                 if (result.code === 0) {
@@ -278,7 +278,7 @@
           }
         });
       },
-      clkTurnOff: function (data) {
+      clkTurnOff: function (info) {
         var _this = this;
 
         this.$confirm({
@@ -298,7 +298,7 @@
             _this.$confirm({ show: false });
             if (data.text === '确定') {
               ajaxSetLmFlag({
-                columnId: data.columnId,
+                columnId: info.columnId,
                 inuseFlg: 0
               }, function (result) {
                 if (result.code === 0) {
@@ -317,7 +317,7 @@
       },
       callbackDialog: function (data) {
         var _this = this;
-
+ 
         this.optionDialog.show = false;
         if (data.text === '添加' || data.text === '编辑') {
           ajaxSaveUpdataLmsz(this.dialogDataInfo, function (result) {
@@ -331,7 +331,7 @@
         }
       },
       utlFormatDate: function (dateLong) {
-        return dataFormat(new Date(dateLong), ' yyyy-MM-dd hh:mm:ss');
+        return dateLong && dataFormat(new Date(dateLong), ' yyyy-MM-dd hh:mm:ss');
       }
     }
   };
