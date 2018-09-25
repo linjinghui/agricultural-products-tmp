@@ -406,6 +406,12 @@
       width: 550px;
       height: 360px;
     }
+
+    .wrap-table {
+      .button {
+        margin-left: 10px;
+      }
+    }
   }
 
   // 笔记本尺寸 1366 * 768
