@@ -111,7 +111,7 @@
             _this.$tip({ show: true, text: result.msg, theme: 'danger' });
           }
           result.code = result.code === 0 ? 200 : result.code;
-          result.url = result.ret.downloadUrl;
+          result.url = result.ret && result.ret.downloadUrl;
           callback && callback(result);          
         });        
       },

@@ -152,7 +152,11 @@ export function ajaxUploadFile (pms, callback) {
   formData.append('file', pms.datafile);
 
   if (pms.size > 5 * 1024 * 1024) {
-    $tip({ show: true, text: '图片大小不能超过5M', theme: 'warning' });
+    callback({
+      code: 201,
+      msg: '图片大小不能超过5M',
+      ret: {}
+    });
   } else {
     $http({
       method: 'POST',
