@@ -162,16 +162,18 @@
           }],
           callback: function (data) {
             _this.$confirm({ show: false });
-            ajaxDelJg({
-              deptId: info.deptId
-            }, function (result) {
-              if (result.code === 0) {
-                _this.$tip({ show: true, text: '已成功删除！', theme: 'succcess' });
-                _this.callbackTree([_this.currentTreeItem]);
-              } else {
-                _this.$tip({ show: true, text: result.msg, theme: 'danger' });
-              }
-            });
+            if (data.text === '确定') {
+              ajaxDelJg({
+                deptId: info.deptId
+              }, function (result) {
+                if (result.code === 0) {
+                  _this.$tip({ show: true, text: '已成功删除！', theme: 'succcess' });
+                  _this.callbackTree([_this.currentTreeItem]);
+                } else {
+                  _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+                }
+              });
+            }
           }
         });
       },

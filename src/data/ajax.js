@@ -930,9 +930,90 @@ export function ajaxGetScztOptLogList (pms, callback) {
 }
 
 
+// ===================[禁用品管理相关接口 v]===================
 
+/**
+ * 获取农资品分类树
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetCategoryTree (callback) {
+  $http({
+    method: 'GET',
+    url: URL + '/prohibit_material/getCategoryTree'
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
+/**
+ * 获取禁用品数据列表
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetPmDataList (pms, callback) {
+  let params = pms;
+  
+  $http({
+    method: 'GET',
+    url: URL + '/prohibit_material/getPMList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
+/**
+ * 保存|编辑 禁用品信息
+ * @param {string} pms.pmId - ID
+ * @param {string} pms.dictCode - 分类
+ * @param {string} pms.materialName - 中文名
+ * @param {string} pms.enName - 英文名
+ * @param {string} pms.prohibitUsed - 禁止用途 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSaveUpdataPm (pms, callback) {
+  let params = {
+    pmId: pms.pmId || '',
+    dictCode: pms.dictCode || '',
+    materialName: pms.materialName || '',
+    enName: pms.enName || '',
+    prohibitUsed: pms.prohibitUsed || ''
+  };
+  
+  if (!params.materialName) {
+    $tip({ show: true, text: '请输入禁用品中文名', theme: 'warning' });
+  } else {
+    $http({
+      method: 'POST',
+      url: URL + '/prohibit_material/saveOrUpdate',
+      body: params,
+      emulateJSON: true
+    }).then(function (successData) {
+      callback && callback(successData.body);
+    });
+  }
+}
+
+/**
+ * 删除 禁用品信息
+ * @param {string} pms.pmId - ID
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDeletePm (pms, callback) {
+  let params = {
+    pmId: pms.pmId
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/prohibit_material/delete',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 // ===================================================[虚拟数据接口]===================================================
 

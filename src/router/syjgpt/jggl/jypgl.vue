@@ -1,111 +1,98 @@
 <template>
-  <div class="wrap">
-    <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
-    <div style="padding: 0 20px;">
-      <div class="wrap-form horiz" :class="{'show': formShow}">
-        <div class="form-layer">
-          <label class="star">主体名称:</label>
-          <cmp-input class="f-dom" v-model="query._ztmc_" maxlength="50"></cmp-input>
-        </div>
-        <div class="form-layer">
-          <label class="star">行政区划:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
-        </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXian" v-model="optionXian.result" @cbkClkItem="cbkClkXian">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
-        </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
-        </div>
-        <div class="form-layer">
-          <label class="star">问题状态:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionWtzt" v-model="optionWtzt.result" @cbkClkItem="cbkClkWtzt">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
-        </div>
-        <div class="form-layer" style="width: 100%;text-align:center;">
-          <cmp-button theme="line" @click="clkRest">重置</cmp-button>
-          <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
-        </div>
-      </div>
-      <div class="fgx">
-        <i class="cicon-triangle-top triangle center-h" :title="formShow?'隐藏搜索':'展开搜索'" @click="formShow=!formShow"></i>
-      </div>
-      <cmp-table v-bind="optionTabel">
+  <div class="wrap jypgl">
+    <cmp-tab v-bind="optionTab"></cmp-tab>
+    <div class="p-l">
+      <cmp-tree :treeData="treeData" :activeId="activeId" :autoActiveRoot="autoActiveRoot" @callback="callbackTree"></cmp-tree>
+    </div>
+    <div class="p-r">
+      <header>
+        <cmp-input class="f-dom" v-model="query.materialName" placeholder="回车搜索" maxlength="50" @enter="clkSearch"></cmp-input>
+        <cmp-button class="theme" @click="clkAdd">添加</cmp-button>
+      </header>
+      <cmp-table ref="rtable" v-bind="optionTabel">
         <tr slot="head">
-          <td>主体名称</td><td>经营场所</td><td>问题标题</td><td>问题描述</td><td>问题状态</td>
+          <td @click="clkOrder('materialName')">中文名</td>
+          <td @click="clkOrder('enName')">英文名</td>
+          <td @click="clkOrder('prohibitUsed')">禁止用途</td>
+          <td class="no-order">操作</td>
         </tr>
         <tr slot="body" slot-scope="props">
-          <td>{{props.item._ztmc_}}</td><td>{{props.item._jycs_}}</td><td>{{props.item._fddbr_}}</td><td>{{props.item._cylx_}}</td><td>{{props.item._cylx_}}</td>
+          <td>{{props.item.materialName}}</td>
+          <td>{{props.item.enName||''}}</td>
+          <td>{{props.item.prohibitUsed||''}}</td>
+          <td>
+            <cmp-button theme="line" @click="clkEdit(props.item)">编辑</cmp-button>
+            <cmp-button theme="danger" @click="clkDel(props.item)">删除</cmp-button>
+          </td>
         </tr>
       </cmp-table>
-      <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
+      <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>
+      <cmp-dialog class="class-1" v-model="optionDialog.show" v-bind="optionDialog" @callback="callbackDialog">
+        <span slot="title">{{optionDialog.heading}}</span>
+        <div slot="content">
+          <div class="wrap-form">
+            <div class="form-layer">
+              <label class="star">中文名：</label>
+              <cmp-input class="f-dom" v-model="dialogInfo.materialName" autofocus="true" maxlength="50"></cmp-input>
+              <small class="tip">&nbsp;</small>
+            </div>
+            <div class="form-layer">
+              <label>英文名：</label>
+              <cmp-input class="f-dom" v-model="dialogInfo.enName" maxlength="100"></cmp-input>
+              <small class="tip">&nbsp;</small>
+            </div>
+            <div class="form-layer">
+              <label>禁止用途：</label>
+              <cmp-textarea class="f-dom" v-model="dialogInfo.prohibitUsed" v-bind="optionTextarea"></cmp-textarea>
+              <!-- <cmp-input class="f-dom" v-model="dialogInfo.prohibitUsed" maxlength="200"></cmp-input> -->
+              <small class="tip">&nbsp;</small>
+            </div>
+          </div>
+        </div>
+      </cmp-dialog>
     </div>
   </div>
 </template>
 
 <script>
-  import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
-  import geoinfo from '../../../../static/geoinfo.js';
-  import {ajaxGetDshData} from '../../../data/ajax.js';
+  import {Tab, Tree, Table, Button, Dialog, Input, PagebarPagesize, Textarea} from 'web-base-ui';
+  import {ajaxGetCategoryTree, ajaxGetPmDataList, ajaxSaveUpdataPm, ajaxDeletePm} from '../../../data/ajax.js';
 
   export default {
-    name: 'Xcwt',
+    name: 'Jypgl',
     components: {
       'cmpTab': Tab,
-      'cmpInput': Input,
-      'cmpDropMenu': DropMenu,
-      'cmpDatePicker': FlatDatePicker,
-      'cmpButton': Button,
+      'cmpTree': Tree,
       'cmpTable': Table,
-      'cmpPagebarPagesize': PagebarPagesize
+      'cmpButton': Button,
+      'cmpDialog': Dialog,
+      'cmpInput': Input,
+      'cmpPagebarPagesize': PagebarPagesize,
+      'cmpTextarea': Textarea
+    },
+    props: {
+      title: ''
     },
     data () {
       return {
         optionTab: {
           acitve: 0,
-          close: true,
           list: [
             {
-              name: '禁用品管理'
+              name: this.title
             }
           ]
         },
-        formShow: true,
+        treeData: '',
+        activeId: '',
+        // jsTreeIdStr: '_jypId',
+        // 当前点击的树节点项
+        currentTreeItem: '',
+        autoActiveRoot: true,
         query: {},
-        optionCity: {
-          placeholder: '选择城市',
-          show: true,
-          data: geoinfo[0].child,
-          result: []
-        },
-        optionXian: {
-          placeholder: '选择区县',
-          show: true,
-          data: [],
-          result: []
-        },
-        optionXiang: {
-          placeholder: '选择乡镇',
-          show: true,
-          // '福州市', '宁德市', '莆田市', '泉州市', '厦门市', '漳州市', '南平市', '三明市', '龙岩市'
-          data: [],
-          result: []
-        },
-        optionWtzt: {
-          placeholder: '请选择',
-          show: true,
-          data: [ {text: '已发送', value: 1}, {text: '已办结', value: 2}, {text: '已反馈', value: 3}, {text: '已撤回', value: 4} ],
-          result: []
-        },
         optionTabel: {
-          data: []
+          data: [],
+          order: true
         },
         optionPagebarPagesize: {
           // 当期页
@@ -116,46 +103,54 @@
             10, 20, 30, 40, 50
           ],
           pagesize: 20
+        },
+        dialogInfo: {},
+        optionDialog: {
+          heading: '',
+          show: false,
+          modal: true,
+          stl: {},
+          buttons: []
+        },
+        optionTextarea: {
+          'placeholder': '',
+          'rows': '3',
+          'maxlength': '200'
         }
       };
     },
     mounted: function () {
-      // 
+      this.getTreeData();
     },
     methods: {
-      cbkTab: function (data) {
-        this.optionTab.acitve = data.name === '审核' ? 1 : 0;
-      },
-      cbkClkCity: function (data) {
-        this.$set(this.query, '_city_', data);
-        this.optionXian.data = [];
-        this.$nextTick(function () {
-          this.optionXian.data = data[0].child;
+      getTreeData: function () {
+        var _this = this;
+
+        ajaxGetCategoryTree(function (data) {
+          if (data.code === 0) {
+            _this.treeData = _this.formateDataToPluginData(data.ret);
+            // 设置默认激活项
+            _this.$nextTick(function () {
+              _this.activeId = data.ret[0].id;
+            });
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
         });
       },
-      cbkClkXian: function (data) {
-        this.$set(this.query, '_xian_', data);
-        this.optionXiang.data = [];
-        this.$nextTick(function () {
-          this.optionXiang.data = data[0].child;
-        });
-      },
-      cbkClkXiang: function (data) {
-        this.$set(this.query, '_xiang_', data);
-      },
-      cbkClkSplx: function (data) {
-        this.$set(this.query, '_ztxz_', data);
-      },
-      cbkClkWtzt: function (data) {
-        this.$set(this.query, '_wtzt_', data);
-      },
-      clkRest: function () {
-        this.query = {};
+      callbackTree: function (data) {
+        data = data[data.length - 1];
+        this.$set(this.query, 'dictCode', data.dictCode);
+        this.$set(this.query, 'materialName', '');
         this.clkSearch();
       },
+      formateDataToPluginData: function (data) {
+        data = JSON.stringify(data);
+        data = data.replace(/"dictName"/g, '"text"');
+        data = data.replace(/"id":"/g, '"id":"' + this.jsTreeIdStr);
+        return JSON.parse(data);
+      },
       clkSearch: function () {
-        console.log('===search===');
-        console.log(this.query);
         this.optionPagebarPagesize.index = 1;
         if (this.optionPagebarPagesize.index === 1) {
           this.callbackPagebar({
@@ -169,89 +164,170 @@
       callbackPagebar: function (data) {
         var _this = this;
 
-        console.log('====callbackPagebar====');
-        console.log(data);
         this.optionPagebarPagesize.index = data.currentPage;
         this.optionPagebarPagesize.pagesize = data.pagesize;
-        ajaxGetDshData(Object.assign({
-          current: this.optionPagebarPagesize.index,
-          pageSize: this.optionPagebarPagesize.pagesize
+        ajaxGetPmDataList(Object.assign({
+          page: this.optionPagebarPagesize.index,
+          size: this.optionPagebarPagesize.pagesize
         }, this.query), function (data) {
           if (data.code === 0) {
             _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.total - 1) / _this.optionPagebarPagesize.pagesize) + 1;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
         });
       },
-      clkTabelItem: function (data) {
-        if (this.optionTab.list.length === 1) {
-          this.optionTab.list.push({
-            name: '审核'
+      clkDel: function (info) {
+        var _this = this;
+
+        this.$confirm({
+          show: true,
+          modal: true,
+          heading: '删除禁用品',
+          content: ' 确定删除该禁用品？',
+          type: '',
+          buttons1: [],
+          buttons: [{
+            text: '取消',
+            theme: 'line'
+          }, {
+            text: '确定',
+            theme: 'primary'
+          }],
+          callback: function (data) {
+            _this.$confirm({ show: false });
+            if (data.text === '确定') {
+              ajaxDeletePm({
+                pmId: info.pmId
+              }, function (result) {
+                if (result.code === 0) {
+                  _this.$tip({ show: true, text: '已成功删除！', theme: 'succcess' });
+                  _this.clkSearch();
+                } else {
+                  _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+                }
+              });
+            }
+          }
+        });
+      },
+      clkAdd: function () {
+        this.dialogInfo = {
+          dictCode: this.query.dictCode
+        };
+        this.optionDialog.heading = '添加禁用品';
+        this.optionDialog.buttons = [{
+          text: '取消',
+          theme: 'line'
+        }, {
+          text: '添加',
+          theme: 'primary'
+        }];
+        this.optionDialog.show = true;
+      },
+      clkEdit: function (info) {
+        this.dialogInfo = JSON.parse(JSON.stringify(info));
+        this.dialogInfo.dictCode = this.query.dictCode;
+        this.dialogInfo.prohibitUsed = this.dialogInfo.prohibitUsed || '';
+        this.optionDialog.heading = '编辑禁用品';
+        this.optionDialog.buttons = [{
+          text: '取消',
+          theme: 'line'
+        }, {
+          text: '编辑',
+          theme: 'primary'
+        }];
+        this.optionDialog.show = true;
+      },
+      clkOrder: function (orderBy) {
+        this.$refs.rtable.setOrder(this.optionTabel.data, orderBy);
+      },
+      callbackDialog: function (data) {
+        var _this = this;
+        
+        if (data.text === '添加' || data.text === '编辑') {
+          ajaxSaveUpdataPm(this.dialogInfo, function (result) {
+            if (result.code === 0) {
+              _this.optionDialog.show = false;
+              if (data.text === '添加') {
+                _this.$tip({ show: true, text: '添加禁用品成功！', theme: 'success' });
+              } else if (data.text === '编辑') {
+                _this.$tip({ show: true, text: '编辑禁用品成功！', theme: 'success' });
+              }
+              _this.clkSearch();
+            } else {
+              _this.$tip({ show: true, text: result.msg, theme: 'danger' });
+            }
           });
         }
-        this.optionTab.acitve = 1;
       }
     }
   };
 </script>
 
 <style lang="scss">
-  .wrap {
-    .wrapper-pagebar-pagesize {
-      .wrap-menu {
-        top: unset!important;
-        bottom: calc(100% + 4px)!important;
+  .jypgl {
+
+    >.p-r {
+
+      >header {
+        >.input > input {
+          border-radius: 4px!important;
+        }
+      }
+      .wrap-dialog >section {
+        padding: 0 100px;
       }
     }
   }
 </style>
 <style scoped lang="scss">
-  .wrap {
+  .jypgl {
     background-color: transparent;
+    
+    >.p-l {
+      float: left;
+      padding: 20px;
+      width: 240px;
+    }
+    >.p-r {
+      float: left;
+      width: calc(100% - 240px);
+      min-height: 550px;
+      border-left: solid 1px #ccc;
 
-    .wrap-form {
-      position: relative;
-      padding: 0;
-      width: 100%;
-      height: 0;
-      overflow: hidden;
+      >header {
+        padding: 10px;
+        border-bottom: solid 1px #ccc;
 
-      >.form-layer {
-        display: inline-block;
-        width: 300px;
+        >.button {
+          padding: 8px 15px;
+          width: 100px;
+          border-radius: 4px;
+        }
+
+        >.input {
+          float: right;
+          width: 300px;
+        }
       }
-    }
-    .wrap-form.show {
-      padding: 10px;
-      height: auto;
-      overflow: unset;
-    }
 
-    .fgx {
-      position: relative;
-      margin-bottom: 20px;
-      border-bottom: solid 1px #ccc;
-      >.triangle {
-        position: absolute!important;
-        color: #ccc;
-        font-size: 20px;
-        bottom: -14px;
-        transform: rotate(180deg);
-        z-index: 1;
-        cursor: pointer;
+      >.wrap-table {
+        .button {
+          margin-right: 10px;
+        }
       }
-    }
-    .wrap-form.show + .fgx {
-      >.triangle {
-        bottom: -6px;
-        transform: rotate(0deg);
-      }
-    }
 
-    .wrapper-pagebar-pagesize {
-      margin: 10px 0;
+      >.wrapper-pagebar-pagesize {
+        margin: 20px;
+        width: calc(100% - 40px);
+      }
+
+      .wrap-dialog {
+        width: 550px;
+        height: 460px;
+      }
     }
   }
 

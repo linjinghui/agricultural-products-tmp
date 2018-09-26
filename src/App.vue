@@ -473,11 +473,16 @@
         line-height: 30px;
       }
 
+      >label.star:before {
+        content: '*';
+        color: red;
+      }
+
       >.f-dom {
         display: inline-block;
         width: 100%;
       }
-
+      
       >.tip {
         color: red;
         line-height: 20px;
