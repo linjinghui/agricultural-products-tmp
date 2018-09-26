@@ -51,7 +51,7 @@ Mock.mock(/(\/admin_ent_main_info\/select_ent_main_list)/, {
         'entStatus|1': [0, 4, 5]
       }
     ],
-    'totalSize': '221'
+    'total': '221'
   },
   'success': true
 });
@@ -72,7 +72,7 @@ Mock.mock(/(\/admin_ent_main_info\/select_ent_main_list)/, {
 //         'createTime': new Date().getTime()
 //       }
 //     ],
-//     'totalSize': '221'
+//     'total': '221'
 //   },
 //   'success': true
 // });
@@ -122,7 +122,7 @@ Mock.mock(/(\/admin_ent_main_info\/select_ent_main_list)/, {
 //         'userName': '@name'
 //       }
 //     ],
-//     'totalSize': '221'
+//     'total': '221'
 //   },
 //   'success': true
 // });
@@ -184,7 +184,7 @@ Mock.mock(/(\/admin_ent_main_info\/select_ent_main_list)/, {
 //         'status|1': [1, 2]
 //       }
 //     ],
-//     'totalSize': '221'
+//     'total': '221'
 //   },
 //   'success': true
 // });
@@ -228,7 +228,25 @@ Mock.mock(/(\/admin_ent_main_info\/select_ent_main_list)/, {
 //         'status|1': [1, 2]
 //       }
 //     ],
-//     'totalSize': '221'
+//     'total': '221'
+//   },
+//   'success': true
+// });
+
+
+// ===================[工作监督相关接口 v]===================
+
+// 监管用户登陆日志
+// Mock.mock(/(\/sys_admin_login_log\/getInfo)/, {
+//   'msg': 'im msg',
+//   'code': 0,
+//   'ret': {
+//     'list|20': [
+//       { 
+        
+//       }
+//     ],
+//     'total': '221'
 //   },
 //   'success': true
 // });
@@ -299,7 +317,7 @@ Mock.mock(/(\/portal\/enterpriseByArea)/, {
     'list|20-100': [
       { 'enterName': '@name', 'xzqh': '@natural(0, 100)', 'xxwzd': '@natural(0, 100)' + '%', 'xsl': '@natural(0, 10000)', 'fmsl': '@natural(0, 100)' }
     ],
-    'totalSize': '221'
+    'total': '221'
   },
   'success': true
 });
@@ -367,7 +385,7 @@ Mock.mock(/(\/portal\/getDshData)/, {
     'list|20': [
       { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_fzrxm_': '@name', '_dlzh_': '@name', '_sczttjsj_': '2018-11-11', '_sfyzsj_': '2018-05-11' }
     ],
-    'totalSize': '221'
+    'total': '221'
   },
   'success': true
 });
@@ -394,7 +412,7 @@ Mock.mock(/(\/portal\/getLsshData)/, {
     'list|20': [
       { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_shzt_|1': ['通过', '不通过'], '_sczttjsj_': '2018-11-11', '_shjssj_': '2018-05-11' }
     ],
-    'totalSize': '221'
+    'total': '221'
   },
   'success': true
 });
@@ -407,7 +425,7 @@ Mock.mock(/(\/portal\/getDshShcxData)/, {
     'list|20': [
       { '_ztmc_': '@name', '_ztdm_': '@id', '_jycs_': '@name', '_fddbr_': '@name', '_cylx_': '@name', '_ztxz_': '@name', '_shzt_|1': ['待审核', '通过', '未通过', '县级审核', '市级审核'], '_sczttjsj_': '2018-11-11', '_shjssj_': '2018-05-11' }
     ],
-    'totalSize': '221'
+    'total': '221'
   },
   'success': true
 });

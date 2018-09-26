@@ -835,6 +835,99 @@ export function ajaxGetJgxxDataList (pms, callback) {
 }
 
 
+// ===================[工作监督相关接口 v]===================
+
+/**
+ * 获取监管用户登陆日志
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgyhLoginLogList (pms, callback) {
+  let params = pms;
+  
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
+  $http({
+    method: 'GET',
+    url: URL + '/sys_admin_login_log/getInfoList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取监管用户操作日志
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgyhOptLogList (pms, callback) {
+  let params = pms;
+  
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
+  $http({
+    method: 'GET',
+    url: URL + '/sys_admin_opt_log/getOptInfoList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取生产主体登陆日志
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetScztLoginLogList (pms, callback) {
+  let params = pms;
+  
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
+  $http({
+    method: 'GET',
+    url: URL + '/ent_sys_login_log/getLogList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取生产主体操作日志
+ * @param {string} pms
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetScztOptLogList (pms, callback) {
+  let params = pms;
+  
+  if (params.startTime) {
+    params.startTime = new Date(params.startTime.replace(/-/g, '/')).getTime();
+  }
+  if (params.endTime) {
+    params.endTime = new Date(params.endTime.replace(/-/g, '/')).getTime();
+  }
+  $http({
+    method: 'GET',
+    url: URL + '/ent_sys_opt_log/getLogList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 
 
