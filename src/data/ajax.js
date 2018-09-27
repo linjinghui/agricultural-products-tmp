@@ -1015,6 +1015,111 @@ export function ajaxDeletePm (pms, callback) {
   });
 }
 
+
+// ===================[监管管理相关接口 v]===================
+
+/**
+ * 获取监管管理（监管问题处置、行政处罚、监督检查）数据列表
+ * @param {number} pms.sheetType - 档案类别 -（1监管问题处置、2行政处罚、3监督检查）
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgglDataList (pms, callback) {
+  let params = pms;
+
+  $http({
+    method: 'GET',
+    url: URL + '/supervision_sheets/getSheetList',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 获取监管管理（监管问题处置、行政处罚、监督检查）详情
+ * @param {number} pms.recId - id
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetJgglDataInfo (pms, callback) {
+  let params = {
+    recId: pms.recId
+  };
+
+  $http({
+    method: 'GET',
+    url: URL + '/supervision_sheets/getContent',
+    params: params
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 新建（监管问题处置、行政处罚、监督检查）数据
+ * @param {string} pms.sheetType - 档案类别 -（1监管问题处置2行政处罚、3监督检查）
+ * @param {string} pms.title - 标题
+ * @param {string} pms.content - 详情
+ * @param {string} pms.entId - 涉事主体id
+ * @param {string} pms.entName - 主体名称 
+ * @param {string} pms.deptName - 执行部门 
+ * @param {string} pms.attachIds - 附件ID(多个以英文逗号分隔) 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxCreateJgglData (pms, callback) {
+  let params = {
+    sheetType: pms.sheetType || '',
+    title: pms.title || '',
+    content: pms.content || '',
+    entId: pms.entId || '',
+    entName: pms.entName || '',
+    deptName: pms.deptName || '',
+    attachIds: pms.attachIds || ''
+  };
+  
+  if (!params.title) {
+    $tip({ show: true, text: '请输入标题', theme: 'warning' });
+  } else if (!params.content) {
+    $tip({ show: true, text: '请输入详情', theme: 'warning' });
+  } else if (!params.entId) {
+    $tip({ show: true, text: '请选择涉事主体', theme: 'warning' });
+  } else {
+    $http({
+      method: 'POST',
+      url: URL + '/supervision_sheets/save',
+      body: params,
+      emulateJSON: true
+    }).then(function (successData) {
+      callback && callback(successData.body);
+    });
+  }
+}
+
+/**
+ * 撤回、删除、办结（监管问题处置、行政处罚、监督检查）数据
+ * @param {string} pms.recId - 档案id
+ * @param {string} pms.doType - 操作类别 - 1撤回，2删除，3办结
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxSetJgglStatus (pms, callback) {
+  let params = {
+    recId: pms.recId,
+    doType: pms.doType
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/supervision_sheets/doAdminOpt',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+
+
+
+
 // ===================================================[虚拟数据接口]===================================================
 
 /**

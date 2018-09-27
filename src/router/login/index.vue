@@ -5,7 +5,7 @@
       <p class="subTitle">监管人员登录</p>
       <div class="wrap-form">
         <div class="form-layer">
-          <label class="star">账号: </label>
+          <label>账号: </label>
           <cmp-input class="f-dom" maxlength="50" :autofocus="true" placeholder="请输入登录账号" v-model="account" @focus="focusAccount" @blur="blurAccount">
             <i class="cicon-tick center-v" slot="right" v-if="accountCheck===true"></i>
           </cmp-input>
@@ -13,7 +13,7 @@
           <small class="tip">{{accountCheck===false?'请正确填写账号':''}}&nbsp;</small>
         </div>
         <div class="form-layer">
-          <label class="star">密码: </label>
+          <label>密码: </label>
           <cmp-input class="f-dom" :type="pwdType" maxlength="100" placeholder="请输入登录密码" v-model="password" @focus="focusPassword">
             <i class="cicon-xxx center-v icon iconfont icon-eye-close" slot="right" @click="changePwdType"></i>
           </cmp-input>
@@ -22,7 +22,7 @@
           <!-- <small class="tip find-pwd">忘记密码?</small> -->
         </div>
         <div class="form-layer">
-          <label class="star">验证码: </label><br>
+          <label>验证码: </label><br>
           <cmp-input class="f-dom ipt-vcode" maxlength="10" placeholder="请输入验证码" v-model="vcode" @enter="clkLogin"></cmp-input>
           <img class="vcode" :src="vcodeUrl" width="100" height="32" @click="getVcode">
         </div>

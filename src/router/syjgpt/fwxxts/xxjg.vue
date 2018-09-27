@@ -142,7 +142,7 @@
           pagesizes: [
             10, 20, 30, 40, 50
           ],
-          pagesize: 20
+          pagesize: 10
         },
         dialogDataInfo: {}
       };
