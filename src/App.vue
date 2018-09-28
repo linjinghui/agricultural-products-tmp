@@ -367,6 +367,14 @@
               // -----------------------xtgl--角色及权限管理
               path = '/#/jsjqxgl';
               break;
+            case 'bases:sjzd:qtzd':
+              // -----------------------sjzd--其他字典
+              path = '/#/qtzdsz';
+              break;
+            case 'bases:sjzd:cylx':
+              // -----------------------sjzd--产业类型字典
+              path = '/#/cylxsz';
+              break;
             default:
               path = '/#/home';
           }

@@ -71,6 +71,9 @@ const Zzjggl = () => import('./jcpt/xtgl/zzjggl.vue');
 const Yhgl = () => import('./jcpt/xtgl/yhgl.vue');
 const Jsjqxgl = () => import('./jcpt/xtgl/jsjqxgl.vue');
 
+const Cylxsz = () => import('./jcpt/sjzd/cylxsz.vue');
+const Qtzdsz = () => import('./jcpt/sjzd/qtzdsz.vue');
+
 
 const Mmxg = () => import('./mmxg/index.vue');
 
@@ -372,6 +375,16 @@ export default new Router({
               path: '/jsjqxgl',
               name: 'jsjqxgl',
               component: Jsjqxgl
+            },
+            {
+              path: '/cylxsz',
+              name: 'cylxsz',
+              component: Cylxsz
+            },
+            {
+              path: '/qtzdsz',
+              name: 'qtzdsz',
+              component: Qtzdsz
             }
           ]
         },

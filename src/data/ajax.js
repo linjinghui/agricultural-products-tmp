@@ -1117,8 +1117,103 @@ export function ajaxSetJgglStatus (pms, callback) {
 }
 
 
+// ===================[数据字典相关接口 v]===================
 
+/**
+ * 获取产业类型树形数据
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetIndustryTree (callback) {
+  $http({
+    method: 'GET',
+    url: URL + '/base_industry_dict/getIndustryTree'
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
+/**
+ * 获取产业类型详细信息
+ * @param {string} pms.dictId - 字典ID
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxGetIndustryInfo (pms, callback) {
+  let param = {
+    dictId: pms.dictId
+  };
+
+  $http({
+    method: 'GET',
+    url: URL + '/base_industry_dict/getIndustryInfo',
+    params: param
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
+
+/**
+ * 新增产业类型数据字典
+ * @param {string} pms.commitType - 保存类型 - 1表示非二级节点，2表示二级节点
+ * @param {string} pms.dictId - id
+ * @param {string} pms.dictName - 名称
+ * @param {string} pms.dictCode - 编码（同一parentId下不能重复）
+ * @param {string} pms.dictValue - 英文名 
+ * @param {string} pms.parentId - 父id 
+ * @param {string} pms.categoryCode - 食用农产品类别编码(commitType=2时不能空)
+ * @param {string} pms.scaleUnit - 生产规模计量单位(commitType=2时不能空)，多个以竖线分隔
+ * @param {string} pms.saleUnit - 产成品的计量单位(commitType=2时不能空) ，多个以竖线分隔 
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxCreateCylxzdData (pms, callback) {
+  let params = {
+    commitType: pms.commitType || '',
+    dictId: pms.dictId || '',
+    dictName: pms.dictName || '',
+    dictCode: pms.dictCode || '',
+    dictValue: pms.dictValue || '',
+    parentId: pms.parentId || '',
+    categoryCode: pms.categoryCode || '',
+    scaleUnit: pms.scaleUnit || '',
+    saleUnit: pms.saleUnit || ''
+  };
+  
+  if (params.commitType === 2 && !params.scaleUnit) {
+    $tip({ show: true, text: '请输入生产规模计量单位', theme: 'warning' });
+  } else if (params.commitType === 2 && !params.saleUnit) {
+    $tip({ show: true, text: '请输入产成品的计量单位', theme: 'warning' });
+  } else if (params.commitType === 2 && !params.categoryCode) {
+    $tip({ show: true, text: '请输入食用农产品类别编码', theme: 'warning' });
+  } else {
+    $http({
+      method: 'POST',
+      url: URL + '/base_industry_dict/saveOrUpdate',
+      body: params,
+      emulateJSON: true
+    }).then(function (successData) {
+      callback && callback(successData.body);
+    });
+  }
+}
+
+/**
+ * 删除产业类型数据字典
+ * @param {string} pms.dictId - id
+ * @param {function} callback - 回调函数 
+ */
+export function ajaxDeleteCylxzdData (pms, callback) {
+  let params = {
+    dictId: pms.dictId || ''
+  };
+  
+  $http({
+    method: 'POST',
+    url: URL + '/base_industry_dict/delete',
+    body: params,
+    emulateJSON: true
+  }).then(function (successData) {
+    callback && callback(successData.body);
+  });
+}
 
 // ===================================================[虚拟数据接口]===================================================
 
