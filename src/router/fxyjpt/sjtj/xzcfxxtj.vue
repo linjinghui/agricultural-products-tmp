@@ -1,260 +1,432 @@
+<!-- 行政处罚信息统计 -->
 <template>
-  <div class="wrap">
-    <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
-    <div style="padding: 0 20px;">
-      <div class="wrap-form horiz" :class="{'show': formShow}">
-        <div class="form-layer">
-          <label class="star">主体名称:</label>
-          <cmp-input class="f-dom" v-model="query._ztmc_" maxlength="50"></cmp-input>
+    <div class="wrap">
+
+        <div class="part tabel">
+            <cmp-table v-bind="optionMainTabel">
+                <tr slot="head">
+                    <td>主体性质</td><td>主体数(家)</td>
+                </tr>
+                <tr slot="body" slot-scope="props">
+                    <td>{{props.item.entProperty}}</td><td>{{props.item.staNo}}</td>
+                </tr>
+            </cmp-table>
         </div>
-        <div class="form-layer">
-          <label class="star">行政区划:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionCity" v-model="optionCity.result" @cbkClkItem="cbkClkCity">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
+
+        <div class="part pie">
+            <cmp-echarts :option="optionPie"></cmp-echarts>
         </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXian" v-model="optionXian.result" @cbkClkItem="cbkClkXian">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
+
+        <div class="part time">
+            <p class="title">时间</p>
+            <cmp-radio v-model="timeArr.val" v-for="(item,index) in timeArr.arr" :key="'rd_'+index" :val="item.val">{{item.name}}</cmp-radio>
+            <div v-show="timeShow" >
+                <div class="timeDiv">
+                    <cmp-date-picker class="f-dom" v-model="query.startTime"></cmp-date-picker>
+                </div>
+                <div class="timeDiv">
+                    <cmp-date-picker class="f-dom" v-model="query.endTime"></cmp-date-picker>
+                </div>
+            </div>
         </div>
-        <div class="form-layer" style="width: 185px;">
-          <cmp-drop-menu style="width: 100%;" class="f-dom" v-bind="optionXiang" v-model="optionXiang.result" @cbkClkItem="cbkClkXiang">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
+
+        <div class="part tabel">
+            <cmp-table v-bind="optionMainTabel">
+                <tr slot="head">
+                    <td>主体性质</td><td>主体数(家)</td>
+                </tr>
+                <tr slot="body" slot-scope="props">
+                    <td>{{props.item.entProperty}}</td><td>{{props.item.staNo}}</td>
+                </tr>
+            </cmp-table>
         </div>
-        <div class="form-layer">
-          <label class="star">问题状态:</label>
-          <cmp-drop-menu class="f-dom" v-bind="optionWtzt" v-model="optionWtzt.result" @cbkClkItem="cbkClkWtzt">
-            <span slot="line" slot-scope="props">{{props.item.text}}</span>
-          </cmp-drop-menu>
+        <div class="part bar">
+            <cmp-echarts :option="optionBar"></cmp-echarts>
         </div>
-        <div class="form-layer" style="width: 100%;text-align:center;">
-          <cmp-button theme="line" @click="clkRest">重置</cmp-button>
-          <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
+
+        <div class="part area">
+            <p class="title">区域</p>
+            <!-- <cmp-checkbox v-model="areaArr.full" val="0" @click="clkAreaFull">全部区域</cmp-checkbox> -->
+            <cmp-checkbox v-model="areaArr.val" v-for="(item,index) in areaArr.arr" :key="'ckb_'+index" :val="item.val" @click="clkArea">{{item.name}}</cmp-checkbox>
+
         </div>
-      </div>
-      <div class="fgx">
-        <i class="cicon-triangle-top triangle center-h" :title="formShow?'隐藏搜索':'展开搜索'" @click="formShow=!formShow"></i>
-      </div>
-      <cmp-table v-bind="optionTabel">
-        <tr slot="head">
-          <td>主体名称</td><td>经营场所</td><td>问题标题</td><td>问题描述</td><td>问题状态</td>
-        </tr>
-        <tr slot="body" slot-scope="props">
-          <td>{{props.item._ztmc_}}</td><td>{{props.item._jycs_}}</td><td>{{props.item._fddbr_}}</td><td>{{props.item._cylx_}}</td><td>{{props.item._cylx_}}</td>
-        </tr>
-      </cmp-table>
-      <cmp-pagebar-pagesize v-bind="optionPagebarPagesize" @callback="callbackPagebar"></cmp-pagebar-pagesize>    
+
     </div>
-  </div>
 </template>
 
 <script>
-  import {Tab, Input, DropMenu, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
-  import geoinfo from '../../../../static/geoinfo.js';
-  import {ajaxGetDshData} from '../../../data/ajax.js';
+  import {Echarts, Radio, Checkbox, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
+  // import {ajaxGetCylxzb, ajaxGetFmsltj, ajaxGetQyxs, ajaxGetEnterpriseByArea} from '../../../data/ajax.js';
+  import {ajaxStaEntProperty} from '../../../data/fxyjajax.js';
+
 
   export default {
-    name: 'Xcwt',
+    name: 'xzcfxxtj',
     components: {
-      'cmpTab': Tab,
-      'cmpInput': Input,
-      'cmpDropMenu': DropMenu,
+      'cmpEcharts': Echarts,
+      'cmpRadio': Radio,
       'cmpDatePicker': FlatDatePicker,
+      'cmpCheckbox': Checkbox,
       'cmpButton': Button,
       'cmpTable': Table,
       'cmpPagebarPagesize': PagebarPagesize
     },
     data () {
       return {
-        optionTab: {
-          acitve: 0,
-          close: true,
-          list: [
+        optionBar: {},
+        optionPie: {},
+        timeShow: false,
+        optionMainTabel: {
+          data: []
+        },
+        optionCityTabel: {
+          data: []
+        },
+        query: {},
+        timeArr: {
+          val: '',
+          arr: [
             {
-              name: '行政处罚信息统计'
+              val: '1',
+              name: '今天之前'
+            },
+            {
+              val: '2',
+              name: '本月'
+            },
+            {
+              val: '3',
+              name: '本年度'
+            },
+            {
+              val: '4',
+              name: '自定义区间'
             }
           ]
         },
-        formShow: true,
-        query: {},
-        optionCity: {
-          placeholder: '选择城市',
-          show: true,
-          data: geoinfo[0].child,
-          result: []
-        },
-        optionXian: {
-          placeholder: '选择区县',
-          show: true,
-          data: [],
-          result: []
-        },
-        optionXiang: {
-          placeholder: '选择乡镇',
-          show: true,
-          // '福州市', '宁德市', '莆田市', '泉州市', '厦门市', '漳州市', '南平市', '三明市', '龙岩市'
-          data: [],
-          result: []
-        },
-        optionWtzt: {
-          placeholder: '请选择',
-          show: true,
-          data: [ {text: '已发送', value: 1}, {text: '已办结', value: 2}, {text: '已反馈', value: 3}, {text: '已撤回', value: 4} ],
-          result: []
-        },
-        optionTabel: {
-          data: []
-        },
-        optionPagebarPagesize: {
-          // 当期页
-          index: 1,
-          // 总页数
-          totalPage: 1,
-          pagesizes: [
-            10, 20, 30, 40, 50
-          ],
-          pagesize: 20
+        areaArr: {
+          val: [],
+          full: [],
+          arr: [
+            {
+              val: '1',
+              name: '福州市'
+            },
+            {
+              val: '2',
+              name: '宁德市'
+            },
+            {
+              val: '3',
+              name: '莆田市'
+            },
+            {
+              val: '4',
+              name: '泉州市'
+            },
+            {
+              val: '5',
+              name: '厦门市'
+            },
+            {
+              val: '6',
+              name: '漳州市'
+            },
+            {
+              val: '7',
+              name: '南平市'
+            },
+            {
+              val: '8',
+              name: '三明市'
+            },
+            {
+              val: '9',
+              name: '龙岩市'
+            }
+          ]
         }
       };
     },
+    watch: {
+      'timeArr.val': {
+        deep: true,
+        handler: function (val) {
+          this.clkTime();
+        }
+      }
+    },
     mounted: function () {
-      // 
+      // 默认取当天数据
+      this.timeArr.val = '2';
+      // 查询统计数据
+      this.queryEntPropertySta();
+      // 默认取全省区域企业数据
+      // this.clkArea();
     },
     methods: {
-      cbkTab: function (data) {
-        this.optionTab.acitve = data.name === '审核' ? 1 : 0;
+      /**
+       * nameArr - ['水果', '蔬菜', '茶叶', '食用菌', '中草药', '牲畜', '家禽', '屠宰及肉类加工']
+       * valueArr - [10, 52, 200, 334, 390, 330, 220, 119]
+       */
+      setBarOption: function (nameArr, valueArr) {
+        this.optionBar = {
+          color: ['#3398DB'],
+          tooltip: {
+            trigger: 'axis',
+            // 坐标轴指示器，坐标轴触发有效
+            axisPointer: {
+              // 默认为直线，可选为：'line' | 'shadow'
+              type: 'shadow'
+            }
+          },
+          title: {
+            text: '主体性质数据统计',
+            left: 'left',
+            textStyle: {
+              color: '#000000'
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              data: nameArr,
+              axisTick: {
+                alignWithLabel: true
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              data: [20, 40, 60, 80, 100, 120, 140],
+              name: '',
+              nameTextStyle: {
+                fontSize: 14
+              }
+            }
+          ],
+          series: [
+            {
+              name: '',
+              type: 'bar',
+              barWidth: '60%',
+              data: valueArr
+            }
+          ],
+          toolbox: {
+            right: '3.5%',
+            feature: {
+              magicType: {
+                show: true,
+                type: ['line', 'bar']
+              }
+            }
+          }
+        };
       },
-      cbkClkCity: function (data) {
-        this.$set(this.query, '_city_', data);
-        this.optionXian.data = [];
-        this.$nextTick(function () {
-          this.optionXian.data = data[0].child;
+      /**
+       * data - [{ value: 335, name: '水果' }]
+       * nameArr - ['水果', '蔬菜', '茶叶', '食用菌', '中草药', '牲畜', '家禽', '屠宰及肉类加工']
+       */
+      setPieOption: function (nameArr, data) {
+        this.optionPie = {
+          tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {c} ({d}%)'
+          },
+          title: {
+            text: '主体性质分布',
+            left: 'left',
+            textStyle: {
+              color: '#000000'
+            }
+          },
+          legend: {
+            orient: 'horizontal',
+            width: 380,
+            itemGap: 20,
+            x: 'center',
+            y: 40,
+            data: nameArr
+          },
+          color: [ '#00c1ed', '#80c26b', '#ffd503', '#d1d5de', '#3c9bed', '#df4c3a', '#02a75b', '#f39c10' ],
+          series: [
+            {
+              name: '',
+              type: 'pie',
+              radius: ['30%', '60%'],
+              center: ['50%', '65%'],
+              avoidLabelOverlap: false,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: false,
+                  textStyle: {
+                    fontSize: '20',
+                    fontWeight: 'bold'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data: data
+            }
+          ]
+        };
+      },
+      clkOutput: function () {
+        console.log('导出按钮');
+      },
+      // 整理查询数据，在echart中使用
+      parseResult: function (resultList, pieData) {
+        var nameArr = [];
+        var valueArr = [];
+
+        resultList.forEach(function (item) {
+          nameArr[nameArr.length] = item.entProperty;
+          valueArr[valueArr.length] = item.staNo;
+          var o = {};
+
+          o.name = item.entProperty;
+          o.value = item.staNo;
+          pieData.push(o);
         });
+        return [nameArr, valueArr, pieData];
       },
-      cbkClkXian: function (data) {
-        this.$set(this.query, '_xian_', data);
-        this.optionXiang.data = [];
-        this.$nextTick(function () {
-          this.optionXiang.data = data[0].child;
-        });
-      },
-      cbkClkXiang: function (data) {
-        this.$set(this.query, '_xiang_', data);
-      },
-      cbkClkSplx: function (data) {
-        this.$set(this.query, '_ztxz_', data);
-      },
-      cbkClkWtzt: function (data) {
-        this.$set(this.query, '_wtzt_', data);
-      },
-      clkRest: function () {
-        this.query = {};
-        this.clkSearch();
-      },
-      clkSearch: function () {
-        console.log('===search===');
-        console.log(this.query);
-        this.optionPagebarPagesize.index = 1;
-        if (this.optionPagebarPagesize.index === 1) {
-          this.callbackPagebar({
-            currentPage: 1,
-            pagesize: this.optionPagebarPagesize.pagesize
-          });
-        } else {
-          this.optionPagebarPagesize.index = 1;
-        }
-      },
-      callbackPagebar: function (data) {
+      queryEntPropertySta: function () {
         var _this = this;
 
-        console.log('====callbackPagebar====');
-        console.log(data);
-        this.optionPagebarPagesize.index = data.currentPage;
-        this.optionPagebarPagesize.pagesize = data.pagesize;
-        ajaxGetDshData(Object.assign({
-          current: this.optionPagebarPagesize.index,
-          pageSize: this.optionPagebarPagesize.pagesize
-        }, this.query), function (data) {
+        ajaxStaEntProperty(this.query, function (data) {
           if (data.code === 0) {
-            _this.optionTabel.data = data.ret.list;
-            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+            // 设置饼图
+            var pieData = [];
+            var temp = _this.parseResult(data.ret, pieData);
+
+            _this.optionMainTabel.data = data.ret;
+            _this.setBarOption(temp[0], temp[1]);
+            _this.setPieOption(temp[0], pieData);
+            _this.barData = temp;
           } else {
             _this.$tip({ show: true, text: data.msg, theme: 'danger' });
           }
         });
       },
-      clkTabelItem: function (data) {
-        if (this.optionTab.list.length === 1) {
-          this.optionTab.list.push({
-            name: '审核'
-          });
-        }
-        this.optionTab.acitve = 1;
+      clkTime: function () {
+
+        this.timeShow = (this.timeArr.val === '4');
+        console.log('clkTime---' + this.timeArr.val + '---' + this.timeShow);
+
+      },
+      clkArea: function () {
+        console.log('选择的区域--' + this.areaArr.val);
+        this.query.areaArr = this.areaArr.val;
+        this.queryEntPropertySta();
       }
+
     }
   };
 </script>
 
 <style lang="scss">
-  .wrap {
-    .wrapper-pagebar-pagesize {
-      .wrap-menu {
-        top: unset!important;
-        bottom: calc(100% + 4px)!important;
-      }
+    .wrap {
+        .wrap-table table {
+            text-align: center;
+        }
+
+        .pagebar .wrap-drop-menu .wrap-menu {
+            top: unset!important;
+            bottom: calc(100% + 4px)!important;
+        }
     }
-  }
 </style>
 <style scoped lang="scss">
-  .wrap {
-    background-color: transparent;
+    .wrap {
+        padding-right: 10px;
+        padding-bottom: 10px;
+        width: 100%;
+        height: 100%;
+        border-style: solid;
+        border-width: 0px;
+        border-color: #ccc;
+        overflow: hidden;
+        background-color: transparent;
 
-    .wrap-form {
-      position: relative;
-      padding: 0;
-      width: 100%;
-      height: 0;
-      overflow: hidden;
+        >.part {
+            margin-top: 10px;
+            margin-left: 10px;
+            padding: 10px;
+            float: left;
+            border: inherit;
+            border-width: 1px;
+            height: 420px;
 
-      >.form-layer {
-        display: inline-block;
-        width: 300px;
-      }
-    }
-    .wrap-form.show {
-      padding: 10px;
-      height: auto;
-      overflow: unset;
+            >.title {
+                margin-bottom: 20px;
+                font-size: 18px;
+                font-weight: 700;
+                color: #333;
+            }
+
+            >.radio,
+            >.checkbox {
+                display: block;
+                margin-top: 14px;
+            }
+
+        }
+        >.partSta {
+            margin-top: 10px;
+            margin-left: 10px;
+            padding: 10px;
+            float: left;
+            border: inherit;
+            border-width: 1px;
+            height: 440px;
+
+            >.part {
+                float: left;
+                border: inherit;
+                border-width: 1px;
+                height: 420px;
+            }
+        }
+        >.tabel {
+            width: calc(45% - 10px - 10px);
+        }
+
+        >.pie {
+            width: calc(45% - 10px - 10px - 10px - 10px);
+        }
+        >.map {
+            width: 22%;
+        }
+        >.bar {
+            width: calc(45% - 10px - 10px - 10px - 10px);
+        }
+        >.time,
+        >.area {
+            width: 11%;
+        }
     }
 
-    .fgx {
-      position: relative;
-      margin-bottom: 20px;
-      border-bottom: solid 1px #ccc;
-      >.triangle {
-        position: absolute!important;
-        color: #ccc;
-        font-size: 20px;
-        bottom: -14px;
-        transform: rotate(180deg);
-        z-index: 1;
-        cursor: pointer;
-      }
-    }
-    .wrap-form.show + .fgx {
-      >.triangle {
-        bottom: -6px;
-        transform: rotate(0deg);
-      }
+    .timeDiv {
+        margin-top: 10px;
+        padding-top: 11px;
     }
 
-    .wrapper-pagebar-pagesize {
-      margin: 10px 0;
-    }
-  }
-
-  // 笔记本尺寸 1366 * 768
-  @media screen and (max-width: 1366px) {}
+    // 笔记本尺寸 1366 * 768
+    @media screen and (max-width: 1366px) {}
 </style>

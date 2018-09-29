@@ -1,4 +1,4 @@
-<!-- 监督检查信息统计 -->
+<!-- 生产规模统计 -->
 <template>
     <div class="wrap">
 
@@ -61,7 +61,7 @@
 
 
   export default {
-    name: 'jdjcxxtj',
+    name: 'scgmtj',
     components: {
       'cmpEcharts': Echarts,
       'cmpRadio': Radio,
@@ -328,7 +328,47 @@
 
         this.timeShow = (this.timeArr.val === '4');
         console.log('clkTime---' + this.timeArr.val + '---' + this.timeShow);
+        /* if (this.timeArr.val === '4') {
+          console.log('clkTime---' + this.timeArr.val);
+        } else*/
 
+        // var _this = this;
+        /* var parseResult = function (resultList) {
+          var nameArr = [];
+          var valueArr = [];
+
+          resultList.forEach(function (item) {
+            nameArr[nameArr.length] = item.name;
+            valueArr[valueArr.length] = item.value;
+          });
+          return [nameArr, valueArr];
+        };*/
+
+        /* ajaxGetCylxzb({'timeType': this.timeArr.val}, function (data) {
+          if (data.code === 0) {
+            // var temp = parseResult(data.ret);
+
+            // _this.setPieOption(temp[0], data.ret);
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+        ajaxGetFmsltj({'timeType': this.timeArr.val}, function (data) {
+          if (data.code === 0) {
+            // var temp = parseResult(data.ret);
+
+            // _this.setBarOption(temp[0], temp[1]);
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+        ajaxGetQyxs({'timeType': this.timeArr.val}, function (data) {
+          if (data.code === 0) {
+            _this.setMapOption(data.ret);
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });*/
 
       },
       clkArea: function () {
@@ -336,8 +376,42 @@
         this.query.areaArr = this.areaArr.val;
         this.queryEntPropertySta();
 
-      }
 
+        // if (this.areaArr.val.length === 0) {
+        //   // alert('取全省数据');
+        // } else {
+        //   // alert('按区域取数据:' + this.areaArr.val);
+        // }
+        /* if (this.optionPagebarPagesize.index === 1) {
+          this.callbackPagebar({
+            currentPage: 1,
+            pagesize: this.optionPagebarPagesize.pagesize
+          });
+        } else {
+          this.optionPagebarPagesize.index = 1;
+        }*/
+
+      }
+      /* callbackPagebar: function (data) {
+        var _this = this;
+
+        console.log('===callbackPagebar===');
+        console.log(data);
+        this.optionPagebarPagesize.index = data.currentPage;
+        this.optionPagebarPagesize.pagesize = data.pagesize;
+        ajaxGetEnterpriseByArea({
+          area: this.areaArr.val,
+          current: this.optionPagebarPagesize.index,
+          pageSize: this.optionPagebarPagesize.pagesize
+        }, function (data) {
+          if (data.code === 0) {
+            _this.optionTabel.data = data.ret.list;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+      }*/
     }
   };
 </script>

@@ -293,19 +293,42 @@
               break;
             case 'stat':
               // ------------分析预警平台
-              path = '/#/fxyjpt';
+              path = '/#/fxyjsy';
               break;
-            case 'stat:jcyjpz:fxpz':
+            case 'stat:fxyjsy':
+              // -----------------------fxyjsy--分析预警平台首页
+              path = '/#/fxyjsy';
+              break;
+            case 'stat:jcyj:jcyjpz':
+              // -----------------------jcyjpz--监测预警配置
+              this.isClickFxpz = true;
+              path = '/#/jcyjpz';
+              break;
+            case 'stat:jcyj:jcyjgl':
+              // -----------------------jcyjpz--监测预警管理
+              path = '/#/jcyjpz';
+              this.isClickFxpz = false;
+              break;
+            case 'stat:jcyj:jcyjpz:fxpz':
               // -----------------------jcyjpz--风险配置
               path = '/#/fxpz';
               break;
-            case 'stat:jcyjpz:fxzbyzpz':
+
+            case 'stat:jcyj:jcyjpz:fxyzpz':
               // -----------------------jcyjpz--风险指标阈值配置
               path = '/#/fxzbfzpz';
               break;
-            case 'stat:jcyjpz:fxgxrpz':
+            case 'stat:jcyj:jcyjpz:fxgxrpz':
               // -----------------------jcyjpz--风险干系人配置
               path = '/#/fxgxrpz';
+              break;
+            case 'stat:jcyj:jcyjgl:yjff':
+              // -----------------------jcyjpz--预警分发
+              path = '/#/yjff';
+              break;
+            case 'stat:jcyj:jcyjgl:jqcl':
+              // -----------------------jcyjpz--警情处理
+              path = '/#/jqcl';
               break;
             case 'stat:fxyjcpz:ksjcfxjc':
               // -----------------------fxyjcgl--快速检测风险监测
@@ -347,9 +370,65 @@
               // -----------------------sjtj--行政处罚信息统计
               path = '/#/xzcfxxtj';
               break;
+            case 'stat:sjtj:ztxztj':
+              // -----------------------sjtj--主体性质统计
+              path = '/#/ztxztj';
+              break;
             case 'stat:sjtj:zscxlfx':
               // -----------------------sjtj--追溯查询量分析
               path = '/#/zscxlfx';
+              break;
+            case 'stat:zttj:cylxtj':
+              // -----------------------sjtj--产业类型统计
+              path = '/#/cylxtj';
+              break;
+            case 'stat:zttj:rzqktj':
+              // -----------------------sjtj--认证情况统计
+              path = '/#/rzqktj';
+              break;
+            case 'stat:zttj:scgmtj':
+              // -----------------------sjtj--生产规模统计
+              path = '/#/scgmtj';
+              break;
+            case 'stat:zttj:ztsltj':
+              // -----------------------sjtj--主体数量统计
+              path = '/#/ztsltj';
+              break;
+            case 'stat:zttj:ztfbtj':
+              // -----------------------sjtj--主体分布统计
+              path = '/#/ztfbtj';
+              break;
+            case 'stat:zttj:fmsltj':
+              // -----------------------sjtj--赋码数量统计
+              path = '/#/fmsltj';
+              break;
+            case 'stat:jgtj:zxscxxtj':
+              // -----------------------sjtj--专项生产信息统计
+              path = '/#/zxscxxtj';
+              break;
+            case 'stat:jgtj:zbfstj':
+              // -----------------------sjtj--质保信息统计
+              path = '/#/zbxxtj';
+              break;
+            case 'stat:jgtj:jdjcxxtj':
+              // -----------------------sjtj--监督检查信息统计
+              path = '/#/jdjcxxtj';
+              break;
+            case 'stat:jgtj:xzcftj':
+              // -----------------------sjtj--行政处罚信息统计
+              path = '/#/xzcfxxtj';
+              break;
+            case 'stat:jgtj:zscxltj':
+              // -----------------------sjtj--追溯查询量统计
+              path = '/#/zscxlfx';
+              break;
+            case 'stat:jgtj:cpgylfx':
+              // -----------------------sjtj--产品供应量分析
+              path = '/#/cpgylfx';
+              break;
+            case 'stat:jgtj:nzpsyqktj':
+              // -----------------------sjtj--农资产品使用情况统计
+              path = '/#/nzpsyqktj';
               break;
             case 'bases':
               // 基础平台

@@ -35,7 +35,6 @@ const Jgczrzcx = () => import('./syjgpt/gzjd/jgczrzcx.vue');
 const Scztdlrzcx = () => import('./syjgpt/gzjd/scztdlrzcx.vue');
 const Scztczrzcx = () => import('./syjgpt/gzjd/scztczrzcx.vue');
 
-//========= 服务推送 ============
 // 栏目设置
 const Lmsz = () => import('./syjgpt/fwxxts/lmsz.vue');
 // 阅读信息
@@ -45,11 +44,19 @@ const Fbxx = () => import('./syjgpt/fwxxts/fbxx.vue');
 // 信息监管
 const Xxjg = () => import('./syjgpt/fwxxts/xxjg.vue');
 
+// =============分析预警平台=============
 
 const Fxyjpt = () => import('./fxyjpt/index.vue');
+const Fxyjsy = () => import('./fxyjpt/fxyjsy/fxyjsy.vue');
+
+const Jcyjpz = () => import('./fxyjpt/jcyjpz/index.vue');
 const Fxpz = () => import('./fxyjpt/jcyjpz/fxpz.vue');
 const Fxzbfzpz = () => import('./fxyjpt/jcyjpz/fxzbfzpz.vue');
 const Fxgxrpz = () => import('./fxyjpt/jcyjpz/fxgxrpz.vue');
+
+
+const Yjff = () => import('./fxyjpt/jcyjpz/yjff.vue');
+const Jqcl = () => import('./fxyjpt/jcyjpz/jqcl.vue');
 
 const Ksjcfxjc = () => import('./fxyjpt/fxyjcgl/ksjcfxjc.vue');
 const Qyzzyzjc = () => import('./fxyjpt/fxyjcgl/qyzzyzjc.vue');
@@ -63,8 +70,20 @@ const Jdjcxxtj = () => import('./fxyjpt/sjtj/jdjcxxtj.vue');
 const Pthydfx = () => import('./fxyjpt/sjtj/pthydfx.vue');
 const Xzcfxxtj = () => import('./fxyjpt/sjtj/xzcfxxtj.vue');
 const Zscxlfx = () => import('./fxyjpt/sjtj/zscxlfx.vue');
+const Ztxztj = () => import('./fxyjpt/sjtj/ztxztj.vue');
+
+const Cylxtj = () => import('./fxyjpt/sjtj/cylxtj.vue');
+const Fmsltj = () => import('./fxyjpt/sjtj/fmsltj.vue');
+const Rzqktj = () => import('./fxyjpt/sjtj/rzqktj.vue');
+const Scgmtj = () => import('./fxyjpt/sjtj/scgmtj.vue');
+const Zbxxtj = () => import('./fxyjpt/sjtj/zbxxtj.vue');
+const Ztfbtj = () => import('./fxyjpt/sjtj/ztfbtj.vue');
+const Ztsltj = () => import('./fxyjpt/sjtj/ztsltj.vue');
+const Zxscxxtj = () => import('./fxyjpt/sjtj/zxscxxtj.vue');
+const Nzpsyqktj = () => import('./fxyjpt/sjtj/nzpsyqktj.vue');
 
 
+// ==============基础平台==============
 const Jcpt = () => import('./jcpt/index.vue');
 
 const Zzjggl = () => import('./jcpt/xtgl/zzjggl.vue');
@@ -280,24 +299,41 @@ export default new Router({
           component: Fxyjpt,
           children: [
             {
-              path: '/',
-              name: 'fxpz',
-              component: Fxpz
+              path: '/fxyjsy',
+              name: 'fxyjsy',
+              component: Fxyjsy
             },
             {
-              path: '/fxpz',
-              name: 'fxpz',
-              component: Fxpz
-            },
-            {
-              path: '/fxzbfzpz',
-              name: 'fxzbfzpz',
-              component: Fxzbfzpz
-            },
-            {
-              path: '/fxgxrpz',
-              name: 'fxgxrpz',
-              component: Fxgxrpz
+              path: '/jcyjpz',
+              name: 'jcyjpz',
+              component: Jcyjpz,
+              children: [
+                  {
+                    path: '/fxpz',
+                    name: 'fxpz',
+                    component: Fxpz
+                  },
+                  {
+                    path: '/fxzbfzpz',
+                    name: 'fxzbfzpz',
+                    component: Fxzbfzpz
+                  },
+                  {
+                    path: '/fxgxrpz',
+                    name: 'fxgxrpz',
+                    component: Fxgxrpz
+                  },
+                  {
+                    path: '/yjff',
+                    name: 'yjff',
+                    component: Yjff
+                  },
+                  {
+                    path: '/jqcl',
+                    name: 'jqcl',
+                    component: Jqcl
+                  }
+                ]
             },
             {
               path: '/ksjcfxjc',
@@ -353,6 +389,56 @@ export default new Router({
               path: '/zscxlfx',
               name: 'zscxlfx',
               component: Zscxlfx
+            },
+            {
+              path: '/ztxztj',
+              name: 'ztxztj',
+              component: Ztxztj
+            },
+            {
+              path: '/cylxtj',
+              name: 'cylxtj',
+              component: Cylxtj
+            },
+            {
+              path: '/rzqktj',
+              name: 'rzqktj',
+              component: Rzqktj
+            },
+            {
+              path: '/scgmtj',
+              name: 'scgmtj',
+              component: Scgmtj
+            },
+            {
+              path: '/ztsltj',
+              name: 'ztsltj',
+              component: Ztsltj
+            },
+            {
+              path: '/fmsltj',
+              name: 'fmsltj',
+              component: Fmsltj
+            },
+            {
+              path: '/zbxxtj',
+              name: 'zbxxtj',
+              component: Zbxxtj
+            },
+            {
+              path: '/ztfbtj',
+              name: 'ztfbtj',
+              component: Ztfbtj
+            },
+            {
+              path: '/zxscxxtj',
+              name: 'zxscxxtj',
+              component: Zxscxxtj
+            },
+            {
+              path: '/nzpsyqktj',
+              name: 'nzpsyqktj',
+              component: Nzpsyqktj
             }
           ]
         },

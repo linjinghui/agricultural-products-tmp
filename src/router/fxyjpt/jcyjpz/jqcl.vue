@@ -1,11 +1,45 @@
-<!--风险干系人配置-->
+<!--警情处理-->
 <template>
     <div class="wrap">
         <cmp-tab v-bind="optionTab" @cbk="cbkTab"></cmp-tab>
         <div style="padding: 0 20px;">
-
-            <div class="form-layer" style="width: 100%;text-align:right;padding-top: 10px;padding-bottom: 10px; padding-right: 10px">
-                <cmp-button class="theme" @click="clkSearch">添加</cmp-button>
+            <div class="wrap-form horiz" :class="{'show': formShow}">
+                <div class="form-layer">
+                    <label class="star">风险类型:</label>
+                    <cmp-drop-menu class="f-dom" v-bind="optionSsbm" v-model="optionSsbm.result" @cbkClkItem="cbkClkSsbm">
+                        <span slot="line" slot-scope="props">{{props.item.text}}</span>
+                    </cmp-drop-menu>
+                </div>
+                <div class="form-layer">
+                    <label class="star">风险级别:</label>
+                    <cmp-drop-menu class="f-dom" v-bind="optionSsbm" v-model="optionSsbm.result" @cbkClkItem="cbkClkSsbm">
+                        <span slot="line" slot-scope="props">{{props.item.text}}</span>
+                    </cmp-drop-menu>
+                </div>
+                <div class="form-layer">
+                    <label class="star">预警对象:</label>
+                    <cmp-input class="f-dom" v-model="query._ztmc_" maxlength="50"></cmp-input>
+                </div>
+                <div class="form-layer">
+                    <label class="star">预警时间:</label>
+                    <cmp-date-picker class="f-dom" v-model="query._sfyzsjstart_"></cmp-date-picker>
+                </div>
+                <div class="form-layer" style="width: 185px;">
+                    <cmp-date-picker style="width: 100%;" class="f-dom" v-model="query._sfyzsjend_"></cmp-date-picker>
+                </div>
+                <div class="form-layer">
+                    <label class="star">状态:</label>
+                    <cmp-drop-menu class="f-dom" v-bind="optionSsbm" v-model="optionSsbm.result" @cbkClkItem="cbkClkSsbm">
+                        <span slot="line" slot-scope="props">{{props.item.text}}</span>
+                    </cmp-drop-menu>
+                </div>
+                <div class="form-layer" style="width: 100%;text-align:center;">
+                    <cmp-button theme="line" @click="clkRest">重置</cmp-button>
+                    <cmp-button class="theme" @click="clkSearch">搜索</cmp-button>
+                </div>
+            </div>
+            <div class="fgx">
+                <i class="cicon-triangle-top triangle center-h" :title="formShow?'隐藏搜索':'展开搜索'" @click="formShow=!formShow"></i>
             </div>
             <cmp-table v-bind="optionTabel">
                 <tr slot="head">
@@ -43,7 +77,7 @@
           close: true,
           list: [
             {
-              name: '风险干系人配置'
+              name: '预警分发'
             }
           ]
         },
@@ -228,4 +262,3 @@
     // 笔记本尺寸 1366 * 768
     @media screen and (max-width: 1366px) {}
 </style>
-

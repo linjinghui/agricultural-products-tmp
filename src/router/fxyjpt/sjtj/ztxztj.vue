@@ -1,8 +1,10 @@
-<!-- 监督检查信息统计 -->
+<!-- 主体性质统计 -->
 <template>
     <div class="wrap">
-
-        <div class="part tabel">
+        <div class="back">
+          <cmp-button theme="theme" @click="back">返回</cmp-button>
+        </div>
+        <div class="part tabel up">
             <cmp-table v-bind="optionMainTabel">
                 <tr slot="head">
                     <td>主体性质</td><td>主体数(家)</td>
@@ -11,13 +13,14 @@
                     <td>{{props.item.entProperty}}</td><td>{{props.item.staNo}}</td>
                 </tr>
             </cmp-table>
+            <div class="download" @click="clkOutput()"></div>
         </div>
 
-        <div class="part pie">
+        <div class="part pie up">
             <cmp-echarts :option="optionPie"></cmp-echarts>
         </div>
 
-        <div class="part time">
+        <div class="part time up">
             <p class="title">时间</p>
             <cmp-radio v-model="timeArr.val" v-for="(item,index) in timeArr.arr" :key="'rd_'+index" :val="item.val">{{item.name}}</cmp-radio>
             <div v-show="timeShow" >
@@ -39,6 +42,7 @@
                     <td>{{props.item.entProperty}}</td><td>{{props.item.staNo}}</td>
                 </tr>
             </cmp-table>
+            <div class="download" @click="clkOutput()"></div>
         </div>
         <div class="part bar">
             <cmp-echarts :option="optionBar"></cmp-echarts>
@@ -57,11 +61,11 @@
 <script>
   import {Echarts, Radio, Checkbox, FlatDatePicker, Button, Table, PagebarPagesize} from 'web-base-ui';
   // import {ajaxGetCylxzb, ajaxGetFmsltj, ajaxGetQyxs, ajaxGetEnterpriseByArea} from '../../../data/ajax.js';
-  import {ajaxStaEntProperty} from '../../../data/fxyjajax.js';
+  import {ajaxStaEntProperty, ajaxExportStaEntProperty} from '../../../data/fxyjajax.js';
 
 
   export default {
-    name: 'jdjcxxtj',
+    name: 'ztxztj',
     components: {
       'cmpEcharts': Echarts,
       'cmpRadio': Radio,
@@ -165,6 +169,9 @@
       // this.clkArea();
     },
     methods: {
+      back () {
+        history.back();
+      },
       /**
        * nameArr - ['水果', '蔬菜', '茶叶', '食用菌', '中草药', '牲畜', '家禽', '屠宰及肉类加工']
        * valueArr - [10, 52, 200, 334, 390, 330, 220, 119]
@@ -249,11 +256,14 @@
             }
           },
           legend: {
-            orient: 'horizontal',
+            orient: 'vertical',
+            icon: 'circle',
             width: 380,
-            itemGap: 20,
-            x: 'center',
-            y: 40,
+            itemGap: 12,
+            itemWidth: 10,
+            itemHeight: 10,
+            right: 20,
+            top: '10%',
             data: nameArr
           },
           color: [ '#00c1ed', '#80c26b', '#ffd503', '#d1d5de', '#3c9bed', '#df4c3a', '#02a75b', '#f39c10' ],
@@ -261,8 +271,8 @@
             {
               name: '',
               type: 'pie',
-              radius: ['30%', '60%'],
-              center: ['50%', '65%'],
+              radius: [0, '80%'],
+              center: ['40%', '50%'],
               avoidLabelOverlap: false,
               label: {
                 normal: {
@@ -284,11 +294,27 @@
               },
               data: data
             }
-          ]
+          ],
+          toolbox: {
+            right: '3.5%',
+            feature: {
+              dataView: {
+                show: true
+              },
+              saveAsImage: {
+                show: true
+              }
+            }
+          }
         };
       },
       clkOutput: function () {
         console.log('导出按钮');
+
+        ajaxExportStaEntProperty(Object.assign({
+          isExport: true
+        }, this.query));
+
       },
       // 整理查询数据，在echart中使用
       parseResult: function (resultList, pieData) {
@@ -328,7 +354,47 @@
 
         this.timeShow = (this.timeArr.val === '4');
         console.log('clkTime---' + this.timeArr.val + '---' + this.timeShow);
+        /* if (this.timeArr.val === '4') {
+          console.log('clkTime---' + this.timeArr.val);
+        } else*/
 
+        // var _this = this;
+        /* var parseResult = function (resultList) {
+          var nameArr = [];
+          var valueArr = [];
+
+          resultList.forEach(function (item) {
+            nameArr[nameArr.length] = item.name;
+            valueArr[valueArr.length] = item.value;
+          });
+          return [nameArr, valueArr];
+        };*/
+
+        /* ajaxGetCylxzb({'timeType': this.timeArr.val}, function (data) {
+          if (data.code === 0) {
+            // var temp = parseResult(data.ret);
+
+            // _this.setPieOption(temp[0], data.ret);
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+        ajaxGetFmsltj({'timeType': this.timeArr.val}, function (data) {
+          if (data.code === 0) {
+            // var temp = parseResult(data.ret);
+
+            // _this.setBarOption(temp[0], temp[1]);
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+        ajaxGetQyxs({'timeType': this.timeArr.val}, function (data) {
+          if (data.code === 0) {
+            _this.setMapOption(data.ret);
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });*/
 
       },
       clkArea: function () {
@@ -336,8 +402,42 @@
         this.query.areaArr = this.areaArr.val;
         this.queryEntPropertySta();
 
-      }
 
+        // if (this.areaArr.val.length === 0) {
+        //   // alert('取全省数据');
+        // } else {
+        //   // alert('按区域取数据:' + this.areaArr.val);
+        // }
+        /* if (this.optionPagebarPagesize.index === 1) {
+          this.callbackPagebar({
+            currentPage: 1,
+            pagesize: this.optionPagebarPagesize.pagesize
+          });
+        } else {
+          this.optionPagebarPagesize.index = 1;
+        }*/
+
+      }
+      /* callbackPagebar: function (data) {
+        var _this = this;
+
+        console.log('===callbackPagebar===');
+        console.log(data);
+        this.optionPagebarPagesize.index = data.currentPage;
+        this.optionPagebarPagesize.pagesize = data.pagesize;
+        ajaxGetEnterpriseByArea({
+          area: this.areaArr.val,
+          current: this.optionPagebarPagesize.index,
+          pageSize: this.optionPagebarPagesize.pagesize
+        }, function (data) {
+          if (data.code === 0) {
+            _this.optionTabel.data = data.ret.list;
+            _this.optionPagebarPagesize.totalPage = parseInt((data.ret.totalSize - 1) / _this.optionPagebarPagesize.pagesize) + 1;
+          } else {
+            _this.$tip({ show: true, text: data.msg, theme: 'danger' });
+          }
+        });
+      }*/
     }
   };
 </script>
@@ -366,9 +466,16 @@
         overflow: hidden;
         background-color: transparent;
 
+        .back {
+          padding: 18px 20px;
+        }
+        .back > button {
+          padding: 6px 32px;
+          border-radius: 4px;
+        }
         >.part {
-            margin-top: 10px;
             margin-left: 10px;
+            margin-bottom: 50px;
             padding: 10px;
             float: left;
             border: inherit;
@@ -389,6 +496,9 @@
             }
 
         }
+        .up {
+          height: 310px;
+        }
         >.partSta {
             margin-top: 10px;
             margin-left: 10px;
@@ -406,7 +516,20 @@
             }
         }
         >.tabel {
-            width: calc(45% - 10px - 10px);
+            width: calc(45% - 40px);
+            margin-left: 20px;
+            position: relative;
+            padding: 0;
+            .download {
+              cursor: pointer;
+              position: absolute;
+              bottom: -38px;
+              right: 0;
+              width: 25px;
+              height: 25px;
+              background: url('./excel.png') no-repeat center;
+              background-size: contain;
+            }
         }
 
         >.pie {
@@ -421,6 +544,7 @@
         >.time,
         >.area {
             width: 11%;
+            margin-left: 20px;
         }
     }
 
