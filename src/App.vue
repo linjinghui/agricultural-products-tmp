@@ -145,7 +145,7 @@
         this.showTotop = st >= 200;
       },
       toPage: function (path, type) {
-        // alert(type);
+        alert(type);
         if (!path) {
           switch (type) {
             case 0:

@@ -50,10 +50,10 @@
       };
     },
     mounted: function () {
-      var firstNav = this.navData[0];
+      // var firstNav = this.navData[0];
 
-      this.clkNavItem([firstNav]);
-      this.clkNavItem([firstNav, firstNav.children[0]]);
+      // this.clkNavItem([firstNav]);
+      // this.clkNavItem([firstNav, firstNav.children[0]]);
     },
     methods: {
       clkNavItem: function (arr) {
